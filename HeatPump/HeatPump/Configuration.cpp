@@ -14,22 +14,23 @@ Configuration::~Configuration()
 
 void Configuration::loop1() {
 	//Debug("Loop1");
-	DevManager.loop1(counter1);
+	DevMgr.loop1(counter1);
 }
 
 void Configuration::loop5() {
 	//Debug("Loop5");
 	web.loop();
-	DevManager.loop5(counter5);
+	DevMgr.loop5(counter5);
+	ScenMgr.loop5(counter5);
 }
 
 void Configuration::loop10() {
 	//Debug("Loop10");
-	DevManager.loop10(counter10);
+	DevMgr.loop10(counter10);
 
 }
 
 void Configuration::begin() {
-	DevManager.begin();
+	DevMgr.begin();
 	web.begin();
 }

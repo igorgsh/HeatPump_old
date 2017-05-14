@@ -25,7 +25,6 @@ void DeviceManager::loop1(unsigned long counter) {
 }
 
 void DeviceManager::loop5(unsigned long counter) {
-	//check all sensor's statuses
 
 }
 

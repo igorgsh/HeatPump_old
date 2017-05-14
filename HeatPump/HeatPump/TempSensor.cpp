@@ -1,8 +1,8 @@
 #include "TempSensor.h"
 //
 
-TempSensor::TempSensor(String label, int pin,  float actionLow, float actionHigh, int critThreshold)
-	: Sensor(label, pin, actionHigh, critThreshold) {
+TempSensor::TempSensor(String label, int pin,  float actionPoints[], int critThreshold)
+	: Sensor(label, pin, actionPoints, critThreshold) {
 	init();
 }
 

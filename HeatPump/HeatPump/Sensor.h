@@ -17,26 +17,34 @@ typedef enum {
 */
 typedef enum {
 	ACTION_NODATA = 0,
-	ACTION_LOW = 1,
-	ACTION_NORMAL = 2,
-	ACTION_HIGH = 3
+	ACTION_LOW_ALARM = 1,
+	ACTION_LOW_ALARM_START = 2,
+	ACTION_NORMAL = 3,
+	ACTION_HIGH_ALARM_START = 4,
+	ACTION_HIGH_ALARM = 5
 } ActionStatus;
 
+#define NUMBER_OF_ACTIONPOINTS 4
+
+typedef enum {
+	ACTIONPOINT_ALARM_LOW=0,
+	ACTIONPOINT_START_LOW = 1,
+	ACTIONPOINT_START_HIGH = 2,
+	ACTIONPOINT_ALARM_HIGH = 3
+
+}ActionPointType;
 
 class Sensor
 {
 public:
-	Sensor(String label, int pin, float actionLow, float actionHigh, int critThreshold = 5);
-	//SType of Sensor
+	Sensor(String label, int pin, float actionPoints[], int critThreshold = 5);
+	//Type of Sensor
 	SensorType type = NOSENSOR;
 	SensorType getType() { return type; };
 
 	//Current value of sensor
 	virtual float getValue() { return currentValue; };
 
-	// Last Eror
-//	ErrorCode getError() { return error; };
-//	void setError(ErrorCode e) { error = e; };
 	// Number of errors occured
 	int ErrorCounter = 0;
 	// Is error critical
@@ -56,25 +64,29 @@ public:
 
 	ActionStatus getActionStatus() { return actionStatus; };
 
+	/*
 	void setActionLow(float value) { actionLow = value; };
 	float getActionLow() { return actionLow; };
 	void setActionHigh(float value) { actionHigh = value; };
 	float getActionHigh() { return actionHigh; };
+	*/
 	void setCriticalThreshold(int value) { criticalThreshold = value; };
 	int getCriticalThreshold() { return criticalThreshold; };
+	float getActionPoint(ActionPointType n) { if (n >= 0 && n < NUMBER_OF_ACTIONPOINTS) return actionPoints[n]; else return 0.0; };
+	void setActionPoint(ActionPointType n, float value) { if (n >= 0 && n < NUMBER_OF_ACTIONPOINTS) actionPoints[n] = value; };
 
 protected:
 	// Is Data Ready for this Sensor
 	virtual bool checkDataReady() = 0;
-//	ErrorCode error = NO_ERROR;
+	//	ErrorCode error = NO_ERROR;
 	String label;
 	int pin;
 	// Alarm line: AlarmLow: -... alarmLow); No Alarm: alarmLow...alarmHigh;AlarmHigh:alarmHigh...
 	// Action line: ActionLow:-...actionLow; ActionNormal:actionLow...actionHigh; ActionHigh: actionHigh...+ 
 //	float alarmLow;
 //	float alarmHigh;
-	float actionLow;
-	float actionHigh;
+	//float actionLow;
+	//float actionHigh;
 
 
 
@@ -82,11 +94,13 @@ protected:
 	int criticalThreshold;
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
-//	AlarmStatus alarmStatus = AlarmStatus::ALARM_LOW;
+	//	AlarmStatus alarmStatus = AlarmStatus::ALARM_LOW;
 
 	float currentValue;
+
+	float actionPoints[NUMBER_OF_ACTIONPOINTS] = { 0.0, 0.0, 0.0, 0.0 };
 private:
-	void init(String label, int pin, float actionLow, float actionHigh, int critThreshold);
+	void init(String label, int pin, float actionPoints[], int critThreshold);
 
 };
 

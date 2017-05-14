@@ -1,18 +1,19 @@
 #include "Sensor.h"
 
 
-void Sensor::init(String label, int pin, float actionLow, float actionHigh, int critThreshold) {
+void Sensor::init(String label, int pin, float actionPoints[], int critThreshold) {
 
 	this->label = label;
 	this->pin = pin;
-	this->actionLow = actionLow;
-	this->actionHigh = actionHigh;
+	for (int i = 0; i < NUMBER_OF_ACTIONPOINTS; i++) {
+		this->actionPoints[i] = actionPoints[i];
+	}
 	this->criticalThreshold = critThreshold;
 }
 
 
-Sensor::Sensor(String label, int pin,  float actionLow, float actionHigh, int critThreshold) {
-	init(label, pin, actionLow, actionHigh, critThreshold);
+Sensor::Sensor(String label, int pin, float actionPoints[], int critThreshold) {
+	init(label, pin, actionPoints, critThreshold);
 }
 
 bool Sensor::getData() {
@@ -20,17 +21,25 @@ bool Sensor::getData() {
 
 	res = checkDataReady();
 	if (res) { //data is ready
-		if (actionLow <= currentValue) { // ActionLow
-			actionStatus = ACTION_LOW;
+		if (currentValue <= actionPoints[ACTIONPOINT_ALARM_LOW]) {
+			actionStatus = ACTION_LOW_ALARM;
 			ErrorCounter++;
 		}
-		else if (actionHigh >= currentValue) { // ActionHigh
-			actionStatus = ACTION_HIGH;
-			ErrorCounter++;
+		else if (currentValue <= actionPoints[ACTIONPOINT_START_LOW]) {
+			actionStatus = ACTION_LOW_ALARM_START;
+			ErrorCounter = 0;
 		}
-		else {
+		else if (currentValue <= actionPoints[ACTIONPOINT_START_HIGH]) {
 			actionStatus = ACTION_NORMAL;
 			ErrorCounter = 0;
+		}
+		else if (currentValue <= actionPoints[ACTIONPOINT_ALARM_HIGH]) {
+			actionStatus = ACTION_HIGH_ALARM_START;
+			ErrorCounter = 0;
+		}
+		else if (currentValue > actionPoints[ACTIONPOINT_ALARM_LOW]) {
+			actionStatus = ACTION_HIGH_ALARM;
+			ErrorCounter++;
 		}
 	}
 	else { //result is absent

@@ -1,6 +1,8 @@
 #pragma once
 #include "DeviceManager.h"
 #include "ArduinoServer.h"
+#include "ScenarioManager.h"
+
    
 class Configuration
 {
@@ -17,7 +19,9 @@ public:
 	unsigned long counter5 = 0;
 	unsigned long counter10 = 0;
 
-	DeviceManager DevManager = DeviceManager();
+	DeviceManager DevMgr = DeviceManager();
+	ScenarioManager ScenMgr = ScenarioManager();
+
 private:
 	ArduinoServer web = ArduinoServer();
 };

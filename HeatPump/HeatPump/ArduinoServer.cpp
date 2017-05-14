@@ -226,19 +226,19 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 	else if (tpl.equals("%ArrayCriticalCounter%")) {
 		res = sensor->getCriticalThreshold();
 	}
-	/*
+	
 	else if(tpl.equals("%ArrayAlarmLow%")) {
-		res = sensor->getAlarmLow();
+		res = sensor->getActionPoint(ACTIONPOINT_ALARM_LOW);
 	}
 	else if (tpl.equals("%ArrayAlarmHigh%")) {
-		res += sensor->getAlarmHigh();
+		res = sensor->getActionPoint(ACTIONPOINT_ALARM_HIGH);
 	}
-	*/
+	
 	else if (tpl.equals("%ArrayStartLow%")) {
-		res = sensor->getActionLow();
+		res = sensor->getActionPoint(ACTIONPOINT_START_LOW);
 	}
 	else if (tpl.equals("%ArrayStartHigh%")) {
-		res = sensor->getActionHigh();
+		res = sensor->getActionPoint(ACTIONPOINT_START_HIGH);
 	}
 	return res;
 }
@@ -247,9 +247,9 @@ String GetTemplate(String tpl) {
 	String res = "";
 	if (tpl.startsWith("%Array")) {
 		res = "[";
-		for (int i = 0; i < Config.DevManager.getNumberTemp(); i++) {
+		for (int i = 0; i < Config.DevMgr.getNumberTemp(); i++) {
 			res += "'";
-			res += GetSensorParams(&(Config.DevManager.tempSensors[i]), tpl);
+			res += GetSensorParams(&(Config.DevMgr.tempSensors[i]), tpl);
 			res += "',";
 		}
 		/*
@@ -299,8 +299,8 @@ String decodeHex(String s) {
 
 void setArrayVar(String varName, int ind, String val) {
 	Sensor *s;
-	if (ind < Config.DevManager.getNumberTemp()) {
-		s = &(Config.DevManager.tempSensors[ind]);
+	if (ind < Config.DevMgr.getNumberTemp()) {
+		s = &(Config.DevMgr.tempSensors[ind]);
 	}
 	else {
 		//s = &(Config.contacts[ind - Config.getNumberTemp()]);
@@ -312,19 +312,17 @@ void setArrayVar(String varName, int ind, String val) {
 	else if (varName.equals("arrayCritCnt")) {
 		s->setCriticalThreshold(val.toInt());
 	}
-	/*
 	else if (varName.equals("arrayAlarmLow")) {
-		s->setAlarmLow(val.toFloat());
+		s->setActionPoint(ACTIONPOINT_ALARM_LOW, val.toFloat());
 	}
 	else if (varName.equals("arrayAlarmHigh")) {
-		s->setAlarmHigh(val.toFloat());
+		s->setActionPoint(ACTIONPOINT_ALARM_HIGH, val.toFloat());
 	}
-	*/
 	else if (varName.equals("arrayStartLow")) {
-		s->setActionLow(val.toFloat());
+		s->setActionPoint(ACTIONPOINT_START_LOW, val.toFloat());
 	}
 	else if (varName.equals("arrayStartHigh")) {
-		s->setActionHigh(val.toFloat());
+		s->setActionPoint(ACTIONPOINT_START_HIGH, val.toFloat());
 	}
 }
 
