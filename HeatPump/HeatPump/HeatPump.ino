@@ -37,7 +37,7 @@ void Timer2() { //it is started every 100ms
 	if (Config.counter1 % 5 == 0) {
 		Config.loop5();
 		Config.counter5++;
-		if (Config.counter1 % 10 == 10) {
+		if (Config.counter1 % 10 == 0) {
 			Config.loop10();
 			Config.counter10++;
 		}

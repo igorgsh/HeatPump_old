@@ -1,5 +1,5 @@
 #include "DeviceManager.h"
-
+#include "Definitions.h"
 
 
 DeviceManager::DeviceManager()
@@ -18,14 +18,23 @@ void DeviceManager::begin() {
 }
 
 void DeviceManager::loop1(unsigned long counter) {
+	//check all thermometers
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].loop(counter);
 	}
 }
 
 void DeviceManager::loop5(unsigned long counter) {
+	//check all sensor's statuses
+
 }
 
 
 void DeviceManager::loop10(unsigned long counter) {
+	for (int i = 0; i < getNumberTemp(); i++) {
+		Debug2_("Sensor:",tempSensors[i].getLabel());
+		Debug2_(";Temperature=", tempSensors[i].getValue());
+		Debug2(";Status:", tempSensors[i].getActionStatus());
+	}
+
 }

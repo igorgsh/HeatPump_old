@@ -92,6 +92,7 @@
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="HttpRequest.h" />
+    <ClInclude Include="ScenarioManager.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="TempSensor.h" />
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
@@ -102,10 +103,16 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
+    <ClCompile Include="ScenarioManager.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="TempSensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.upload.port="COM7" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

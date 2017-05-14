@@ -19,4 +19,5 @@ extern DebugLevel dLevel;
 #define Debug(X)	SerialLog(D_DEBUG, X)
 #define Debug_(X)	SerialLog_(D_DEBUG, X)
 #define Debug2(X,Y)	SerialLog_(D_DEBUG,X); SerialLog(D_DEBUG, Y);
+#define Debug2_(X,Y)	SerialLog_(D_DEBUG,X); SerialLog_(D_DEBUG, Y);
 #define Debug3(X,Y,Z)	SerialLog_(D_DEBUG,X); SerialLog2(D_DEBUG, Y, Z);

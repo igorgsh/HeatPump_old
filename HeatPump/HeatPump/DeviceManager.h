@@ -12,8 +12,8 @@ public:
 
 	void begin();
 
-	TempSensor tempSensors[NUMBER_OF_TEMP] = { TempSensor("D1",30,21.0,23.0, 5),
-		TempSensor("D2",31,22.0,25.0,  6) };
+	TempSensor tempSensors[NUMBER_OF_TEMP] = { TempSensor("T1",22,21.0,23.0, 5),
+		TempSensor("T2",23,22.0,25.0,5) };
 
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }
