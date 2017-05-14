@@ -15,6 +15,9 @@ void DeviceManager::begin() {
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].begin();
 	}
+	for (int i = 0; i < getNumberPump(); i++) {
+		pumps[i].begin();
+	}
 }
 
 void DeviceManager::loop1(unsigned long counter) {

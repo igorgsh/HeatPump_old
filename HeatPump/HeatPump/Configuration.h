@@ -20,7 +20,7 @@ public:
 	unsigned long counter10 = 0;
 
 	DeviceManager DevMgr = DeviceManager();
-	ScenarioManager ScenMgr = ScenarioManager();
+	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
 
 private:
 	ArduinoServer web = ArduinoServer();

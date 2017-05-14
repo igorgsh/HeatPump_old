@@ -2,8 +2,9 @@
 
 
 
-ScenarioManager::ScenarioManager()
+ScenarioManager::ScenarioManager(DeviceManager* DevMgr)
 {
+	this->DevMgr = DevMgr;
 }
 
 

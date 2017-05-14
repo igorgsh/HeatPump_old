@@ -92,7 +92,13 @@
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="HttpRequest.h" />
+    <ClInclude Include="OutputDevice.h" />
+    <ClInclude Include="Pump.h" />
+    <ClInclude Include="Relay.h" />
+    <ClInclude Include="Scenario.h" />
     <ClInclude Include="ScenarioManager.h" />
+    <ClInclude Include="ScriptCompressor.h" />
+    <ClInclude Include="ScriptPump.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="TempSensor.h" />
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
@@ -103,7 +109,13 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
+    <ClCompile Include="OutputDevice.cpp" />
+    <ClCompile Include="Pump.cpp" />
+    <ClCompile Include="Relay.cpp" />
+    <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="ScenarioManager.cpp" />
+    <ClCompile Include="ScriptCompressor.cpp" />
+    <ClCompile Include="ScriptPump.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="TempSensor.cpp" />
   </ItemGroup>

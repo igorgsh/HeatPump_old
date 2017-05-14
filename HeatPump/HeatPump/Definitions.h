@@ -21,3 +21,11 @@ extern DebugLevel dLevel;
 #define Debug2(X,Y)	SerialLog_(D_DEBUG,X); SerialLog(D_DEBUG, Y);
 #define Debug2_(X,Y)	SerialLog_(D_DEBUG,X); SerialLog_(D_DEBUG, Y);
 #define Debug3(X,Y,Z)	SerialLog_(D_DEBUG,X); SerialLog2(D_DEBUG, Y, Z);
+
+
+
+typedef enum {
+	SCENARIO_NOCMD = 0,
+	SCENARIO_STOP = 1,
+	SCENARIO_START = 2
+} ScenarioCmd;
