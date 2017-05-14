@@ -17,6 +17,8 @@ public:
 
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }
-
+	void loop1(unsigned long counter);
+	void loop5(unsigned long counter);
+	void loop10(unsigned long counter);
 };
 

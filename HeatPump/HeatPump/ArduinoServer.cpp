@@ -333,7 +333,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 	Debug("Start PrintMonitorPage");
 	
 	if (request.NumberParms != 0) { // Some POST variables submitted
-		int ind;
+		//int ind;
 
 		for (int i = 0; i < request.NumberParms; i++) {
 			if (request.ParamKeys[i].startsWith("array")) {

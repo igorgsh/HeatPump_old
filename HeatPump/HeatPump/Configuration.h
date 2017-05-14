@@ -1,7 +1,7 @@
 #pragma once
 #include "DeviceManager.h"
 #include "ArduinoServer.h"
-
+   
 class Configuration
 {
 public:
