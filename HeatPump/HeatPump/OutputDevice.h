@@ -24,10 +24,10 @@ public:
 	String getLabel() { return label; };
 	void setLabel(String lbl) { label = lbl; };
 	virtual void begin() = 0;
+	unsigned long lastStatusTimestamp = 0;
+	unsigned int minTimeOff = 0;
+	unsigned int minTimeOn = 0;
 protected:
-	long lastStatusTimestamp = 0;
-	int minTimeOff = 0;
-	int minTimeOn = 0;
 	String label;
 	//int pin;
 	//void WaitTime(unsigned long delay, void (*callBack)());

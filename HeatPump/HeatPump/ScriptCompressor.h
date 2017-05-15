@@ -4,7 +4,7 @@ class ScriptCompressor :
 	public Scenario
 {
 public:
-	ScriptCompressor();
+	ScriptCompressor(bool enable);
 	~ScriptCompressor();
 };
 

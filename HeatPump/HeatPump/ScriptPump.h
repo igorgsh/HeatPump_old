@@ -8,9 +8,11 @@ class ScriptPump :
 	public Scenario
 {
 public:
-	ScriptPump(Pump* p);
+	ScriptPump(Pump* p, bool enable);
 	~ScriptPump();
 	ScenarioCmd TriggerredCmd();
+	bool Run(ScenarioCmd cmd, unsigned long counter);
+
 private:
 	Pump* pump;
 };

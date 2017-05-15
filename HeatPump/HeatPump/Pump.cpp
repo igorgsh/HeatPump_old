@@ -1,6 +1,7 @@
 #include "Pump.h"
+#include "Configuration.h"
 
-
+extern Configuration Config;
 
 Pump::Pump(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff)
 {
@@ -16,10 +17,12 @@ Pump::~Pump()
 
 void Pump::StopPump() {
 	r->disconnect();
+	lastStatusTimestamp = Config.counter1;
 }
 
 void Pump::StartPump() {
 	r->connect();
+	lastStatusTimestamp = Config.counter1;
 }
 
 void Pump::begin() {

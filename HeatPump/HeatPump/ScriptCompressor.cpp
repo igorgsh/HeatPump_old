@@ -2,7 +2,7 @@
 
 
 
-ScriptCompressor::ScriptCompressor()
+ScriptCompressor::ScriptCompressor(bool enable) : Scenario(enable, "")
 {
 }
 
