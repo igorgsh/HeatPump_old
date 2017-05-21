@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArduinoServer.h" />
+    <ClInclude Include="Compressor.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="DeviceManager.h" />
@@ -105,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoServer.cpp" />
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />

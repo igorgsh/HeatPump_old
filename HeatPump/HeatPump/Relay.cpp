@@ -5,7 +5,7 @@ Relay::Relay(int pin, bool on) {
 	this->pin = pin;
 	this->on = on;
 
-	status = !on;
+	status = (on==LOW? STATUS_ON : STATUS_OFF);
 }
 
 Relay::~Relay()
@@ -19,31 +19,15 @@ void Relay::begin() {
 }
 
 void Relay::connect() {
-	if (status != on) {
-		status = on;
-		digitalWrite(pin, status);
+	if (status == STATUS_OFF) {
+		status = STATUS_ON;
+		digitalWrite(pin, on);
 	}
 }
 
 void Relay::disconnect() {
-	if (status == on) {
-		status = !on;
-		digitalWrite(pin, status);
+	if (status == STATUS_ON) {
+		status = STATUS_OFF;
+		digitalWrite(pin, !on);
 	}
 }
-
-/*
-bool Relay::DeviceCommand(ScenarioCommand cmd)
-{
-	if (cmd == COMMAND_FORCE_STOP || cmd == COMMAND_STOP) {
-		disconnect();
-	} else {
-		connect();
-	}
-	return true;
-}
-*/
-
-
-
-

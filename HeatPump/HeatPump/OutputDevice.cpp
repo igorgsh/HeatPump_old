@@ -10,6 +10,9 @@ OutputDevice::OutputDevice()
 OutputDevice::~OutputDevice()
 {
 }
+
+
+
 /*
 void OutputDevice::Command(ScenarioCommand cmd)
 {

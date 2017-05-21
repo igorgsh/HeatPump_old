@@ -66,6 +66,9 @@
     <ClInclude Include="ScriptCompressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compressor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Configuration.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScriptCompressor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compressor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

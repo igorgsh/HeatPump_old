@@ -11,7 +11,8 @@ public:
 	ScriptPump(Pump* p, bool enable);
 	~ScriptPump();
 	ScenarioCmd TriggerredCmd();
-	bool Run(ScenarioCmd cmd, unsigned long counter);
+	bool Start();
+	bool Stop();
 
 private:
 	Pump* pump;
