@@ -26,7 +26,7 @@ public:
 	Scenario* scriptPumpContour2 = &scripts[2];
 	Scenario* scriptCompressor = &scripts[3];
 
-	void Run(Scenario* script, ScenarioCmd cmd);
+	void PrepareCmd(Scenario* script, ScenarioCmd cmd);
 	void loop1(unsigned long counter);
 	void loop5(unsigned long counter);
 	void loop10(unsigned long counter);

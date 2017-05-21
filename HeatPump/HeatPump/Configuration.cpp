@@ -15,6 +15,7 @@ Configuration::~Configuration()
 void Configuration::loop1() {
 	//Debug("Loop1");
 	DevMgr.loop1(counter1);
+	ScenMgr.loop1(counter1);
 }
 
 void Configuration::loop5() {
@@ -27,7 +28,7 @@ void Configuration::loop5() {
 void Configuration::loop10() {
 	//Debug("Loop10");
 	DevMgr.loop10(counter10);
-
+	ScenMgr.loop10(counter10);
 }
 
 void Configuration::begin() {
