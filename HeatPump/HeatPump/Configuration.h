@@ -3,7 +3,9 @@
 #include "ArduinoServer.h"
 #include "ScenarioManager.h"
 
-   
+//#define WEB_ENABLED
+#undef WEB_ENABLED
+
 class Configuration
 {
 public:

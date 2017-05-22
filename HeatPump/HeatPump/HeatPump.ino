@@ -18,6 +18,7 @@
 #include "Configuration.h"
 #include <MsTimer2.h>
 #include "Definitions.h"
+#include "Configuration.h"
 
 DebugLevel dLevel = D_ALL;
 
@@ -49,6 +50,8 @@ void Timer2() { //it is started every 100ms
 void setup() {
 	//Configure Serial port and SD card
 	Serial.begin(115200);
+	Debug("Begin");
+	
 	SD.begin(SDCARD_SS);
 
 	// Initialize configuration
@@ -69,7 +72,7 @@ void setup() {
 	//Set a timer 
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
-
+	Debug("Start!!!");
 	//	delay(500);
 
 }

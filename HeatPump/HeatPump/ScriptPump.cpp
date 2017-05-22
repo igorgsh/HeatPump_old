@@ -2,7 +2,7 @@
 
 
 
-ScriptPump::ScriptPump(Pump* p, bool enable) : Scenario(enable, "", p)
+ScriptPump::ScriptPump(Pump* p, bool enable, String label) : Scenario(enable, label, p)
 {
 	pump = p;
 }

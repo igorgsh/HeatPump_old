@@ -22,6 +22,7 @@ void Compressor::StopCompressor() {
 }
 
 void Compressor::StartCompressor() {
+	Debug("Start Compressor!!!");
 	r->connect();
 	lastStatusTimestamp = Config.counter1;
 }

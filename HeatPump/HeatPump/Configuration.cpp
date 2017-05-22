@@ -20,7 +20,11 @@ void Configuration::loop1() {
 
 void Configuration::loop5() {
 	//Debug("Loop5");
+#ifdef WEB_ENABLED
 	web.loop();
+
+#endif // WEB_ENABLED
+
 	DevMgr.loop5(counter5);
 	ScenMgr.loop5(counter5);
 }
@@ -33,5 +37,9 @@ void Configuration::loop10() {
 
 void Configuration::begin() {
 	DevMgr.begin();
+	//ScenMgr.begin();
+
+#ifdef WEB_ENABLED
 	web.begin();
+#endif
 }

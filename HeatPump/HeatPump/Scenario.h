@@ -14,18 +14,18 @@ class Scenario
 {
 public:
 	Scenario(bool enabled, String label, OutputDevice* dev);
-	~Scenario();
+	virtual ~Scenario();
 	bool IsActive = false;
-	virtual ScenarioCmd TriggerredCmd() { return ScenarioCmd::SCENARIO_NOCMD; };
-	//virtual bool Run(ScenarioCmd cmd, unsigned long counter) { return false; };
+	virtual ScenarioCmd TriggerredCmd() = 0 ;
+	virtual bool Run(ScenarioCmd cmd, unsigned long counter);
 	int getId() { return id; };
 	String getLabel() { return label; };
 	void setLabel(String lbl) { label = lbl; };
 	bool Enabled = true;
-	virtual bool Run(ScenarioCmd cmd, unsigned long counter);
-	virtual bool Start() { return true; };
-	virtual bool Stop() { return true;};
-
+	//virtual bool Run(ScenarioCmd cmd, unsigned long counter) =0;
+	virtual bool Start()=0;
+	virtual bool Stop()=0;
+	virtual bool begin()=0;
 private:
 	//ScenarioManager* scenMgr;
 	int id;

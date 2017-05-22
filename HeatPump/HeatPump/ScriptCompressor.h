@@ -7,11 +7,15 @@ class ScriptCompressor :
 	public Scenario
 {
 public:
-	ScriptCompressor(Compressor* compressor, bool enable, Scenario* pGeo, Scenario* p1, Scenario* p2 );
+	ScriptCompressor(Compressor* compressor, bool enable, String label, Scenario* pGeo, Scenario* p1, Scenario* p2 );
 	~ScriptCompressor();
-	ScenarioCmd TriggerredCmd();
+	virtual ScenarioCmd TriggerredCmd();
 	bool Start();
 	bool Stop();
+
+	bool begin() {return true;};
+
+
 private:
 	Compressor *comp;
 
@@ -19,8 +23,8 @@ private:
 	ScriptPump* pumpContour1;
 	ScriptPump* pumpContour2;
 
-	bool StartCompressor();
-	bool StopCompressor();
+	//bool StartCompressor();
+	//bool StopCompressor();
 	
 };
 
