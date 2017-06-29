@@ -16,6 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="HeatPump.ino" />
+    <None Include="monitor.htm" />
+    <None Include="main.htm" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.HeatPump.vsarduino.h">

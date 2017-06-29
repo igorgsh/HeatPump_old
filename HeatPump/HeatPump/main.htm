@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Главная</title>
+<script type="text/javascript">
+%TEMPLATE_START%
+var currTemp=%CurrentTemperature%;
+var desTemp =%DesiredTemperature%;
+var dt=%CurrentTime%;
+%TEMPLATE_END%
+
+var submitCounter =0;
+var isEdit = 0;
+
+setInterval(function(){
+	if (isEdit==1) {submitCounter++;}
+	if (isEdit==0 || submitCounter>=10) {window.location.reload(1);}
+}, 5000);
+
+document.addEventListener( "DOMContentLoaded", function() {
+	document.getElementById('desiredTemp').innerHTML=desTemp;
+	document.getElementById('desTemp').value = desTemp; 
+	document.getElementById('currTemp').innerHTML=currTemp;
+	document.getElementById('currTime').innerHTML=dt;
+}, false );
+
+function chngTemp(c){
+	desTemp+=c;
+	document.getElementById('desTemp').value = desTemp; 
+	document.getElementById('desiredTemp').innerHTML=desTemp;
+	document.getElementById('formsubmit').style.visibility='visible';
+	submitCounter=0;
+	isEdit=1;
+}
+</script>
+<style>
+body {background-color: #E6E6FA;}
+div {display:inline;}
+.text1 {font: 2.5em normal;}
+.desiredTemp {font: 3em bold; color:green;}
+.currentTemp {font: 5em bold; color:blue;}
+#formsubmit	{visibility: hidden;}
+</style>
+</head>
+<body>
+<form  method="post" >
+	<div id="currTime"></div>
+	<br/>
+	<div class="text1">Текущая температура:</div>
+	<div id="currTemp" class="currentTemp"></div><div class="currentTemp">ºС</div>
+	<br/>
+	<div class="text1">Установлена:</div><div id="desiredTemp" class="desiredTemp"></div><div class="desiredTemp">ºС</div>
+		<input type="button" onclick="chngTemp(1)" value="+">
+		<input type="button" onclick="chngTemp(-1)" value="-">
+		<input id="formsubmit" type="submit" value="Ok">
+		<input type='hidden' id='desTemp' name='desTemp' value=''>
+		<br/>
+	<a href="schedule.htm">Расписание</a>&nbsp;
+	<a href="monitor.htm">Мониторинг</a>
+</form>
+</body>
+</html>
