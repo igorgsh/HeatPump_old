@@ -40,20 +40,20 @@ void ScenarioManager::loop5(unsigned long counter) {
 	// check triggers
 	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
 		if (scripts[i]->Enabled) {
-			Debug2("Script:", i);
+			//Debug2("Script:", i);
 			ScenarioCmd cmd = scripts[i]->TriggerredCmd();
-			Debug2("Cmd:", cmd);
+			//Debug2("Cmd:", cmd);
 			PrepareCmd(scripts[i], cmd);
 		}
 	}
 
 	// Run scenario
 	if (currentScript != NULL) {
-		Debug2("CurrentScript:", currentScript->getLabel());
-		Debug2("Current cmd:", currentCmd);
-		Debug2("Try:", tryCounter);
+		//Debug2("CurrentScript:", currentScript->getLabel());
+		//Debug2("Current cmd:", currentCmd);
+		//Debug2("Try:", tryCounter);
 		bool res = currentScript->Run(currentCmd,counter);
-		Debug2("Result:", res);
+		//Debug2("Result:", res);
 		if (res) {//script is finished
 			tryCounter = 0;
 			currentScript = NULL;
@@ -77,29 +77,29 @@ void ScenarioManager::loop10(unsigned long counter) {
 }
 
 void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
-	Debug("PrepareCmd");
-	Debug2("cmd=", cmd);
+	//Debug("PrepareCmd");
+	//Debug2("cmd=", cmd);
 
 	if (cmd != ScenarioCmd::SCENARIO_NOCMD) {
 		if (currentScript == NULL) {//There is no script is running right now
-			Debug("Take command");
+			//Debug("Take command");
 			currentScript = script;
 			currentCmd = cmd;
 		}
 		else if (currentScript->getId() == script->getId()) {
-			Debug("Script is running");
+			//Debug("Script is running");
 			if (cmd == ScenarioCmd::SCENARIO_STOP) {//Stop has the highest priority
 				currentCmd = cmd;
 			} // else nothing to do
 		} // current script is running
 	}
-	Debug("End Prepare");
+	//Debug("End Prepare");
 }
 
 void ScenarioManager::begin() {
-	Debug("ScanMgr Begin");
+	//Debug("ScanMgr Begin");
 	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
-		Debug2("Script:", scripts[i]->getLabel());
+		//Debug2("Script:", scripts[i]->getLabel());
 		scripts[i]->begin();
 	}
 }

@@ -21,6 +21,8 @@ ArduinoServer::~ArduinoServer()
 
 void ArduinoServer::begin() {
 
+	//Debug("Point1");
+
 	if (Ethernet.begin(mac) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
@@ -28,6 +30,7 @@ void ArduinoServer::begin() {
 		IPAddress ip(192, 168, 0, 101);
 		Ethernet.begin(mac, ip);
 	}
+	//Debug("Point2");
 	server->begin();
 	Debug2("Server is at: ",Ethernet.localIP());
 
@@ -206,46 +209,58 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 
 String GetSensorParams(Sensor* sensor, String tpl) {
 	String res = "";
-	if (tpl.equals("%ArraySensorLabel%")) {
+	if (tpl.equals("%SensorsLabel%")) {
 		res = sensor->getLabel();
-	} else if (tpl.equals("%ArrayType%")) {
+	} else if (tpl.equals("%SensorsType%")) {
 		res = sensor->getType();
 	}
-	else if (tpl.equals("%ArrayCode%")) {
+	else if (tpl.equals("%SensorsCode%")) {
 		res = sensor->getPin();
 	}
-	else if (tpl.equals("%ArrayValue%")) {
+	else if (tpl.equals("%SensorsValue%")) {
 		res = sensor->getValue();
 	}
-	else if (tpl.equals("%ArrayError%")) {
+	else if (tpl.equals("%SensorsError%")) {
 		res = sensor->getActionStatus();
 	}
-	else if (tpl.equals("%ArrayCritical%")) {
+	else if (tpl.equals("%SensorsCritical%")) {
 		res = sensor->isCritical();
 	}
-	else if (tpl.equals("%ArrayCriticalCounter%")) {
+	else if (tpl.equals("%SensorsCriticalCounter%")) {
 		res = sensor->getCriticalThreshold();
 	}
 	
-	else if(tpl.equals("%ArrayAlarmLow%")) {
+	else if(tpl.equals("%SensorsAlarmLow%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_ALARM_LOW);
 	}
-	else if (tpl.equals("%ArrayAlarmHigh%")) {
+	else if (tpl.equals("%SensorsAlarmHigh%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_ALARM_HIGH);
 	}
 	
-	else if (tpl.equals("%ArrayStartLow%")) {
+	else if (tpl.equals("%SensorsStartLow%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_START_LOW);
 	}
-	else if (tpl.equals("%ArrayStartHigh%")) {
+	else if (tpl.equals("%SensorsStartHigh%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_START_HIGH);
 	}
 	return res;
 }
 
+String GetPumpParams(Pump* pump, String tpl) {
+	String res = "";
+	if (tpl.equals("%PumpsLabel%")) {
+		res = pump->getLabel();
+	}
+	else if (tpl.equals("%PumpsStatus%")) {
+		res = pump->status;
+	}
+	return res;
+}
+
+
 String GetTemplate(String tpl) {
 	String res = "";
-	if (tpl.startsWith("%Array")) {
+	if (tpl.startsWith("%Sensors")) {
 		res = "[";
 		for (int i = 0; i < Config.DevMgr.getNumberTemp(); i++) {
 			res += "'";
@@ -259,6 +274,15 @@ String GetTemplate(String tpl) {
 			res += "',";
 		}
 		*/
+		res[res.length() - 1] = ']';
+	}
+	else if (tpl.startsWith("%Pumps")) {
+		res = "[";
+		for (int i = 0; i < Config.DevMgr.getNumberPump(); i++) {
+			res += "'";
+			res += GetPumpParams(&(Config.DevMgr.pumps[i]), tpl);
+			res += "',";
+		}
 		res[res.length() - 1] = ']';
 	}
 	return res;
@@ -373,25 +397,28 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 				}
 				else if (isTpl) {
 					String tpl = "";
-					s.replace("%ArraySensorLabel%", GetTemplate("%ArraySensorLabel%"));
-					s.replace("%ArrayType%", GetTemplate("%ArrayType%"));
-					s.replace("%ArrayCode%", GetTemplate("%ArrayCode%"));
-					s.replace("%ArrayValue%", GetTemplate("%ArrayValue%"));
-					s.replace("%ArrayError%", GetTemplate("%ArrayError%"));
-					s.replace("%ArrayCritical%", GetTemplate("%ArrayCritical%"));
-					s.replace("%ArrayCriticalCounter%", GetTemplate("%ArrayCriticalCounter%"));
-					s.replace("%ArrayAlarmLow%", GetTemplate("%ArrayAlarmLow%"));
-					s.replace("%ArrayAlarmHigh%", GetTemplate("%ArrayAlarmHigh%"));
-					s.replace("%ArrayStartLow%", GetTemplate("%ArrayStartLow%"));
-					s.replace("%ArrayStartHigh%", GetTemplate("%ArrayStartHigh%"));
-
-/*
-					s.replace("%DesiredTemperature%", String(Config.cThermo.getDesiredTemp()));
-					s.replace("%CurrentTemperature%", String(Config.cThermo.getTemp()));
-*/
-					s.replace("%CurrentTime%", "Date-Time here");
+					s.replace("%SensorsLabel%", GetTemplate("%SensorsLabel%"));
+					s.replace("%SensorsType%", GetTemplate("%SensorsType%"));
+					s.replace("%SensorsCode%", GetTemplate("%SensorsCode%"));
+					s.replace("%SensorsValue%", GetTemplate("%SensorsValue%"));
+					s.replace("%SensorsError%", GetTemplate("%SensorsError%"));
+					s.replace("%SensorsCritical%", GetTemplate("%SensorsCritical%"));
+					s.replace("%SensorsCriticalCounter%", GetTemplate("%SensorsCriticalCounter%"));
+					s.replace("%SensorsAlarmLow%", GetTemplate("%SensorsAlarmLow%"));
+					s.replace("%SensorsAlarmHigh%", GetTemplate("%SensorsAlarmHigh%"));
+					s.replace("%SensorsStartLow%", GetTemplate("%SensorsStartLow%"));
+					s.replace("%SensorsStartHigh%", GetTemplate("%SensorsStartHigh%"));
 
 
+					s.replace("%DesiredTemperature%", String(Config.getDesiredTemp()));
+					s.replace("%CurrentTemperature%", String(Config.getTemp()));
+
+					s.replace("%CurrentTime%", "'Date-Time here'");
+
+					s.replace("%CompressorStatus%", String(Config.DevMgr.compressor.status));
+
+					s.replace("%PumpsLabel%", GetTemplate("%PumpsLabel%"));
+					s.replace("%PumpsStatus%",GetTemplate("%PumpsStatus%"));
 
 					client.println(s);
 					Debug(s);

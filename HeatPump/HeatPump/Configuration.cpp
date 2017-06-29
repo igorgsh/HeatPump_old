@@ -2,6 +2,8 @@
 #include "Definitions.h"
 
 
+#define WEB_ENABLED 1
+
 
 Configuration::Configuration()
 {
@@ -40,6 +42,7 @@ void Configuration::begin() {
 	//ScenMgr.begin();
 
 #ifdef WEB_ENABLED
+	Debug("Server Is Starting...");
 	web.begin();
 #endif
 }

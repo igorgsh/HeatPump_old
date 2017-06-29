@@ -23,8 +23,11 @@ public:
 
 	DeviceManager DevMgr = DeviceManager();
 	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
+	float getDesiredTemp() { return desiredTemp; }
+	float getTemp() { return DevMgr.currentTemp->getValue(); }
 
 private:
 	ArduinoServer web = ArduinoServer();
+	float desiredTemp=0.0;
 };
 

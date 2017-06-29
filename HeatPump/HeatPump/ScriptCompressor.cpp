@@ -19,11 +19,11 @@ ScriptCompressor::~ScriptCompressor()
 ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
 	ScenarioCmd ret = SCENARIO_NOCMD;
-	Debug("ScriptCompressor.Trigger");
+	//Debug("ScriptCompressor.Trigger");
 	// check TGEO & T1
 	if (Config.DevMgr.t1->getActionStatus() == ActionStatus::ACTION_NORMAL
 		&& Config.DevMgr.tGeo->getActionStatus() == ActionStatus::ACTION_NORMAL) {
-		Debug("Normal");
+		//Debug("Normal");
 		if (comp->status == STATUS_ON) {
 			ret = SCENARIO_NOCMD;
 		}
@@ -32,7 +32,7 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 		}
 	}
 	else {
-		Debug("Not Normal");
+		//Debug("Not Normal");
 
 		if (comp->status == STATUS_OFF) {
 			ret = SCENARIO_NOCMD;

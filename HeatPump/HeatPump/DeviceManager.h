@@ -31,6 +31,7 @@ public:
 
 	TempSensor* tGeo = &tempSensors[0];
 	TempSensor* t1 = &tempSensors[1];
+	TempSensor* currentTemp = &tempSensors[1];
 
 
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
