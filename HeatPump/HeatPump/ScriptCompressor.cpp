@@ -16,13 +16,40 @@ ScriptCompressor::~ScriptCompressor()
 {
 }
 
+bool ScriptCompressor::checkTempInt() {
+	bool ret = true;
+	ret &= (Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tGeoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tEvoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tEvoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tCondI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tCondO->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tHpO->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tHpI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tComp->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	return ret;
+}
+bool ScriptCompressor::checkContactors() {
+	bool ret = true;
+	ret &= (Config.DevMgr.cFlow->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	return ret;
+}
+
+bool ScriptCompressor::IsStartNeeded() {
+	if (Config.getDesiredTemp() < Config.DevMgr.currentTemp->getValue())
+		return false;
+	else
+		return true;
+}
+
 ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
 	ScenarioCmd ret = SCENARIO_NOCMD;
 	//Debug("ScriptCompressor.Trigger");
-	// check TGEO & T1
-	if (Config.DevMgr.t1->getActionStatus() == ActionStatus::ACTION_NORMAL
-		&& Config.DevMgr.tGeo->getActionStatus() == ActionStatus::ACTION_NORMAL) {
+	// check all internal temp sensors
+	if (IsStartNeeded()
+		&& checkTempInt()
+		&& checkContactors()) {
 		//Debug("Normal");
 		if (comp->status == STATUS_ON) {
 			ret = SCENARIO_NOCMD;

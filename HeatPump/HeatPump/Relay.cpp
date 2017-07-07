@@ -17,7 +17,7 @@ Relay::~Relay()
 void Relay::begin() {
 	pinMode(pin, OUTPUT);
 	disconnect();
-	digitalWrite(pin, status);
+	//digitalWrite(pin, status);
 }
 
 void Relay::connect() {

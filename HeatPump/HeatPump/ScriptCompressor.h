@@ -25,6 +25,11 @@ private:
 
 	//bool StartCompressor();
 	//bool StopCompressor();
-	
+
+	bool checkTempInt();
+	bool checkContactors();
+	bool IsStartNeeded();
+
+
 };
 

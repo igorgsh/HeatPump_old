@@ -95,6 +95,7 @@
     <ClInclude Include="ArduinoServer.h" />
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="Configuration.h" />
+    <ClInclude Include="Contactor.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DT.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="ArduinoServer.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Configuration.cpp" />
+    <ClCompile Include="Contactor.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
@@ -126,6 +128,9 @@
     <ClCompile Include="ScriptPump.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="TempSensor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="configuration.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

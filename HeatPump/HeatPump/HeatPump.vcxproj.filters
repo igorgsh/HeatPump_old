@@ -71,6 +71,9 @@
     <ClInclude Include="Compressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Contactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Configuration.cpp">
@@ -118,5 +121,11 @@
     <ClCompile Include="Compressor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Contactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="configuration.txt" />
   </ItemGroup>
 </Project>

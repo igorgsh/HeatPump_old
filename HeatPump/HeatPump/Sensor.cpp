@@ -9,6 +9,7 @@ void Sensor::init(String label, int pin, float actionPoints[], int critThreshold
 		this->actionPoints[i] = actionPoints[i];
 	}
 	this->criticalThreshold = critThreshold;
+	pinMode(pin, INPUT);
 }
 
 

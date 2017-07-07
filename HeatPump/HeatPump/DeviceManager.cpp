@@ -18,6 +18,10 @@ void DeviceManager::begin() {
 	for (int i = 0; i < getNumberPump(); i++) {
 		pumps[i].begin();
 	}
+	for (int i = 0; i < getNumberCont(); i++) {
+		contacts[i].begin();
+	}
+
 	compressor.begin();
 }
 
