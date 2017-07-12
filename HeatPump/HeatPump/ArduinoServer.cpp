@@ -367,12 +367,12 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 				}
 			}
 			else {
-				/*
-				ind = request.getIndexOfParmKey("desTemp");
+				
+				int ind = request.getIndexOfParmKey("desTemp");
 				if (ind != -1) {
-					Config.cThermo.setDesiredTemp(request.getParmValue(ind).toFloat());
+					Config.setDesiredTemp(request.getParmValue(ind).toFloat());
 				}
-				*/
+				
 			}
 		}
 

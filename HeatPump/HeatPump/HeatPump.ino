@@ -8,6 +8,7 @@
 
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
+#include <EEPROM.h>
 #include <EthernetUdp.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>

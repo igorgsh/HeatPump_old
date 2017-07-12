@@ -1,10 +1,14 @@
 #pragma once
+//#include "EEPROM.h"
 #include "DeviceManager.h"
 #include "ArduinoServer.h"
 #include "ScenarioManager.h"
 
 //#define WEB_ENABLED
-#undef WEB_ENABLED
+//#undef WEB_ENABLED
+
+#define EEPROM_Desired_Temp	0x00  //1 bytes
+
 
 class Configuration
 {
@@ -23,11 +27,18 @@ public:
 
 	DeviceManager DevMgr = DeviceManager();
 	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
-	float getDesiredTemp() { return desiredTemp; }
+	byte getDesiredTemp() { return desiredTemp; }
+	void setDesiredTemp(byte value);
 	float getTemp() { return DevMgr.currentTemp->getValue(); }
-
+	float OutTemperature();
 private:
 	ArduinoServer web = ArduinoServer();
-	float desiredTemp=0.0;
+	byte desiredTemp=EepromRead(EEPROM_Desired_Temp);
+	void EepromWrite(unsigned int addr, byte value);
+	void EepromWrite(unsigned int addr, unsigned int value);
+	byte EepromRead(unsigned int addr);
+	unsigned int EepromRead2(unsigned int addr);
+
+	//void EepromWrite(byte value, unsigned int addr);
 };
 

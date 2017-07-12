@@ -36,7 +36,8 @@ bool ScriptCompressor::checkContactors() {
 }
 
 bool ScriptCompressor::IsStartNeeded() {
-	if (Config.getDesiredTemp() < Config.DevMgr.currentTemp->getValue())
+	//if (Config.getDesiredTemp() < Config.DevMgr.currentTemp->getValue())
+	if (Config.DevMgr.tHpO->getValue() < Config.OutTemperature())
 		return false;
 	else
 		return true;
@@ -109,26 +110,24 @@ bool ScriptCompressor::Stop() {
 	static int step = 0;
 	bool ret = false;
 	if (step == 0) {
-		ret = Config.ScenMgr.scriptPumpGeo->Stop();
-		if (ret) {
-			step = 1;
-		}
+		comp->StopCompressor();
+		ret = true;
+		step = 1;
 	}
 	if (step == 1) {
-		ret = Config.ScenMgr.scriptPumpContour1->Stop();
+		ret = Config.ScenMgr.scriptPumpContour2->Stop();
 		if (ret) {
 			step = 2;
 		}
 	}
 	if (step == 2) {
-		ret = Config.ScenMgr.scriptPumpContour2->Stop();
+		ret = Config.ScenMgr.scriptPumpContour1->Stop();
 		if (ret) {
 			step = 3;
 		}
 	}
 	if (step == 3) { //final
-		comp->StopCompressor();
-		ret = true;
+		ret = Config.ScenMgr.scriptPumpGeo->Stop();
 		step = 0;
 	}
 
