@@ -37,10 +37,10 @@ void Timer2() { //it is started every 100ms
 
 	Config.loop1();
 	Config.counter1++;
-	if (Config.counter1 % 5 == 0) {
+	if (Config.counter1 % 5 == 1) {
 		Config.loop5();
 		Config.counter5++;
-		if (Config.counter1 % 10 == 0) {
+		if (Config.counter1 % 10 == 2) {
 			Config.loop10();
 			Config.counter10++;
 		}
@@ -52,7 +52,7 @@ void Timer2() { //it is started every 100ms
 void setup() {
 	//Configure Serial port and SD card
 	Serial.begin(115200);
-	Debug("Begin");
+	Debug("Begin 1.0");
 	
 	SD.begin(SDCARD_SS);
 
@@ -62,15 +62,6 @@ void setup() {
 	// Prepare the light indicator 
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
-
-	/*
-	// locate devices on the bus
-	Serial.print("Locating devices...");
-	Serial.print("Found ");
-	Serial.print(Config.getNumberTemp() + Config.getNumberCont(), DEC);
-	Serial.println(" devices.");
-	*/
-
 	//Set a timer 
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();

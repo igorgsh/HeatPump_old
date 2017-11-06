@@ -17,25 +17,26 @@ public:
 
 	void begin();
 
-	TempSensor tempSensors[NUMBER_OF_TEMP] = { TempSensor("GeoI",22,new float[NUMBER_OF_ACTIONPOINTS] {21.0,22.0,44.0,45.0}, 5),
-												TempSensor("GeoO",23,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("EvoI",24,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("EvoO",25,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("CondI",26,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("CondO",27,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("HpO",28,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("HpI",29,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("Comp",30,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("Unkn",31,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("Room",32,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5),
-		TempSensor("Street",33,new float[NUMBER_OF_ACTIONPOINTS] { 21.0,22.0,44.0,45.0 },5)
+	TempSensor tempSensors[NUMBER_OF_TEMP] = { 
+		TempSensor("GeoI",22,new float[NUMBER_OF_ACTIONPOINTS] {17.0,18.0,30.0,32.0}, 5),
+		TempSensor("GeoO",23,new float[NUMBER_OF_ACTIONPOINTS] {17.0,18.0,30.0,32.0},5),
+		TempSensor("EvoI",24,new float[NUMBER_OF_ACTIONPOINTS] {17.0,18.0,30.0,32.0},5),
+		TempSensor("EvoO",25,new float[NUMBER_OF_ACTIONPOINTS] {17.0,18.0,30.0,32.0},5),
+		TempSensor("CondI",26,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("CondO",27,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("HpO",28,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("HpI",29,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("Comp",30,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("Unkn",31,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("Room",32,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5),
+		TempSensor("Street",33,new float[NUMBER_OF_ACTIONPOINTS] { 17.0,18.0,30.0,32.0 },5)
 	};
 
-	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", 50,LOW,30,30),
-									Pump("PC1", 51,LOW,30,30),
-									Pump("PC2", 49,LOW,30,30),
+	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", 40,HIGH,30,30),
+									Pump("PC1", 42,HIGH,30,30),
+									Pump("PC2", 44,HIGH,30,30),
 	};
-	Compressor compressor = Compressor("PComp", 53, LOW, 30, 30);
+	Compressor compressor = Compressor("PComp", 38, HIGH, 30, 30);
 
 	Pump* pumpGeo = &pumps[0];
 	Pump* pumpContour1 = &pumps[1];
@@ -54,7 +55,7 @@ public:
 	TempSensor* currentTemp = &tempSensors[10];
 	TempSensor* tStreet = &tempSensors[11];
 
-	Contactor contacts[NUMBER_OF_CONTACTOR] = {Contactor("Flow", 34, true, 5)};
+	Contactor contacts[NUMBER_OF_CONTACTOR] = {Contactor("Flow", 8, true, 5)};
 	
 	Contactor* cFlow = &contacts[0];
 

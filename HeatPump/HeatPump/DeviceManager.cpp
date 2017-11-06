@@ -43,5 +43,6 @@ void DeviceManager::loop10(unsigned long counter) {
 		Debug2_(";Temperature=", tempSensors[i].getValue());
 		Debug2(";Status:", tempSensors[i].getActionStatus());
 	}
+	Debug("====");
 
 }
