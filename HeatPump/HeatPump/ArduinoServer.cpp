@@ -24,7 +24,7 @@ void ArduinoServer::begin() {
 	//Debug("Point1");
 
 	if (Ethernet.begin(mac) == 0) {
-		Serial.println("Failed to configure Ethernet using DHCP");
+		Debug("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
 		// try to congifure using IP address instead of DHCP:
 		IPAddress ip(192, 168, 0, 101);
@@ -77,7 +77,6 @@ int ArduinoServer::ProcessRequest(Client& client) {
 	// skip HTTP/1.1
 	line = client.readStringUntil(0x0a);
 	Debug2("Line=", line);
-	//Serial.println(line);
 
 	//Read parameters of header
 	while (client.available()) {
@@ -267,13 +266,13 @@ String GetTemplate(String tpl) {
 			res += GetSensorParams(&(Config.DevMgr.tempSensors[i]), tpl);
 			res += "',";
 		}
-		/*
-		for (int i = 0; i < Config.DevManager.getNumberCont(); i++) {
+		
+		for (int i = 0; i < Config.DevMgr.getNumberCont(); i++) {
 			res += "'";
-			res += GetSensorParams(&(Config.DevManager.contacts[i]), tpl);
+			res += GetSensorParams(&(Config.DevMgr.contacts[i]), tpl);
 			res += "',";
 		}
-		*/
+		
 		res[res.length() - 1] = ']';
 	}
 	else if (tpl.startsWith("%Pumps")) {
@@ -440,7 +439,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 	else
 	{
 		Debug("File not found");
-		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
+		PrintErrorPage(client, "404 Not Found!", "File:" + request.URL);
 	}
 	Debug("End PrintMainPage");
 

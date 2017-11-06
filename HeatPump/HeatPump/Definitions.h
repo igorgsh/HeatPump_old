@@ -12,6 +12,11 @@ typedef enum {
 
 extern DebugLevel dLevel;
 
+#define _SIMULATOR_
+#include "Simulator.h"
+
+extern Simulator* sim;
+
 #define SerialLog2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),Y);}};
 #define SerialLog2_(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.print((X),Y);}};
 #define SerialLog(LEVEL, X) {if (LEVEL <= dLevel) {Serial.println((X));}};

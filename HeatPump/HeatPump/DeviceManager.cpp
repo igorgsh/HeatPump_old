@@ -30,6 +30,10 @@ void DeviceManager::loop1(unsigned long counter) {
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].loop(counter);
 	}
+	//check all contactors
+	for (int i = 0; i < getNumberCont(); i++) {
+		contacts[i].loop(counter);
+	}
 }
 
 void DeviceManager::loop5(unsigned long counter) {
@@ -38,11 +42,12 @@ void DeviceManager::loop5(unsigned long counter) {
 
 
 void DeviceManager::loop10(unsigned long counter) {
+	/*
 	for (int i = 0; i < getNumberTemp(); i++) {
 		Debug2_("Sensor:",tempSensors[i].getLabel());
-		Debug2_(";Temperature=", tempSensors[i].getValue());
-		Debug2(";Status:", tempSensors[i].getActionStatus());
+		Debug2_(";Temperature=", String(tempSensors[i].getValue()));
+		Debug2(";Status:", String(tempSensors[i].getActionStatus()));
 	}
 	Debug("====");
-
+	*/
 }

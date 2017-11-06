@@ -5,13 +5,16 @@ class Contactor :
 {
 public:
 	~Contactor();
-	Contactor(String label, int pin, bool alarm, int critThreshold);
+
+	Contactor(String label, int pin, bool lhOn, float actionPoints[], int critThreshold);
 	void begin();
 //	void requestTemperatures();
 	bool checkDataReady();
 	bool loop(unsigned long counter);
+	//ActionStatus getActionStatus() { return actionStatus; };
+
 private:
-	bool Alarm;
+	bool lhOn;
 	void init();
 
 };

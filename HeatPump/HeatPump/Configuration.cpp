@@ -50,6 +50,8 @@ void Configuration::begin() {
 float Configuration::OutTemperature() {
 	float outTemp = 0;
 	if (desiredTemp< 20)
+		outTemp = 25;
+	else if (desiredTemp < 25)
 		outTemp = 30;
 	else if (desiredTemp < 30)
 		outTemp = 35;

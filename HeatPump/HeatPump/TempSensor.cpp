@@ -1,4 +1,5 @@
 #include "TempSensor.h"
+#include "Definitions.h"
 //
 
 TempSensor::TempSensor(String label, int pin,  float actionPoints[], int critThreshold)
@@ -25,8 +26,15 @@ void TempSensor::requestTemperatures() {
 
 bool TempSensor::checkDataReady() {
 	bool ret = dt->isConversionAvailable(0);
+	//Debug("Point 2.5");
 	if (ret) {
+		//Debug("Point3");
+#ifdef _SIMULATOR_
+		currentValue = sim->GetRealResult(this->pin);
+		//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
+#else
 		currentValue = dt->getTempCByIndex(0);
+#endif // _SIMULATOR_
 	}
 	return ret;
 }

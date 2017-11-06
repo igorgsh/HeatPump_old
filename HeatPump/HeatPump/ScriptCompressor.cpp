@@ -27,26 +27,29 @@ bool ScriptCompressor::checkTempInt() {
 	ret &= (Config.DevMgr.tHpO->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tHpI->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tComp->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	Debug2("checkTempInt=", ret);
 	return ret;
 }
 bool ScriptCompressor::checkContactors() {
 	bool ret = true;
 	ret &= (Config.DevMgr.cFlow->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	Debug2("CheckContactor=", ret);
 	return ret;
 }
 
 bool ScriptCompressor::IsStartNeeded() {
 	//if (Config.getDesiredTemp() < Config.DevMgr.currentTemp->getValue())
-	if (Config.DevMgr.tHpO->getValue() < Config.OutTemperature())
-		return false;
-	else
-		return true;
+	bool res;
+
+	res = (Config.DevMgr.tHpO->getValue() < Config.OutTemperature());
+	Debug2("IsStartNeeded=", res);
+	return res;
 }
 
 ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
 	ScenarioCmd ret = SCENARIO_NOCMD;
-	//Debug("ScriptCompressor.Trigger");
+	Debug("ScriptCompressor.Trigger");
 	// check all internal temp sensors
 	if (IsStartNeeded()
 		&& checkTempInt()
@@ -76,7 +79,7 @@ bool ScriptCompressor::Start() {
 	static int step = 0;
 
 	Debug("Compressor Start");
-	Debug2("Step:", step);
+	Debug2("Step:", String(step));
 	bool ret = false;
 	if (step == 0) {
 		ret = Config.ScenMgr.scriptPumpGeo->Start();
@@ -102,7 +105,7 @@ bool ScriptCompressor::Start() {
 		step = 0;
 	}
 
-	Debug2("Return:", ret);
+	Debug2("Return:", String(ret));
 	return ret;
 }
 

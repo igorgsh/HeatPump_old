@@ -36,20 +36,20 @@ bool Scenario::Run(ScenarioCmd cmd, unsigned long counter) {
 	//Debug("ScenarioRun");
 	bool res = false;
 	if (cmd == ScenarioCmd::SCENARIO_START) {
-		//Debug("CmdStart");
+		Debug("CmdStart");
 		if (device->status == STATUS_ON) { // Nothing to do. Device is running
-			//Debug("Status_on");
+			Debug("Status_on");
 			res = true;
 		}
-		else { //Device is off of unknown
-			//Debug("Status_off");
+		else { //Device is off or unknown
+			Debug("Status_off");
 
 			if (device->lastStatusTimestamp + device->minTimeOff <= counter) { //Device is off a long time. Start it
-				//Debug("Get started");
+				Debug("Get started");
 				res = Start();
 			}
 			else { //Device is Off but timeout is still not over
-				//Debug("Nothing");
+				Debug("Nothing");
 				res = false;
 			}
 		}

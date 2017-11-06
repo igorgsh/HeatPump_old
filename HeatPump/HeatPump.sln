@@ -8,6 +8,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "..\..\Simulator\Simulator.vcxitems", "{0FF7BF96-094F-4CF3-83EA-14B2CD1FB227}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Simulator\Simulator.vcxitems*{0ff7bf96-094f-4cf3-83ea-14b2cd1fb227}*SharedItemsImports = 9
+		..\..\Simulator\Simulator.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
