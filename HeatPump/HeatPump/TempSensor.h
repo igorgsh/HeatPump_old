@@ -14,7 +14,7 @@ public:
 	void begin();
 	void requestTemperatures();
 	bool checkDataReady();
-	bool loop(unsigned long counter);
+	bool loop();
 private:
 	DT* dt;
 	OneWire* wire;

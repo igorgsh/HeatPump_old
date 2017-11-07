@@ -5,8 +5,8 @@
 #include "ScriptPump.h"
 #include "ScriptCompressor.h"
 
-#define NUMBER_OF_SCRIPTS 4
-
+#define NUMBER_OF_SCRIPTS	4
+#define HANGOUT_INTERVAL	(10*60)
 
 
 class ScenarioManager
@@ -24,9 +24,9 @@ public:
 	Scenario* scripts[NUMBER_OF_SCRIPTS];
 
 	void PrepareCmd(Scenario* script, ScenarioCmd cmd);
-	void loop1(unsigned long counter);
-	void loop5(unsigned long counter);
-	void loop10(unsigned long counter);
+	void loop1();
+	void loop5();
+	void loop10();
 	void begin();
 private:
 	DeviceManager* DevMgr;

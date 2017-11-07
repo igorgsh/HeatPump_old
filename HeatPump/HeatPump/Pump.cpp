@@ -3,9 +3,9 @@
 
 extern Configuration Config;
 
-Pump::Pump(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff)
+Pump::Pump(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) : 
+	Relay(pin,on)
 {
-	r = new Relay(pin, on);
 	status = DeviceStatus::STATUS_OFF;
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
@@ -17,40 +17,15 @@ Pump::~Pump()
 }
 
 void Pump::StopPump() {
-	r->disconnect();
-	lastStatusTimestamp = Config.counter1;
+	disconnect();
+	lastStatusTimestamp = Config.counter1s;
 }
 
 void Pump::StartPump() {
-	r->connect();
-	lastStatusTimestamp = Config.counter1;
+	connect();
+	lastStatusTimestamp = Config.counter1s;
 }
 
 void Pump::begin() {
-	r->begin();
+	Relay::begin();
 }
-
-/*
-bool Pump::DeviceCommand(ScenarioCommand cmd)
-{
-	if (cmd == COMMAND_FORCE_STOP) {
-		StopPump();
-		currentCmd = COMMAND_NO_COMMAND;
-		status = STATUS_OFF;
-	}
-	else if (IsDeviceReady()) {
-		if (cmd == COMMAND_STOP) {
-			StopPump();
-			currentCmd = COMMAND_NO_COMMAND;
-			status = STATUS_OFF;
-		}
-		else if (cmd == COMMAND_START) {
-			StartPump();
-			currentCmd = COMMAND_NO_COMMAND;
-			status = STATUS_ON;
-		}
-	}
-	return true;
-}
-
-*/

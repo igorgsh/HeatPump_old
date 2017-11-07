@@ -8,9 +8,10 @@ Contactor::~Contactor()
 }
 
 
-Contactor::Contactor(String label, int pin, bool lhOn, float actionPoints[], int critThreshold)
-	: Sensor(label, pin, actionPoints, critThreshold) {
+Contactor::Contactor(String label, int pin, bool lhOn, bool alarmOn, int critThreshold)
+	: Sensor(label, pin, critThreshold) {
 	this->lhOn = lhOn;
+	this->AlarmOn = alarmOn;
 	init();
 
 }
@@ -19,28 +20,17 @@ Contactor::Contactor(String label, int pin, bool lhOn, float actionPoints[], int
 
 void Contactor::init() {
 	this->type = CONTACT;
-/*
-	if (Alarm) {
-		actionPoints[0] = -1.0;
-		actionPoints[1] = -1.0;
-		actionPoints[2] = 0.5;
-		actionPoints[3] = 0.5;
-	}
-	else {
-		actionPoints[0] = 0.5;
-		actionPoints[1] = 0.5;
-		actionPoints[2] = 1.5;
-		actionPoints[3] = 1.5;
-	}
-	*/
+	actionPoints[0] = (AlarmOn ? ((float)lhOn) : ((float)!lhOn));
+	actionPoints[1] = actionPoints[0];
+	actionPoints[2] = actionPoints[0];
+	actionPoints[3] = actionPoints[0];
 	digitalWrite(pin, !lhOn);
-
 }
 
 void Contactor::begin() {
 }
 
-bool Contactor::loop(unsigned long counter) {
+bool Contactor::loop() {
 	bool res;
 
 	res = getData();

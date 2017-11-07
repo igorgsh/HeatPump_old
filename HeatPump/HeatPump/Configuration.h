@@ -21,9 +21,9 @@ public:
 	void loop5();
 	void loop10();
 
-	unsigned long counter1 = 0;
-	unsigned long counter5 = 0;
-	unsigned long counter10 = 0;
+	unsigned long counter100 = 0;
+	unsigned long counter500 = 0;
+	unsigned long counter1s = 0;
 
 	DeviceManager DevMgr = DeviceManager();
 	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
@@ -38,7 +38,5 @@ private:
 	void EepromWrite(unsigned int addr, unsigned int value);
 	byte EepromRead(unsigned int addr);
 	unsigned int EepromRead2(unsigned int addr);
-
-	//void EepromWrite(byte value, unsigned int addr);
 };
 

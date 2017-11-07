@@ -55,15 +55,15 @@ public:
 	TempSensor* currentTemp = &tempSensors[10];
 	TempSensor* tStreet = &tempSensors[11];
 
-	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, new float[NUMBER_OF_ACTIONPOINTS] {0.5,0.5,1.5,1.5}, 5) };
+	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, false, 5) };
 	
 	Contactor* cFlow = &contacts[0];
 
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }
 	int getNumberPump() { return NUMBER_OF_PUMP; }
-	void loop1(unsigned long counter);
-	void loop5(unsigned long counter);
-	void loop10(unsigned long counter);
+	void loop1();
+	void loop5();
+	void loop10();
 };
 

@@ -79,6 +79,7 @@ void initSim() {
 	res = sim->SetValueGen(0, 8, 1.0);
 	if (!res) Debug("Contactor Error");
 
+
 	sim->SetValueGenNumber(0);
 }
 

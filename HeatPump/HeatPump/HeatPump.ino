@@ -1,5 +1,3 @@
-#include <Keypad.h>
-#include <Key.h>
 /*
  Name:		HeatPump.ino
  Created:	14.05.17 11:26:52
@@ -7,10 +5,12 @@
 
  Heat Pump controller
 */
+#include <Keypad.h>
+#include <Key.h>
 
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
-#include <EEPROM.h>
+//#include <EEPROM.h>
 #include <EthernetUdp.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>
@@ -44,16 +44,16 @@ void Timer2() { //it is started every 100ms
 	if (isReady) {
 		//Debug("Loop1");
 		Config.loop1();
-		Config.counter1++;
-		if (Config.counter1 % 5 == 1) {
+		Config.counter100++;
+		if (Config.counter100 % 5 == 1) {
 			//Debug("Loop5");
 			Config.loop5();
-			Config.counter5++;
+			Config.counter500++;
 		}
-		if (Config.counter1 % 10 == 2) {
+		if (Config.counter100 % 10 == 2) {
 			//Debug("Loop10");
 			Config.loop10();
-			Config.counter10++;
+			Config.counter1s++;
 		}
 	}
 }

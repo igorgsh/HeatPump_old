@@ -3,6 +3,9 @@
 #include "Compressor.h"
 #include "ScriptPump.h"
 
+#define PUMP_OFF_TIMEOUT 10
+#define COMPRESSOR_ON_TIMEOUT 10
+
 class ScriptCompressor :
 	public Scenario
 {
@@ -23,8 +26,6 @@ private:
 	ScriptPump* pumpContour1;
 	ScriptPump* pumpContour2;
 
-	//bool StartCompressor();
-	//bool StopCompressor();
 
 	bool checkTempInt();
 	bool checkContactors();

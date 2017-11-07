@@ -44,21 +44,24 @@ void TempSensor::begin() {
 	dt->setResolution(DEFAULT_RESOLUTION);
 }
 
-bool TempSensor::loop(unsigned long counter) {
+bool TempSensor::loop() {
 	bool result = true;
-	if (counter % 10 == 0) {//first loop - request for data
+	static int tryCounter = 0;
+	if (tryCounter == 0) {//first loop - request for data
 		requestTemperatures();
 		result = true;
 	}
-	else if (counter % 10 == 9) { // the last loop. All sensors which didn't ready are marked as Disconnected 
+	else if (tryCounter == 9) { // the last loop. All sensors which didn't ready are marked as Disconnected 
 		if (!getData()) {
 			actionStatus = ACTION_NODATA;
 			ErrorCounter++;
 			result = false;
 		}
+		tryCounter = 0;
 	}
 	else { //check/prepare data ready
 		result = getData();
 	}
+	tryCounter++;
 	return result;
 }

@@ -12,7 +12,6 @@ public:
 	ScenarioCmd TriggerredCmd();
 	bool Start();
 	bool Stop();
-	//bool Run(ScenarioCmd cmd, unsigned long counter) = 0;
 	bool begin() { return true; };
 
 private:

@@ -17,17 +17,15 @@ public:
 	virtual ~Scenario();
 	bool IsActive = false;
 	virtual ScenarioCmd TriggerredCmd() = 0 ;
-	virtual bool Run(ScenarioCmd cmd, unsigned long counter);
+	virtual bool Run(ScenarioCmd cmd);
 	int getId() { return id; };
 	String getLabel() { return label; };
 	void setLabel(String lbl) { label = lbl; };
 	bool Enabled = true;
-	//virtual bool Run(ScenarioCmd cmd, unsigned long counter) =0;
 	virtual bool Start()=0;
 	virtual bool Stop()=0;
 	virtual bool begin()=0;
 private:
-	//ScenarioManager* scenMgr;
 	int id;
 	String label;
 	

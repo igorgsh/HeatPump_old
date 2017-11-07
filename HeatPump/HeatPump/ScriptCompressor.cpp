@@ -49,12 +49,12 @@ bool ScriptCompressor::IsStartNeeded() {
 ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
 	ScenarioCmd ret = SCENARIO_NOCMD;
-	Debug("ScriptCompressor.Trigger");
+	//Debug("ScriptCompressor.Trigger");
 	// check all internal temp sensors
 	if (IsStartNeeded()
 		&& checkTempInt()
 		&& checkContactors()) {
-		//Debug("Normal");
+		Debug("Normal");
 		if (comp->status == STATUS_ON) {
 			ret = SCENARIO_NOCMD;
 		}
@@ -63,7 +63,7 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 		}
 	}
 	else {
-		//Debug("Not Normal");
+		Debug("Not Normal");
 
 		if (comp->status == STATUS_OFF) {
 			ret = SCENARIO_NOCMD;
@@ -77,6 +77,7 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
 bool ScriptCompressor::Start() {
 	static int step = 0;
+	static unsigned long counterPump = 0;
 
 	Debug("Compressor Start");
 	Debug2("Step:", String(step));
@@ -96,10 +97,17 @@ bool ScriptCompressor::Start() {
 	if (step == 2) {
 		ret = Config.ScenMgr.scriptPumpContour2->Start();
 		if (ret) {
+			counterPump = Config.counter1s;
 			step = 3;
 		}
 	}
-	if (step == 3) { //final
+	if (step ==3 ) {//delay before start compressor
+		
+		if (Config.counter1s - counterPump >= COMPRESSOR_ON_TIMEOUT) {
+			step = 4;
+		}
+	}
+	if (step == 4) { //final
 		comp->StartCompressor();
 		ret = true;
 		step = 0;
@@ -111,25 +119,35 @@ bool ScriptCompressor::Start() {
 
 bool ScriptCompressor::Stop() {
 	static int step = 0;
+	static unsigned long counterPump = 0;
+	Debug("Compressor Stop");
+	Debug2("Step:", String(step));
+
 	bool ret = false;
 	if (step == 0) {
 		comp->StopCompressor();
 		ret = true;
 		step = 1;
+		counterPump = Config.counter1s;
 	}
 	if (step == 1) {
-		ret = Config.ScenMgr.scriptPumpContour2->Stop();
-		if (ret) {
+		if (Config.counter1s - counterPump >= PUMP_OFF_TIMEOUT) {
 			step = 2;
 		}
 	}
 	if (step == 2) {
-		ret = Config.ScenMgr.scriptPumpContour1->Stop();
+		ret = Config.ScenMgr.scriptPumpContour2->Stop();
 		if (ret) {
 			step = 3;
 		}
 	}
-	if (step == 3) { //final
+	if (step == 3) {
+		ret = Config.ScenMgr.scriptPumpContour1->Stop();
+		if (ret) {
+			step = 4;
+		}
+	}
+	if (step == 4) { //final
 		ret = Config.ScenMgr.scriptPumpGeo->Stop();
 		step = 0;
 	}

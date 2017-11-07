@@ -4,10 +4,9 @@
 
 extern Configuration Config;
 
-Compressor::Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff)
+Compressor::Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) :
+	Relay(pin, on)
 {
-	r = new Relay(pin, on);
-	status = DeviceStatus::STATUS_OFF;
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
 	this->label = label;
@@ -18,17 +17,17 @@ Compressor::~Compressor()
 }
 
 void Compressor::StopCompressor() {
-	r->disconnect();
-	lastStatusTimestamp = Config.counter1;
+	disconnect();
+	lastStatusTimestamp = Config.counter1s;
 }
 
 void Compressor::StartCompressor() {
 	Debug("Start Compressor!!!");
-	r->connect();
-	lastStatusTimestamp = Config.counter1;
+	connect();
+	lastStatusTimestamp = Config.counter1s;
 }
 
 void Compressor::begin() {
-	r->begin();
+	Relay::begin();
 }
 

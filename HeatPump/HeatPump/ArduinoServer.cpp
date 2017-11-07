@@ -57,7 +57,7 @@ int ArduinoServer::ProcessRequest(Client& client) {
 
 	// Read type of request
 	line = client.readStringUntil('/');
-	Debug2("TYPE=",line);
+	//Debug2("TYPE=",line);
 	HttpRequest request;
 
 	if (line.startsWith("GET")) {
@@ -71,17 +71,17 @@ int ArduinoServer::ProcessRequest(Client& client) {
 	}
 	// Read URL
 	line = client.readStringUntil(' ');
-	Debug2("URL=",line);
+	//Debug2("URL=",line);
 	request.URL = line;
 
 	// skip HTTP/1.1
 	line = client.readStringUntil(0x0a);
-	Debug2("Line=", line);
+	//Debug2("Line=", line);
 
 	//Read parameters of header
 	while (client.available()) {
 		line = client.readStringUntil(0x0a);
-		Debug2("Line=", line);
+		//Debug2("Line=", line);
 
 		if (line.length() == 1 && line[0] == 0x0D) {// Empty line. The body will be next
 			request.body = client.readString();
@@ -91,11 +91,11 @@ int ArduinoServer::ProcessRequest(Client& client) {
 		}
 	}
 	request.ParseParameters();
-	Debug2("Result:", (request.type == GET ? "Type: GET" : "Type: POST"));
-	Debug2("URL:",request.URL);
-	Debug2("Host:",request.host);
-	Debug2("Body:",request.body);
-	Debug2("NumberOfParm:", request.NumberParms);
+	//Debug2("Result:", (request.type == GET ? "Type: GET" : "Type: POST"));
+	//Debug2("URL:",request.URL);
+	//Debug2("Host:",request.host);
+	//Debug2("Body:",request.body);
+	//Debug2("NumberOfParm:", request.NumberParms);
 
 	ParseCommand(client, request);
 
@@ -125,7 +125,7 @@ void ArduinoServer::HttpHeader(Client& client, String error) {
 
 void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 
-	Debug("Start ParseCommand");
+	//Debug("Start ParseCommand");
 	if (request.URL.endsWith(".htm")) {
 		PrintHtmPage(client, request);
 	}
@@ -351,7 +351,7 @@ void setArrayVar(String varName, int ind, String val) {
 
 void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 
-	Debug("Start PrintMonitorPage");
+	//Debug("Start PrintMonitorPage");
 	
 	if (request.NumberParms != 0) { // Some POST variables submitted
 		//int ind;
@@ -420,7 +420,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%PumpsStatus%",GetTemplate("%PumpsStatus%"));
 
 					client.println(s);
-					Debug(s);
+					//Debug(s);
 				}
 				else { // ordinary line - nothing special
 					client.println(s);

@@ -25,23 +25,23 @@ void DeviceManager::begin() {
 	compressor.begin();
 }
 
-void DeviceManager::loop1(unsigned long counter) {
+void DeviceManager::loop1() {
 	//check all thermometers
 	for (int i = 0; i < getNumberTemp(); i++) {
-		tempSensors[i].loop(counter);
+		tempSensors[i].loop();
 	}
 	//check all contactors
 	for (int i = 0; i < getNumberCont(); i++) {
-		contacts[i].loop(counter);
+		contacts[i].loop();
 	}
 }
 
-void DeviceManager::loop5(unsigned long counter) {
+void DeviceManager::loop5() {
 
 }
 
 
-void DeviceManager::loop10(unsigned long counter) {
+void DeviceManager::loop10() {
 	/*
 	for (int i = 0; i < getNumberTemp(); i++) {
 		Debug2_("Sensor:",tempSensors[i].getLabel());

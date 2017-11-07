@@ -6,10 +6,16 @@ void Sensor::init(String label, int pin, float actionPoints[], int critThreshold
 	this->label = label;
 	this->pin = pin;
 	for (int i = 0; i < NUMBER_OF_ACTIONPOINTS; i++) {
-		this->actionPoints[i] = actionPoints[i];
+		if (actionPoints != NULL) {
+			this->actionPoints[i] = actionPoints[i];
+		}
 	}
 	this->criticalThreshold = critThreshold;
 	pinMode(pin, INPUT);
+}
+
+Sensor::Sensor(String label, int pin, int critThreshold) {
+	init(label, pin, NULL, critThreshold);
 }
 
 

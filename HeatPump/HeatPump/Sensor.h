@@ -42,6 +42,7 @@ typedef enum {
 class Sensor
 {
 public:
+	Sensor(String label, int pin, int critThreshold = 5);
 	Sensor(String label, int pin, float actionPoints[], int critThreshold = 5);
 	//Type of Sensor
 	SensorType type = NOSENSOR;
@@ -63,18 +64,12 @@ public:
 	int getPin() { return pin; };
 
 	// Request values from sensor
-	virtual bool loop(unsigned long counter) = 0;
+	virtual bool loop() = 0;
 
 	bool getData();
 
 	ActionStatus getActionStatus() { return actionStatus; };
 
-	/*
-	void setActionLow(float value) { actionLow = value; };
-	float getActionLow() { return actionLow; };
-	void setActionHigh(float value) { actionHigh = value; };
-	float getActionHigh() { return actionHigh; };
-	*/
 	void setCriticalThreshold(int value) { criticalThreshold = value; };
 	int getCriticalThreshold() { return criticalThreshold; };
 	float getActionPoint(ActionPointType n) { if (n >= 0 && n < NUMBER_OF_ACTIONPOINTS) return actionPoints[n]; else return 0.0; };
@@ -86,12 +81,6 @@ protected:
 	//	ErrorCode error = NO_ERROR;
 	String label;
 	int pin;
-	// Alarm line: AlarmLow: -... alarmLow); No Alarm: alarmLow...alarmHigh;AlarmHigh:alarmHigh...
-	// Action line: ActionLow:-...actionLow; ActionNormal:actionLow...actionHigh; ActionHigh: actionHigh...+ 
-//	float alarmLow;
-//	float alarmHigh;
-	//float actionLow;
-	//float actionHigh;
 
 
 
@@ -99,7 +88,6 @@ protected:
 	int criticalThreshold;
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
-	//	AlarmStatus alarmStatus = AlarmStatus::ALARM_LOW;
 
 	float currentValue;
 

@@ -15,31 +15,27 @@ Configuration::~Configuration()
 }
 
 void Configuration::loop1() {
-	//Debug("Loop1");
-	DevMgr.loop1(counter1);
-	ScenMgr.loop1(counter1);
+	DevMgr.loop1();
+	ScenMgr.loop1();
 }
 
 void Configuration::loop5() {
-	//Debug("Loop5");
 #ifdef WEB_ENABLED
 	web.loop();
 
 #endif // WEB_ENABLED
 
-	DevMgr.loop5(counter5);
-	ScenMgr.loop5(counter5);
+	DevMgr.loop5();
+	ScenMgr.loop5();
 }
 
 void Configuration::loop10() {
-	//Debug("Loop10");
-	DevMgr.loop10(counter10);
-	ScenMgr.loop10(counter10);
+	DevMgr.loop10();
+	ScenMgr.loop10();
 }
 
 void Configuration::begin() {
 	DevMgr.begin();
-	//ScenMgr.begin();
 
 #ifdef WEB_ENABLED
 	Debug("Server Is Starting...");
@@ -49,16 +45,12 @@ void Configuration::begin() {
 
 float Configuration::OutTemperature() {
 	float outTemp = 0;
-	if (desiredTemp< 20)
+	if (desiredTemp<= 20)
 		outTemp = 25;
-	else if (desiredTemp < 25)
-		outTemp = 30;
-	else if (desiredTemp < 30)
-		outTemp = 35;
-	else if (desiredTemp < 35)
-		outTemp = 40;
-	else 
+	else if (desiredTemp >=45)
 		outTemp = 45;
+	else 
+		outTemp = desiredTemp+5;
 	return outTemp;
 }
 

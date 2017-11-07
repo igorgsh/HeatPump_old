@@ -1,6 +1,7 @@
 #include "ScenarioManager.h"
+#include "Configuration.h"
 
-
+extern Configuration Config;
 
 ScenarioManager::ScenarioManager(DeviceManager* DevMgr)
 {
@@ -27,22 +28,22 @@ ScenarioManager::~ScenarioManager()
 	}
 }
 
-void ScenarioManager::loop1(unsigned long counter) {
+void ScenarioManager::loop1() {
 
 }
 
 
-void ScenarioManager::loop5(unsigned long counter) {
-	static int tryCounter = 0;
+void ScenarioManager::loop5() {
+	static unsigned long tryStart = 0;
 
 	// Main loop for scenario run
 
 	// check triggers
 	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
 		if (scripts[i]->Enabled) {
-			Debug2("Script:", scripts[i]->getLabel());
+			//Debug2("Script:", scripts[i]->getLabel());
 			ScenarioCmd cmd = scripts[i]->TriggerredCmd();
-			Debug2("Cmd:", cmd);
+			//Debug2("Cmd:", cmd);
 			PrepareCmd(scripts[i], cmd);
 		}
 	}
@@ -51,19 +52,18 @@ void ScenarioManager::loop5(unsigned long counter) {
 	if (currentScript != NULL) {
 		Debug2("CurrentScript:", currentScript->getLabel());
 		Debug2("Current cmd:", currentCmd);
-		Debug2("Try:", tryCounter);
-		bool res = currentScript->Run(currentCmd,counter);
+		Debug2("Try:", tryStart);
+		bool res = currentScript->Run(currentCmd);
 		Debug2("Result:", res);
 		if (res) {//script is finished
-			tryCounter = 0;
+			tryStart=Config.counter1s;
 			currentScript = NULL;
 			currentCmd = ScenarioCmd::SCENARIO_NOCMD;
 		}
 		else {//script is delayed
-			tryCounter++;
-			if (tryCounter >= 10 * 60 * 2) { //forgot about script when it is running more than 10 minutes 
+			if (Config.counter1s - tryStart >= HANGOUT_INTERVAL) { //forgot about script when it is running more than 10 minutes 
 				Debug("Script is broken");
-				tryCounter = 0;
+				tryStart = Config.counter1s;
 				currentScript = NULL;
 				currentCmd = ScenarioCmd::SCENARIO_NOCMD;
 			}
@@ -72,16 +72,16 @@ void ScenarioManager::loop5(unsigned long counter) {
 
 }
 
-void ScenarioManager::loop10(unsigned long counter) {
+void ScenarioManager::loop10() {
 
 }
 
 void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
-	Debug("PrepareCmd");
-	Debug2("cmd=", cmd);
-	if (currentScript != NULL) {
-		Debug2("CurrentScript=", currentScript->getLabel());
-	}
+	//Debug("PrepareCmd");
+	//Debug2("cmd=", cmd);
+	//if (currentScript != NULL) {
+	//	Debug2("CurrentScript=", currentScript->getLabel());
+	//}
 	if (cmd != ScenarioCmd::SCENARIO_NOCMD) {
 		if (currentScript == NULL) {//There is no script is running right now
 			Debug("Take command");
@@ -95,7 +95,7 @@ void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
 			} // else nothing to do
 		} // current script is running
 	}
-	Debug("End Prepare");
+	//Debug("End Prepare");
 }
 
 void ScenarioManager::begin() {

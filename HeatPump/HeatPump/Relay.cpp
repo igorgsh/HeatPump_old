@@ -17,7 +17,6 @@ Relay::~Relay()
 void Relay::begin() {
 	pinMode(pin, OUTPUT);
 	disconnect();
-	//digitalWrite(pin, status);
 }
 
 void Relay::connect() {
@@ -30,7 +29,9 @@ void Relay::connect() {
 }
 
 void Relay::disconnect() {
+	Debug("Relay disconnect<<<");
 	if (status == STATUS_ON) {
+		Debug("Done!");
 		status = STATUS_OFF;
 		digitalWrite(pin, !on);
 	}

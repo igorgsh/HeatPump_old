@@ -3,16 +3,15 @@
 #include "Relay.h"
 
 class Compressor :
-	public OutputDevice
+	public Relay
 {
 public:
 	Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff);
 	~Compressor();
-	void begin();
 	void StopCompressor();
 	void StartCompressor();
+	void begin();
 private:
-	Relay* r;
 
 };
 
