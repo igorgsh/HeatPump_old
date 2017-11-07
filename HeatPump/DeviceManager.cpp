@@ -25,7 +25,8 @@ void DeviceManager::begin() {
 	compressor.begin();
 }
 
-void DeviceManager::loop1() {
+
+void DeviceManager::loop() {
 	//check all thermometers
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].loop();
@@ -34,20 +35,14 @@ void DeviceManager::loop1() {
 	for (int i = 0; i < getNumberCont(); i++) {
 		contacts[i].loop();
 	}
-}
-
-void DeviceManager::loop5() {
-
-}
-
-
-void DeviceManager::loop10() {
 	/*
 	for (int i = 0; i < getNumberTemp(); i++) {
-		Debug2_("Sensor:",tempSensors[i].getLabel());
-		Debug2_(";Temperature=", String(tempSensors[i].getValue()));
-		Debug2(";Status:", String(tempSensors[i].getActionStatus()));
+	Debug2_("Sensor:",tempSensors[i].getLabel());
+	Debug2_(";Temperature=", String(tempSensors[i].getValue()));
+	Debug2(";Status:", String(tempSensors[i].getActionStatus()));
 	}
 	Debug("====");
 	*/
+
 }
+

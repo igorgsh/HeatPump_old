@@ -30,7 +30,5 @@ private:
 	bool checkTempInt();
 	bool checkContactors();
 	bool IsStartNeeded();
-
-
 };
 

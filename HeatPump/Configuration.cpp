@@ -14,24 +14,12 @@ Configuration::~Configuration()
 {
 }
 
-void Configuration::loop1() {
-	DevMgr.loop1();
-	ScenMgr.loop1();
-}
-
-void Configuration::loop5() {
+void Configuration::loop() {
+	DevMgr.loop();
+	ScenMgr.loop();
 #ifdef WEB_ENABLED
 	web.loop();
-
 #endif // WEB_ENABLED
-
-	DevMgr.loop5();
-	ScenMgr.loop5();
-}
-
-void Configuration::loop10() {
-	DevMgr.loop10();
-	ScenMgr.loop10();
 }
 
 void Configuration::begin() {

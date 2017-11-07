@@ -22,8 +22,8 @@ void Contactor::init() {
 	this->type = CONTACT;
 	actionPoints[0] = (AlarmOn ? ((float)lhOn) : ((float)!lhOn));
 	actionPoints[1] = actionPoints[0];
-	actionPoints[2] = actionPoints[0];
-	actionPoints[3] = actionPoints[0];
+	actionPoints[2] = (AlarmOn ? ((float)!lhOn) : ((float)lhOn));;
+	actionPoints[3] = actionPoints[2];
 	digitalWrite(pin, !lhOn);
 }
 

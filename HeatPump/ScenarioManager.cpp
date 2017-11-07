@@ -28,16 +28,12 @@ ScenarioManager::~ScenarioManager()
 	}
 }
 
-void ScenarioManager::loop1() {
-
-}
 
 
-void ScenarioManager::loop5() {
+void ScenarioManager::loop() {
 	static unsigned long tryStart = 0;
 
 	// Main loop for scenario run
-
 	// check triggers
 	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
 		if (scripts[i]->Enabled) {
@@ -50,6 +46,7 @@ void ScenarioManager::loop5() {
 
 	// Run scenario
 	if (currentScript != NULL) {
+		Debug("Counter=" + String(Config.counter1s));
 		Debug2("CurrentScript:", currentScript->getLabel());
 		Debug2("Current cmd:", currentCmd);
 		Debug2("Try:", tryStart);
@@ -57,6 +54,7 @@ void ScenarioManager::loop5() {
 		Debug2("Result:", res);
 		if (res) {//script is finished
 			tryStart=Config.counter1s;
+			currentScript->step = 0;
 			currentScript = NULL;
 			currentCmd = ScenarioCmd::SCENARIO_NOCMD;
 		}
@@ -64,6 +62,7 @@ void ScenarioManager::loop5() {
 			if (Config.counter1s - tryStart >= HANGOUT_INTERVAL) { //forgot about script when it is running more than 10 minutes 
 				Debug("Script is broken");
 				tryStart = Config.counter1s;
+				currentScript->step = 0;
 				currentScript = NULL;
 				currentCmd = ScenarioCmd::SCENARIO_NOCMD;
 			}
@@ -72,9 +71,6 @@ void ScenarioManager::loop5() {
 
 }
 
-void ScenarioManager::loop10() {
-
-}
 
 void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
 	//Debug("PrepareCmd");

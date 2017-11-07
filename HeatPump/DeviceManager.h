@@ -62,8 +62,6 @@ public:
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }
 	int getNumberPump() { return NUMBER_OF_PUMP; }
-	void loop1();
-	void loop5();
-	void loop10();
+	void loop();
 };
 

@@ -40,19 +40,12 @@ bool isReady = false;
 // the setup function runs once when you press reset or power the board
 
 void Timer2() { //it is started every 100ms
-				//static byte counter100 = 0;
 	if (isReady) {
-		//Debug("Loop1");
-		Config.loop1();
 		Config.counter100++;
-		if (Config.counter100 % 5 == 1) {
-			//Debug("Loop5");
-			Config.loop5();
+		if (Config.counter100 % 5 == 0) {
 			Config.counter500++;
 		}
-		if (Config.counter100 % 10 == 2) {
-			//Debug("Loop10");
-			Config.loop10();
+		if (Config.counter100 % 10 == 0) {
 			Config.counter1s++;
 		}
 	}
@@ -91,4 +84,5 @@ void loop() {
 	#ifdef _SIMULATOR_
 	sim->loop();
 	#endif
+	Config.loop();
 }

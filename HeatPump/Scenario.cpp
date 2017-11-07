@@ -47,10 +47,11 @@ bool Scenario::Run(ScenarioCmd cmd) {
 
 			if (device->lastStatusTimestamp + device->minTimeOff <= Config.counter1s) { //Device is off a long time. Start it
 				Debug("Get started");
+				//step = 0;
 				res = Start();
 			}
 			else { //Device is Off but timeout is still not over
-				Debug("Start timeout! Counter=" + String() + ";LastTs=" + String(device->lastStatusTimestamp) + ";mintime=" + String(device->minTimeOff));
+				Debug("Start timeout! Counter=" + String(Config.counter1s) + ";LastTs=" + String(device->lastStatusTimestamp) + ";mintime=" + String(device->minTimeOff));
 				//Debug("Nothing");
 				res = false;
 			}
@@ -65,6 +66,7 @@ bool Scenario::Run(ScenarioCmd cmd) {
 		else { //Device is on of unknown
 			if (device->lastStatusTimestamp + device->minTimeOn <= Config.counter1s) { //Device is on a long time. Stop it
 				Debug("Run Stop");
+				//step = 0;
 				res=Stop();
 			}
 			else { //Device is On but timeout is still not over

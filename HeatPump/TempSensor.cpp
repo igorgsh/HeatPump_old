@@ -25,17 +25,16 @@ void TempSensor::requestTemperatures() {
 }
 
 bool TempSensor::checkDataReady() {
-	bool ret = dt->isConversionAvailable(0);
-	//Debug("Point 2.5");
-	if (ret) {
-		//Debug("Point3");
+	bool ret = true;
 #ifdef _SIMULATOR_
-		currentValue = sim->GetRealResult(this->pin);
-		//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
+	currentValue = sim->GetRealResult(this->pin);
+	//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
 #else
+	ret = dt->isConversionAvailable(0);
+	if (ret) {
 		currentValue = dt->getTempCByIndex(0);
-#endif // _SIMULATOR_
 	}
+#endif // _SIMULATOR_
 	return ret;
 }
 
@@ -46,22 +45,26 @@ void TempSensor::begin() {
 
 bool TempSensor::loop() {
 	bool result = true;
-	static int tryCounter = 0;
+
 	if (tryCounter == 0) {//first loop - request for data
 		requestTemperatures();
 		result = true;
+		tryCounter++;
 	}
-	else if (tryCounter == 9) { // the last loop. All sensors which didn't ready are marked as Disconnected 
-		if (!getData()) {
+	else {
+		result = getData();
+		if (result) {
+			tryCounter = 0;
+		}
+		else if (tryCounter == 9) {
 			actionStatus = ACTION_NODATA;
 			ErrorCounter++;
-			result = false;
+			tryCounter = 0;
 		}
-		tryCounter = 0;
+		else {
+			tryCounter++;
+		}
 	}
-	else { //check/prepare data ready
-		result = getData();
-	}
-	tryCounter++;
+	//Debug("temp=" + this->getLabel() + ";TryCounter=" + String(tryCounter)+";Temp="+String(currentValue));
 	return result;
 }

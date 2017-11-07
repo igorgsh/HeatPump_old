@@ -25,6 +25,7 @@ public:
 	virtual bool Start()=0;
 	virtual bool Stop()=0;
 	virtual bool begin()=0;
+	int step = 0;
 private:
 	int id;
 	String label;
@@ -32,5 +33,8 @@ private:
 	void generateId();
 	void generateLabel();
 	OutputDevice* device;
+protected:
+	unsigned long counterScript = 0;
+
 };
 

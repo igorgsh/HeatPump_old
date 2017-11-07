@@ -19,6 +19,6 @@ private:
 	DT* dt;
 	OneWire* wire;
 	void init();
-
+	int tryCounter = 0;
 };
 

@@ -24,9 +24,7 @@ public:
 	Scenario* scripts[NUMBER_OF_SCRIPTS];
 
 	void PrepareCmd(Scenario* script, ScenarioCmd cmd);
-	void loop1();
-	void loop5();
-	void loop10();
+	void loop();
 	void begin();
 private:
 	DeviceManager* DevMgr;

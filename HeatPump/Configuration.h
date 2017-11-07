@@ -17,9 +17,7 @@ public:
 	~Configuration();
 
 	void begin();
-	void loop1();
-	void loop5();
-	void loop10();
+	void loop();
 
 	unsigned long counter100 = 0;
 	unsigned long counter500 = 0;
