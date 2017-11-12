@@ -27,8 +27,8 @@ public:
 	void begin();
 private:
 	DeviceManager* DevMgr;
-	Scenario* currentScript=NULL;
-	ScenarioCmd currentCmd = ScenarioCmd::SCENARIO_NOCMD;
+	//Scenario* currentScript=NULL;
+	//ScenarioCmd currentCmd = ScenarioCmd::SCENARIO_NOCMD;
 	void init();
 };
 

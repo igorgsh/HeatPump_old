@@ -12,7 +12,7 @@ ScenarioManager::ScenarioManager(DeviceManager* DevMgr)
 void ScenarioManager::init() {
 	scripts[0] = new ScriptPump(DevMgr->pumpGeo, true, "PG",PumpMode::NO_ACTION);
 	scriptPumpGeo = scripts[0];
-	scripts[1] = new ScriptPump(DevMgr->pumpContour1, true, "P1", PumpMode::NO_ACTION);
+	scripts[1] = new ScriptPump(DevMgr->pumpContour1, true, "P1", PumpMode::ALWAYS_START);
 	scriptPumpContour1 = scripts[1];
 	scripts[2] = new ScriptPump(DevMgr->pumpContour2, true, "P2", PumpMode::ALWAYS_START);
 	scriptPumpContour2 = scripts[2];
@@ -37,41 +37,36 @@ void ScenarioManager::loop() {
 	// check triggers
 	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
 		if (scripts[i]->Enabled) {
-			//Debug2("Script:", scripts[i]->getLabel());
 			ScenarioCmd cmd = scripts[i]->TriggerredCmd();
 			//Debug2("Cmd:", cmd);
-			PrepareCmd(scripts[i], cmd);
-		}
-	}
-	//ERROR
-	// Run scenario
-	if (currentScript != NULL) {
-		Debug("Counter=" + String(Config.counter1s));
-		Debug2("CurrentScript:", currentScript->getLabel());
-		Debug2("Current cmd:", currentCmd);
-		Debug2("Try:", tryStart);
-		bool res = currentScript->Run(currentCmd);
-		Debug2("Result:", res);
-		if (res) {//script is finished
-			tryStart=Config.counter1s;
-			currentScript->step = 0;
-			currentScript = NULL;
-			currentCmd = ScenarioCmd::SCENARIO_NOCMD;
-		}
-		else {//script is delayed
-			if (Config.counter1s - tryStart >= HANGOUT_INTERVAL) { //forgot about script when it is running more than 10 minutes 
-				Debug("Script is hanging out");
+			//PrepareCmd(scripts[i], cmd);
+			//Debug("Counter=" + String(Config.counter1s));
+			//Debug2("CurrentScript:", scripts[i]->getLabel());
+			//Debug2("Current cmd:", cmd);
+			//Debug2("Try:", tryStart);
+			bool res = scripts[i]->Run(cmd);
+			//Debug2("Result:", res);
+			if (res) {//script is finished
+				//Debug("Script" + scripts[i]->getLabel() + " is finished");
 				tryStart = Config.counter1s;
-				currentScript->step = 0;
-				currentScript = NULL;
-				currentCmd = ScenarioCmd::SCENARIO_NOCMD;
+				scripts[i]->step = 0;
+				//script[i] = NULL;
+				//currentCmd = ScenarioCmd::SCENARIO_NOCMD;
+			}
+			else {//script is not finished yet
+				if (Config.counter1s - tryStart >= HANGOUT_INTERVAL) { //stop about script when it is running more than 10 minutes 
+					Debug("Script " + scripts[i]->getLabel() + " is hanging out");
+					tryStart = Config.counter1s;
+					scripts[i]->step = 0;
+					//currentScript = NULL;
+					//currentCmd = ScenarioCmd::SCENARIO_NOCMD;
+				}
 			}
 		}
 	}
-
 }
 
-
+/*
 void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
 	//Debug("PrepareCmd");
 	//Debug2("cmd=", cmd);
@@ -93,7 +88,7 @@ void ScenarioManager::PrepareCmd(Scenario* script, ScenarioCmd cmd) {
 	}
 	//Debug("End Prepare");
 }
-
+*/
 
 
 void ScenarioManager::begin() {

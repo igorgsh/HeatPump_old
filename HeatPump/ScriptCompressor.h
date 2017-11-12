@@ -27,7 +27,7 @@ private:
 	ScriptPump* pumpContour2;
 
 
-	bool checkTempInt();
+	bool checkInternalTempConditions();
 	bool checkContactors();
 	bool IsStartNeeded();
 	bool IsForceOff();

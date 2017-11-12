@@ -85,7 +85,7 @@ void initSim() {
 
 	//Set N1 regular mode. Compressor should stop!
 	sim->SetCaseValues(1, 0);
-	res = sim->SetPinValue(1, 31, 34.0);
+	res = sim->SetPinValue(1, 32, 34.0);
 	if (!res) Debug("T10 Error");
 
 

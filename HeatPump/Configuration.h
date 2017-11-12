@@ -29,6 +29,7 @@ public:
 	void setDesiredTemp(byte value);
 	float getTemp() { return DevMgr.currentTemp->getValue(); }
 	float OutTemperature();
+	float ControlTemperature() { return DevMgr.currentTemp->getValue(); };
 private:
 	ArduinoServer web = ArduinoServer();
 	byte desiredTemp=EepromRead(EEPROM_Desired_Temp);

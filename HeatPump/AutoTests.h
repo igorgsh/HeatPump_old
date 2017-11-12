@@ -27,8 +27,11 @@ private:
 	int step = 0;
 	unsigned long testStartTS = 0;
 
-	bool RunTestCaseNormalStart();
-	
+	bool TestStart();
+	bool TestStop();
+
+	//bool TestNormalStartStop();
+
 
 };
 
