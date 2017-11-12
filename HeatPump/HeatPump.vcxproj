@@ -84,6 +84,7 @@
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <ClInclude Include="AutoTests.h" />
     <ClInclude Include="HeatPump.ino">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -117,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoServer.cpp" />
+    <ClCompile Include="AutoTests.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Contactor.cpp" />

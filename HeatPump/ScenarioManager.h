@@ -15,13 +15,12 @@ public:
 	ScenarioManager(DeviceManager* DevMgr);
 	~ScenarioManager();
 	
-	
+	Scenario* scripts[NUMBER_OF_SCRIPTS];
+
 	Scenario* scriptPumpGeo;
 	Scenario* scriptPumpContour1;
 	Scenario* scriptPumpContour2;
 	Scenario* scriptCompressor;
-	
-	Scenario* scripts[NUMBER_OF_SCRIPTS];
 
 	void PrepareCmd(Scenario* script, ScenarioCmd cmd);
 	void loop();

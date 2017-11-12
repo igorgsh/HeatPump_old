@@ -32,6 +32,15 @@ DebugLevel dLevel = D_ALL;
 #define LED_PIN	13
 //#define _SIMULATOR_
 #include "Sim.h"
+#include "AutoTests.h"
+
+#ifdef _SIMULATOR_
+Simulator* sim;
+#endif
+
+#ifdef _AUTO_TESTING_
+AutoTests* test;
+#endif
 
 Configuration Config;
 
@@ -62,6 +71,11 @@ void setup() {
 	#ifdef _SIMULATOR_
 	initSim();
 	#endif
+#ifdef _AUTO_TESTING_
+	test = new AutoTests();
+
+#endif // _AUTO_TESTING_
+
 	SD.begin(SDCARD_SS);
 
 	// Initialize configuration
@@ -81,8 +95,12 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	#ifdef _SIMULATOR_
+#ifdef _SIMULATOR_
 	sim->loop();
-	#endif
+#endif
 	Config.loop();
+#ifdef _AUTO_TESTING_
+	test->loop();
+#endif //_AUTO_TESTING_
+
 }

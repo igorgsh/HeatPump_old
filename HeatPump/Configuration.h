@@ -25,7 +25,7 @@ public:
 
 	DeviceManager DevMgr = DeviceManager();
 	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
-	byte getDesiredTemp() { return desiredTemp; }
+	byte getDesiredTemp() /*{ return desiredTemp; }*/;
 	void setDesiredTemp(byte value);
 	float getTemp() { return DevMgr.currentTemp->getValue(); }
 	float OutTemperature();

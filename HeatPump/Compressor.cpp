@@ -16,15 +16,17 @@ Compressor::~Compressor()
 {
 }
 
-void Compressor::StopCompressor() {
+bool Compressor::StopCompressor() {
 	disconnect();
 	lastStatusTimestamp = Config.counter1s;
+	return true;
 }
 
-void Compressor::StartCompressor() {
+bool Compressor::StartCompressor() {
 	Debug("Start Compressor!!!");
 	connect();
 	lastStatusTimestamp = Config.counter1s;
+	return true;
 }
 
 void Compressor::begin() {

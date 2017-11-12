@@ -51,25 +51,29 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 	ScenarioCmd ret = SCENARIO_NOCMD;
 	//Debug("ScriptCompressor.Trigger");
 	// check all internal temp sensors
-	if (IsStartNeeded()
-		&& checkTempInt()
-		&& checkContactors()) {
-		//Debug("Normal");
-		if (comp->status == STATUS_ON) {
-			ret = SCENARIO_NOCMD;
-		}
-		else {
-			ret = ScenarioCmd::SCENARIO_START;
-		}
+	if (IsForceOff()) {
+		ret = ScenarioCmd::SCENARIO_STOP;
 	}
 	else {
-		//Debug("Not Normal");
-
-		if (comp->status == STATUS_OFF) {
-			ret = SCENARIO_NOCMD;
+		if (IsStartNeeded()
+			&& checkTempInt()
+			&& checkContactors()) {
+			//Debug("Normal");
+			if (comp->status == STATUS_ON) {
+				ret = ScenarioCmd::SCENARIO_NOCMD;
+			}
+			else {
+				ret = ScenarioCmd::SCENARIO_START;
+			}
 		}
 		else {
-			ret = SCENARIO_STOP;
+			//Debug("Not Normal");
+			if (comp->status == STATUS_OFF) {
+				ret = ScenarioCmd::SCENARIO_NOCMD;
+			}
+			else {
+				ret = ScenarioCmd::SCENARIO_STOP;
+			}
 		}
 	}
 	return ret;
@@ -79,24 +83,23 @@ bool ScriptCompressor::Start() {
 
 	Debug("Compressor Start");
 	Debug2("Step:", String(step));
-	bool ret = false;
 	bool result = false;
 	if (step == 0) {
 		counterScript = Config.counter1s;
-		ret = Config.ScenMgr.scriptPumpGeo->Start();
-		if (ret) {
+		result = Config.ScenMgr.scriptPumpGeo->Start();
+		if (result) {
 			step=1;
 		}
 	} 
 	if (step == 1) {
-		ret = Config.ScenMgr.scriptPumpContour1->Start();
-		if (ret) {
+		result = Config.ScenMgr.scriptPumpContour1->Start();
+		if (result) {
 			step = 2;
 		}
 	}
 	if (step == 2) {
-		ret = Config.ScenMgr.scriptPumpContour2->Start();
-		if (ret) {
+		result = Config.ScenMgr.scriptPumpContour2->Start();
+		if (result) {
 			counterScript = Config.counter1s;
 			step = 3;
 		}
@@ -108,9 +111,12 @@ bool ScriptCompressor::Start() {
 		}
 	}
 	if (step == 4) { //final
-		comp->StartCompressor();
-		result = true;
-		step = 0;
+		if (comp->lastStatusTimestamp + comp->minTimeOff <= Config.counter1s) { //device is off a long time
+			result = comp->StartCompressor();
+		}
+		else {
+			result = false;
+		}
 	}
 
 	Debug2("Return:", String(result));
@@ -121,10 +127,10 @@ bool ScriptCompressor::Stop() {
 	Debug("Compressor Stop");
 	Debug2("Step:", String(step));
 	bool result = false;
-	bool ret = false;
 	if (step == 0) {
-		comp->StopCompressor();
-		ret = true;
+		if (comp->lastStatusTimestamp + comp->minTimeOn <= Config.counter1s) { //device is on a long time
+			result = comp->StopCompressor();
+		}
 		step = 1;
 		counterScript = Config.counter1s;
 	}
@@ -134,22 +140,24 @@ bool ScriptCompressor::Stop() {
 		}
 	}
 	if (step == 2) {
-		ret = Config.ScenMgr.scriptPumpContour2->Stop();
-		if (ret) {
+		result = Config.ScenMgr.scriptPumpContour2->Stop();
+		if (result) {
 			step = 3;
 		}
 	}
 	if (step == 3) {
-		ret = Config.ScenMgr.scriptPumpContour1->Stop();
-		if (ret) {
+		result = Config.ScenMgr.scriptPumpContour1->Stop();
+		if (result) {
 			step = 4;
 		}
 	}
 	if (step == 4) { //final
-		ret = Config.ScenMgr.scriptPumpGeo->Stop();
-		step = 0;
-		result = true;
+		result = Config.ScenMgr.scriptPumpGeo->Stop();
 	}
 
 	return result;
+}
+
+bool ScriptCompressor::IsForceOff() {
+	return false;
 }

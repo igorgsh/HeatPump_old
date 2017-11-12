@@ -8,8 +8,8 @@ class Compressor :
 public:
 	Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff);
 	~Compressor();
-	void StopCompressor();
-	void StartCompressor();
+	bool StopCompressor();
+	bool StartCompressor();
 	void begin();
 private:
 

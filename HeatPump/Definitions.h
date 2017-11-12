@@ -13,9 +13,12 @@ typedef enum {
 extern DebugLevel dLevel;
 
 #define _SIMULATOR_
+#define _AUTO_TESTING_
+#include "AutoTests.h"
 #include "Simulator.h"
 
 extern Simulator* sim;
+extern AutoTests* test;
 
 #define SerialLog2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),Y);}};
 #define SerialLog2_(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.print((X),Y);}};
@@ -32,5 +35,5 @@ extern Simulator* sim;
 typedef enum {
 	SCENARIO_NOCMD = 0,
 	SCENARIO_STOP = 1,
-	SCENARIO_START = 2
+	SCENARIO_START = 2,
 } ScenarioCmd;

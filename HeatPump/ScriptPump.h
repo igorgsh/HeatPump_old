@@ -3,11 +3,16 @@
 #include "Pump.h"
 #include "Definitions.h"
 
+typedef enum {
+	NO_ACTION=0,
+	ALWAYS_START=1
+} PumpMode;
+
 class ScriptPump :
 	public Scenario
 {
 public:
-	ScriptPump(Pump* p, bool enable, String label);
+	ScriptPump(Pump* p, bool enable, String label, PumpMode pumpMode = PumpMode::NO_ACTION);
 	~ScriptPump();
 	ScenarioCmd TriggerredCmd();
 	bool Start();
@@ -16,5 +21,6 @@ public:
 
 private:
 	Pump* pump;
+	PumpMode mode;
 };
 

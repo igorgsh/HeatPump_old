@@ -13,7 +13,7 @@ void Scenario::generateLabel() {
 	label = "S" + id;
 }
 
-Scenario::Scenario(bool enable, String label, OutputDevice* dev )
+Scenario::Scenario(bool enable, String label, OutputDevice* dev)
 {
 	device = dev;
 	Enabled = enable;
@@ -31,7 +31,59 @@ Scenario::~Scenario()
 {
 }
 
+bool Scenario::RunCmd() {
+	bool res = false;
+	switch (lastCmd) {
+	case ScenarioCmd::SCENARIO_NOCMD: {
+		res = true;
+		break;
+	}
+	case ScenarioCmd::SCENARIO_START: {
+		res = Start();
+		break;
+	}
+	case ScenarioCmd::SCENARIO_STOP: {
+		res = Stop();
+		break;
+	}
+	}
+	return res;
+}
 
+bool Scenario::Run(ScenarioCmd cmd) {
+	bool res = false;
+	if (cmd == ScenarioCmd::SCENARIO_NOCMD) {
+		res = true;
+	}
+	else {
+		if (!IsCompleted()) {
+			if (prevCmd != cmd) {//Command is changed, but previous is not completed yet
+				step = 0;
+				lastCmd = ScenarioCmd::SCENARIO_NOCMD;
+				prevCmd = cmd;
+				res = Run(cmd);
+			}
+			else {
+				res = RunCmd();
+			}
+		}
+		else {
+			lastCmd = cmd;
+			if (lastCmd != ScenarioCmd::SCENARIO_NOCMD) {
+				step = 0;
+				res = RunCmd();
+				prevCmd = cmd;
+			}
+		}
+		if (res) {
+			lastCmd = ScenarioCmd::SCENARIO_NOCMD;
+			//prevCmd = ScenarioCmd::SCENARIO_NOCMD;
+		}
+	}
+	return res;
+}
+
+/*
 bool Scenario::Run(ScenarioCmd cmd) {
 
 	//Debug("ScenarioRun");
@@ -59,7 +111,7 @@ bool Scenario::Run(ScenarioCmd cmd) {
 	}
 	else if (cmd == ScenarioCmd::SCENARIO_STOP) {
 		Debug("CmdStop");
-		if (device->status == STATUS_OFF) { // Nothing to do. Device is stoped 
+		if (device->status == STATUS_OFF) { // Nothing to do. Device is stoped
 			Debug("Already stoped!");
 			res = true;
 		}
@@ -81,3 +133,4 @@ bool Scenario::Run(ScenarioCmd cmd) {
 	//Debug("ScenarioStart_End")
 	return res;
 }
+*/

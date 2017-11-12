@@ -33,12 +33,12 @@ void Configuration::begin() {
 
 float Configuration::OutTemperature() {
 	float outTemp = 0;
-	if (desiredTemp<= 20)
+	if (desiredTemp <= 20)
 		outTemp = 25;
-	else if (desiredTemp >=45)
+	else if (desiredTemp >= 45)
 		outTemp = 45;
-	else 
-		outTemp = desiredTemp+5;
+	else
+		outTemp = desiredTemp + 5;
 	return outTemp;
 }
 
@@ -49,7 +49,7 @@ void Configuration::EepromWrite(unsigned int addr, byte value) {
 
 void Configuration::EepromWrite(unsigned int addr, unsigned int value) {
 
-	EEPROM.write(addr, value%256);
+	EEPROM.write(addr, value % 0xFF);
 	EEPROM.write(addr + 1, (value >> 8) & 0xFF);
 }
 
@@ -68,9 +68,18 @@ unsigned int Configuration::EepromRead2(unsigned int addr) {
 
 
 void Configuration::setDesiredTemp(byte value) {
-	
+
 	if (desiredTemp != value) { //optimization: reduce number of write to EEPROM
 		desiredTemp = value;
 		EepromWrite(EEPROM_Desired_Temp, desiredTemp);
 	}
+}
+
+byte Configuration::getDesiredTemp() {
+#ifdef _SIMULATOR_
+	return (byte)(sim->GetIntResult(99));
+#else
+	return desiredTemp;
+#endif // _SIMULATOR_
+
 }
