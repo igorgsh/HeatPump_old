@@ -28,7 +28,11 @@ private:
 	unsigned long testStartTS = 0;
 
 	bool TestStart();
+	bool TestNoStart();
 	bool TestStop();
+	bool TestStartBrokenLastStep();
+	bool TestDummySuccess();
+
 
 	//bool TestNormalStartStop();
 

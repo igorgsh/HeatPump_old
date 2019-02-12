@@ -57,7 +57,8 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 		if (IsStartNeeded()
 			&& checkInternalTempConditions()
 			&& checkContactors()) {
-			//Debug("Normal");
+			//Debug("Compressor start ready");
+
 			if (comp->status == STATUS_ON) {
 				ret = ScenarioCmd::SCENARIO_NOCMD;
 			}
@@ -74,6 +75,7 @@ ScenarioCmd ScriptCompressor::TriggerredCmd() {
 				ret = ScenarioCmd::SCENARIO_STOP;
 			}
 		}
+
 	}
 	return ret;
 }
@@ -100,7 +102,7 @@ bool ScriptCompressor::Start() {
 		}
 	}
 	if (step ==3 ) {//delay before start compressor
-		Debug("Wait:" + String(Config.counter1s - counterScript));
+		Debug("Wait:" + String(COMPRESSOR_ON_TIMEOUT - (Config.counter1s - counterScript)));
 		if (Config.counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
 			step = 4;
 		}
@@ -108,7 +110,7 @@ bool ScriptCompressor::Start() {
 	if (step == 4) { //final
 		if (comp->lastStatusTimestamp + comp->minTimeOff <= Config.counter1s) { //device is off a long time
 			res = comp->StartCompressor();
-			Debug("Compressor Strated = " + String(res));
+			Debug("Compressor Started = " + String(res));
 		}
 	}
 

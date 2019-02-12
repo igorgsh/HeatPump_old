@@ -15,7 +15,7 @@
 const byte ROWS = 4; // 4 строки
 const byte COLS = 4; // 4 столбца
 const byte PINS = 14; // number of sensors
-const byte CASES = 2;
+const byte CASES = 4;
 byte rowKeyPadPins[ROWS] = { 14,15,16,17 };
 byte colKeyPadPins[COLS] = { 18, 19, 20, 21 };
 const byte pinMap[PINS] = { 22,23,24,25,26,27,28,29,30,31,32,33,8,99/*,38,40,42,44*/};
@@ -77,16 +77,27 @@ void initSim() {
 	if (!res) Debug("0.T12 Error");
 
 	res = sim->SetPinValue(0, 99, 28);
-	if (!res) Debug("Desired Temp Error");
+	if (!res) Debug("0.Desired Temp Error");
 
 
 	res = sim->SetPinValue(0, 8, 1.0);
-	if (!res) Debug("Contactor Error");
+	if (!res) Debug("0.Contactor Error");
 
 	//Set N1 regular mode. Compressor should stop!
 	sim->SetCaseValues(1, 0);
 	res = sim->SetPinValue(1, 32, 34.0);
-	if (!res) Debug("T10 Error");
+	if (!res) Debug("1.T10 Error");
+
+	//Set N2 regular mode. Compressor should not start due low desired temp!
+	sim->SetCaseValues(2, 0);
+	res = sim->SetPinValue(0, 99, 22);
+	if (!res) Debug("2.Desired Temp Error");
+
+	//Set N3 emergency mode. Compressor should start but some sensor is failed!
+	sim->SetCaseValues(3, 0);
+	res = sim->SetPinValue(3, 8, 0.0);
+	if (!res) Debug("3.Contactor Error");
+
 
 
 	sim->SetCaseNumber(0);

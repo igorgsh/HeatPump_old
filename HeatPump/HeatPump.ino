@@ -70,6 +70,7 @@ void setup() {
 
 	#ifdef _SIMULATOR_
 	initSim();
+	sim->SetCaseNumber(0);
 	#endif
 #ifdef _AUTO_TESTING_
 	test = new AutoTests();

@@ -25,6 +25,7 @@ void Contactor::init() {
 	actionPoints[2] = (AlarmOn ? ((float)!lhOn) : ((float)lhOn));;
 	actionPoints[3] = actionPoints[2];
 	digitalWrite(pin, !lhOn);
+
 }
 
 void Contactor::begin() {
@@ -42,6 +43,7 @@ bool Contactor::checkDataReady() {
 #ifdef _SIMULATOR_
 	//Debug("Point4");
 	currentValue = sim->GetRealResult(pin);
+	Debug("AS=" + String(actionStatus));
 	//Debug2("CurrentValue=", currentValue);
 #else
 	currentValue = digitalRead(pin);

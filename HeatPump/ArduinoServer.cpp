@@ -45,7 +45,7 @@ bool ArduinoServer::loop() {
 			PrintErrorPage(client, "418 I'm a teapot", "Something wrong");
 		}
 		client.stop();
-		Debug("Client disconnected");
+		//Debug("Client disconnected");
 		delay(1);
 	}
 	return result;
@@ -146,7 +146,7 @@ void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 		PrintErrorPage(client, "404 Page not found", "This page is unavailable");
 	}
 	*/
-	Debug("End ParseCommand");
+	//Debug("End ParseCommand");
 }
 /*
 void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
@@ -184,7 +184,7 @@ void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 
 void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 
-	Debug("Start PrintAnyFile");
+	//Debug("Start PrintAnyFile");
 
 	File file = SD.open(request.URL, FILE_READ);
 	if (file) {
@@ -198,7 +198,7 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Debug("File not found");
+		Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
 	}
 	Debug("End PrintAnyFile");
@@ -438,10 +438,10 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Debug("File not found");
+		Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found!", "File:" + request.URL);
 	}
-	Debug("End PrintMainPage");
+	//Debug("End PrintMainPage");
 
 }
 
