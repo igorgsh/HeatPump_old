@@ -5,7 +5,9 @@
 typedef enum {
 	STATUS_UNKNOWN = 0,
 	STATUS_ON = 1,
-	STATUS_OFF = 2
+	STATUS_OFF = 2,
+	STATUS_ERROR = 3,
+	STATUS_IDLE = 4
 } DeviceStatus;
 
 class OutputDevice

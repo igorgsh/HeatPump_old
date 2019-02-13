@@ -1,5 +1,5 @@
 #pragma once
-#include "Scenario.h"
+#include "Script.h"
 #include "Pump.h"
 #include "Definitions.h"
 
@@ -9,18 +9,18 @@ typedef enum {
 } PumpMode;
 
 class ScriptPump :
-	public Scenario
+	public Script
 {
 public:
-	ScriptPump(Pump* p, bool enable, String label, PumpMode pumpMode = PumpMode::NO_ACTION);
+	ScriptPump(Pump* p, bool enable, String label);
 	~ScriptPump();
-	ScenarioCmd TriggerredCmd();
-	bool Start();
-	bool Stop();
+	//ScenarioCmd TriggerredCmd();
+	bool Start(bool isSync);
+	bool Stop(bool isSync);
 	bool begin() { return true; };
 
 private:
 	Pump* pump;
-	PumpMode mode;
+	//PumpMode mode;
 };
 

@@ -5,10 +5,9 @@ extern Configuration Config;
 
 
 
-ScriptPump::ScriptPump(Pump* p, bool enable, String label, PumpMode pumpMode) : Scenario(enable, label, p)
+ScriptPump::ScriptPump(Pump* p, bool enable, String label) : Script(enable, label, p)
 {
 	pump = p;
-	mode = pumpMode;
 }
 
 
@@ -16,55 +15,50 @@ ScriptPump::~ScriptPump()
 {
 }
 
-ScenarioCmd ScriptPump::TriggerredCmd() {
-	ScenarioCmd res = ScenarioCmd::SCENARIO_NOCMD;
-	switch (mode) {
-	case ALWAYS_START: {
-		if (pump->status != DeviceStatus::STATUS_ON) {
-			res = ScenarioCmd::SCENARIO_START;
-		}
-		else {
-			res = ScenarioCmd::SCENARIO_NOCMD;
-		}
-		break;
-	}
-	default: {
-		res = ScenarioCmd::SCENARIO_NOCMD;
-		break;
-	}
-	}
-	return res;
-}
-
-bool ScriptPump::Start() {
-	bool res;
+bool ScriptPump::Start(bool isSync) {
+	bool res = false;
 	if (pump->status == DeviceStatus::STATUS_ON) {
 		res = true;
 	}
 	else {
-		if (pump->lastStatusTimestamp + pump->minTimeOff <= Config.counter1s) { //device is off a long time
+		long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOff);
+
+		if (waitingTime > 0) { //ready to start
 			pump->StartPump();
+			pump->status = DeviceStatus::STATUS_ON;
 			res = true;
 		}
 		else {
-			res = false;
+			if (isSync) {
+				delay(waitingTime * 1000);
+			}
+			else {
+				res = false;
+			}
 		}
 	}
 	return res;
 }
 
-bool ScriptPump::Stop() {
-	bool res;
+bool ScriptPump::Stop(bool isSync) {
+	bool res = false;
 	if (pump->status == DeviceStatus::STATUS_OFF) {
 		res = true;
 	}
 	else {
-		if (pump->lastStatusTimestamp + pump->minTimeOn <= Config.counter1s) { //device is on a long time
+		long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOn);
+
+		if (waitingTime > 0) { //ready to start
 			pump->StopPump();
 			res = true;
 		}
 		else {
-			res = false;
+			if (isSync) {
+				delay(waitingTime * 1000);
+			}
+			else {
+				res = false;
+			}
 		}
 	}
 	return res;

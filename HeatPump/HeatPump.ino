@@ -11,12 +11,12 @@
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
 //#include <EEPROM.h>
-#include <EthernetUdp.h>
-#include <EthernetServer.h>
-#include <EthernetClient.h>
-#include <Ethernet.h>
-#include <Dns.h>
-#include <Dhcp.h>
+//#include <EthernetUdp.h>
+//#include <EthernetServer.h>
+//#include <EthernetClient.h>
+//#include <Ethernet.h>
+//#include <Dns.h>
+//#include <Dhcp.h>
 #include <SD.h>
 #include "Configuration.h"
 #include <MsTimer2.h>
@@ -31,7 +31,7 @@ DebugLevel dLevel = D_ALL;
 #define SDCARD_SS	4
 #define LED_PIN	13
 //#define _SIMULATOR_
-#include "Sim.h"
+//#include "Sim.h"
 #include "AutoTests.h"
 
 #ifdef _SIMULATOR_
@@ -41,6 +41,8 @@ Simulator* sim;
 #ifdef _AUTO_TESTING_
 AutoTests* test;
 #endif
+
+extern void initSim();
 
 Configuration Config;
 
@@ -69,6 +71,7 @@ void setup() {
 	Debug("Begin 1.0");
 
 	#ifdef _SIMULATOR_
+	//sim = new Simulator();
 	initSim();
 	sim->SetCaseNumber(0);
 	#endif
@@ -89,8 +92,10 @@ void setup() {
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
 	Debug("Start!!!");
-	isReady=true;
+	Config.isHardwareReady = Config.ScriptMgr.setup();
+	isReady = true;
 	//	delay(500);
+	Debug("Setup is over");
 
 }
 

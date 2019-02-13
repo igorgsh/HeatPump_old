@@ -2,13 +2,15 @@
 //#include "EEPROM.h"
 #include "DeviceManager.h"
 #include "ArduinoServer.h"
-#include "ScenarioManager.h"
+#include "ScriptManager.h"
 
 //#define WEB_ENABLED
 //#undef WEB_ENABLED
 
-#define EEPROM_Desired_Temp	0x00  //1 bytes
+#define EEPROM_ID	0x00  //1 bytes
+#define EEPROM_Desired_Temp	0x01  //1 bytes
 
+#define TEMPERATURE_DELTA	5
 
 class Configuration
 {
@@ -22,9 +24,10 @@ public:
 	unsigned long counter100 = 0;
 	unsigned long counter500 = 0;
 	unsigned long counter1s = 0;
+	bool isHardwareReady = false;
 
 	DeviceManager DevMgr = DeviceManager();
-	ScenarioManager ScenMgr = ScenarioManager(&DevMgr);
+	ScriptManager ScriptMgr = ScriptManager(&DevMgr);
 	byte getDesiredTemp() /*{ return desiredTemp; }*/;
 	void setDesiredTemp(byte value);
 	float getTemp() { return DevMgr.currentTemp->getValue(); }

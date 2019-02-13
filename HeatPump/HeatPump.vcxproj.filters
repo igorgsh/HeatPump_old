@@ -46,12 +46,6 @@
     <ClInclude Include="HttpRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScenarioManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenario.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ScriptPump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,6 +74,12 @@
     <ClInclude Include="AutoTests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Configuration.cpp">
@@ -103,12 +103,6 @@
     <ClCompile Include="HttpRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScenarioManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ScriptPump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,10 +124,16 @@
     <ClCompile Include="Contactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sim.c">
+    <ClCompile Include="AutoTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AutoTests.cpp">
+    <ClCompile Include="Sim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

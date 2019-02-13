@@ -10,20 +10,20 @@ typedef enum {
 	SCENARIO_RUN = 1
 } ScenarioStatus;
 */
-class Scenario
+class Script
 {
 public:
-	Scenario(bool enabled, String label, OutputDevice* dev);
-	virtual ~Scenario();
+	Script(bool enabled, String label, OutputDevice* dev);
+	virtual ~Script();
 	bool IsActive = false;
-	virtual ScenarioCmd TriggerredCmd() = 0 ;
 	bool Run(ScenarioCmd cmd);
 	int getId() { return id; };
 	String getLabel() { return label; };
 	void setLabel(String lbl) { label = lbl; };
 	bool Enabled = true;
-	virtual bool Start()=0;
-	virtual bool Stop()=0;
+	virtual bool Start(bool isSync)=0;
+	virtual bool Stop(bool isSync)=0;
+	//virtual bool ForceStop() = 0;
 	virtual bool begin()=0;
 	int step = 0;
 	bool IsCompleted() { return (lastCmd==SCENARIO_NOCMD && step==0); }
@@ -34,12 +34,14 @@ private:
 	void generateId();
 	void generateLabel();
 	OutputDevice* device;
-	bool RunCmd();
+	//bool RunCmd();
 
 protected:
 	unsigned long counterScript = 0;
 	//bool(*lastCommand)(void);
-	ScenarioCmd prevCmd = ScenarioCmd::SCENARIO_NOCMD;
+	//ScenarioCmd prevCmd = ScenarioCmd::SCENARIO_NOCMD;
 	ScenarioCmd lastCmd = ScenarioCmd::SCENARIO_NOCMD;
+	//virtual ScenarioCmd TriggerredCmd() = 0;
+	
 };
 

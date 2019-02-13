@@ -2,7 +2,7 @@
 #include "Definitions.h"
 #include "EEPROM.h"
 
-#define WEB_ENABLED 1
+#define WEB_ENABLED
 
 
 Configuration::Configuration()
@@ -16,7 +16,9 @@ Configuration::~Configuration()
 
 void Configuration::loop() {
 	DevMgr.loop();
-	ScenMgr.loop();
+	if (isHardwareReady) {
+		ScriptMgr.loop();
+	}
 #ifdef WEB_ENABLED
 	web.loop();
 #endif // WEB_ENABLED
@@ -38,7 +40,7 @@ float Configuration::OutTemperature() {
 	else if (desiredTemp >= 45)
 		outTemp = 45;
 	else
-		outTemp = desiredTemp + 5;
+		outTemp = desiredTemp + TEMPERATURE_DELTA;
 	return outTemp;
 }
 
