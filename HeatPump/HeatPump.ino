@@ -26,7 +26,7 @@
 
 DebugLevel dLevel = D_ALL;
 
-#define WEB_ENABLED
+//#define WEB_ENABLED
 
 #define SDCARD_SS	4
 #define LED_PIN	13
@@ -36,11 +36,11 @@ DebugLevel dLevel = D_ALL;
 
 #ifdef _SIMULATOR_
 Simulator* sim;
-#endif
-
 #ifdef _AUTO_TESTING_
 AutoTests* test;
-#endif
+#endif //_AUTO_TESTING_
+#endif //_SIMULATOR_
+
 
 extern void initSim();
 
@@ -77,7 +77,7 @@ void setup() {
 	#endif
 #ifdef _AUTO_TESTING_
 	test = new AutoTests();
-
+	
 #endif // _AUTO_TESTING_
 
 	SD.begin(SDCARD_SS);
@@ -95,7 +95,7 @@ void setup() {
 	Config.isHardwareReady = Config.ScriptMgr.setup();
 	isReady = true;
 	//	delay(500);
-	Debug("Setup is over");
+	Debug("Setup is over#" + String(Config.isHardwareReady) + "#" + String(isReady));
 
 }
 

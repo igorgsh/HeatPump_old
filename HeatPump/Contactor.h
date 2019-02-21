@@ -10,6 +10,7 @@ public:
 	void begin();
 	bool checkDataReady();
 	bool loop();
+	ActionStatus checkStatus();
 
 private:
 	bool lhOn;

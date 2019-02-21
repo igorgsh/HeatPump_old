@@ -55,13 +55,19 @@ void initSim() {
 
 	//Set N2 regular mode. Compressor should not start due low desired temp!
 	sim->SetCaseValues(2, 0);
-	res = sim->SetPinValue(0, 99, 22);
+	res = sim->SetPinValue(2, 99, 21);
 	if (!res) Debug("2.Desired Temp Error");
+	res = sim->SetPinValue(2, 31, 28.0);
+	if (!res) Debug("2.T10 Error");
 
 	//Set N3 emergency mode. Compressor should start but some sensor is failed!
 	sim->SetCaseValues(3, 0);
-	res = sim->SetPinValue(3, 8, 0.0);
-	if (!res) Debug("3.Contactor Error");
+//	res = sim->SetPinValue(3, 8, 0.0);
+//	if (!res) Debug("3.Contactor Error");
+	res = sim->SetPinValue(3, 99, 30);
+	if (!res) Debug("3.Desired Temp Error");
+	res = sim->SetPinValue(3, 31, 28.0);
+	if (!res) Debug("3.T10 Error");
 
 
 

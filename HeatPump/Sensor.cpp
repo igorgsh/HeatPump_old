@@ -28,25 +28,15 @@ bool Sensor::getData() {
 
 	res = checkDataReady();
 	if (res) { //data is ready
-		if (currentValue <= actionPoints[ACTIONPOINT_ALARM_LOW]) {
-			actionStatus = ACTION_LOW_ALARM;
+		actionStatus = checkStatus();
+
+		if (actionStatus == ACTION_LOW_ALARM
+			|| actionStatus == ACTION_HIGH_ALARM
+			|| actionStatus == ACTION_ALARM) {
 			ErrorCounter++;
 		}
-		else if (currentValue <= actionPoints[ACTIONPOINT_START_LOW]) {
-			actionStatus = ACTION_LOW_ALARM_START;
+		else {
 			ErrorCounter = 0;
-		}
-		else if (currentValue <= actionPoints[ACTIONPOINT_START_HIGH]) {
-			actionStatus = ACTION_NORMAL;
-			ErrorCounter = 0;
-		}
-		else if (currentValue <= actionPoints[ACTIONPOINT_ALARM_HIGH]) {
-			actionStatus = ACTION_HIGH_ALARM_START;
-			ErrorCounter = 0;
-		}
-		else if (currentValue > actionPoints[ACTIONPOINT_ALARM_LOW]) {
-			actionStatus = ACTION_HIGH_ALARM;
-			ErrorCounter++;
 		}
 	}
 	else { //result is absent

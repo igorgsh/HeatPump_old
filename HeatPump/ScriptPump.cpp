@@ -23,18 +23,21 @@ bool ScriptPump::Start(bool isSync) {
 	else {
 		long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOff);
 
-		if (waitingTime > 0) { //ready to start
-			pump->StartPump();
-			pump->status = DeviceStatus::STATUS_ON;
-			res = true;
-		}
-		else {
+		if (waitingTime < 0) {//not ready to start
 			if (isSync) {
-				delay(waitingTime * 1000);
+				Debug("Start Pump delay:" + String(-waitingTime));
+				delay(-waitingTime * 1000);
+				waitingTime = 0;
 			}
 			else {
 				res = false;
 			}
+		}
+
+		if (waitingTime >= 0) { //ready to start
+			pump->StartPump();
+			pump->status = DeviceStatus::STATUS_ON;
+			res = true;
 		}
 	}
 	return res;
@@ -48,17 +51,19 @@ bool ScriptPump::Stop(bool isSync) {
 	else {
 		long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOn);
 
-		if (waitingTime > 0) { //ready to start
-			pump->StopPump();
-			res = true;
-		}
-		else {
+		if (waitingTime<0) {//not ready to stop
 			if (isSync) {
-				delay(waitingTime * 1000);
+				Debug("Stop Pump delay:" + String(-waitingTime));
+				delay(-waitingTime * 1000);
+				waitingTime = 0;
 			}
 			else {
 				res = false;
 			}
+		}
+		if (waitingTime >= 0) { //ready to start
+			pump->StopPump();
+			res = true;
 		}
 	}
 	return res;

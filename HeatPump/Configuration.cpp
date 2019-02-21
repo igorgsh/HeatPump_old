@@ -2,7 +2,7 @@
 #include "Definitions.h"
 #include "EEPROM.h"
 
-#define WEB_ENABLED
+//#define WEB_ENABLED
 
 
 Configuration::Configuration()

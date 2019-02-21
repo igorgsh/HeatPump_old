@@ -31,9 +31,19 @@ ScriptManager::~ScriptManager()
 
 
 bool ScriptManager::setup() {
-	bool res = false;
-	scriptPumpContour1->Start(false);
-	scriptPumpContour2->Start(false);
+	bool res = true;
+	Debug("Starting Pump 1");
+	if (scriptPumpContour1->Start(true)) {
+		Debug("Starting Pump 2");
+		if (!scriptPumpContour2->Start(true)) {
+			Debug("Pump2 didn't started!");
+			res = false;
+		}
+	}
+	else {
+		Debug("Pump1 didn't started!");
+		res = false;
+	}
 	SetCmd(ScenarioCmd::SCENARIO_START);
 	return res;
 }

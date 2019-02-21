@@ -68,3 +68,30 @@ bool TempSensor::loop() {
 	//Debug("temp=" + this->getLabel() + ";TryCounter=" + String(tryCounter)+";Temp="+String(currentValue));
 	return result;
 }
+
+ActionStatus TempSensor::checkStatus() {
+	ActionStatus status = ActionStatus::ACTION_NORMAL;
+
+	if (currentValue <= actionPoints[ACTIONPOINT_ALARM_LOW]) {
+		status = ACTION_LOW_ALARM;
+		ErrorCounter++;
+	}
+	else if (currentValue <= actionPoints[ACTIONPOINT_START_LOW]) {
+		status = ACTION_LOW_ALARM_START;
+		ErrorCounter = 0;
+	}
+	else if (currentValue <= actionPoints[ACTIONPOINT_START_HIGH]) {
+		status = ACTION_NORMAL;
+		ErrorCounter = 0;
+	}
+	else if (currentValue <= actionPoints[ACTIONPOINT_ALARM_HIGH]) {
+		status = ACTION_HIGH_ALARM_START;
+		ErrorCounter = 0;
+	}
+	else if (currentValue > actionPoints[ACTIONPOINT_ALARM_LOW]) {
+		status = ACTION_HIGH_ALARM;
+		ErrorCounter++;
+	}
+
+	return status;
+}

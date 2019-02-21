@@ -26,7 +26,8 @@ typedef enum {
 	ACTION_LOW_ALARM_START = 2,
 	ACTION_NORMAL = 3,
 	ACTION_HIGH_ALARM_START = 4,
-	ACTION_HIGH_ALARM = 5
+	ACTION_HIGH_ALARM = 5,
+	ACTION_ALARM = 6
 } ActionStatus;
 
 #define NUMBER_OF_ACTIONPOINTS 4
@@ -78,6 +79,7 @@ public:
 protected:
 	// Is Data Ready for this Sensor
 	virtual bool checkDataReady() = 0;
+	virtual ActionStatus checkStatus() = 0;
 	//	ErrorCode error = NO_ERROR;
 	String label;
 	int pin;

@@ -20,12 +20,16 @@ Contactor::Contactor(String label, int pin, bool lhOn, bool alarmOn, int critThr
 
 void Contactor::init() {
 	this->type = CONTACT;
-	actionPoints[0] = (AlarmOn ? ((float)lhOn) : ((float)!lhOn));
-	actionPoints[1] = actionPoints[0];
-	actionPoints[2] = (AlarmOn ? ((float)!lhOn) : ((float)lhOn));;
-	actionPoints[3] = actionPoints[2];
-	digitalWrite(pin, !lhOn);
+	//actionPoints[0] = (AlarmOn ? ((float)lhOn) : ((float)!lhOn));
+	//actionPoints[1] = actionPoints[0];
+	//actionPoints[2] = (AlarmOn ? ((float)!lhOn) : ((float)lhOn));;
+	//actionPoints[3] = actionPoints[2];
+	//digitalWrite(pin, !lhOn);
 
+}
+
+ActionStatus Contactor::checkStatus() {
+	return (currentValue == AlarmOn? ActionStatus::ACTION_ALARM : ActionStatus::ACTION_NORMAL);
 }
 
 void Contactor::begin() {
@@ -44,9 +48,10 @@ bool Contactor::checkDataReady() {
 	//Debug("Point4");
 	currentValue = sim->GetRealResult(pin);
 	Debug("AS=" + String(actionStatus));
-	//Debug2("CurrentValue=", currentValue);
+	Debug2("CurrentValue=", currentValue);
 #else
 	currentValue = digitalRead(pin);
 #endif // _SIMULATOR_
 	return true;
 }
+

@@ -20,18 +20,18 @@ void Relay::begin() {
 }
 
 void Relay::connect() {
-	Debug("Relay connect>>>");
+	//Debug("Relay connect>>>");
 	if (status == STATUS_OFF) {
-		Debug("Done!");
+		//Debug("Done!");
 		status = STATUS_ON;
 		digitalWrite(pin, on);
 	}
 }
 
 void Relay::disconnect() {
-	Debug("Relay disconnect<<<");
+	//Debug("Relay disconnect<<<");
 	if (status == STATUS_ON) {
-		Debug("Done!");
+		//Debug("Done!");
 		status = STATUS_OFF;
 		digitalWrite(pin, !on);
 	}

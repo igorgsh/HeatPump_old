@@ -3,8 +3,8 @@
 #include "Compressor.h"
 #include "ScriptPump.h"
 
-#define PUMP_OFF_TIMEOUT 3*60
-#define COMPRESSOR_ON_TIMEOUT 1*60
+#define PUMP_OFF_TIMEOUT 5 //3*60
+#define COMPRESSOR_ON_TIMEOUT 5 //1*60
 
 typedef enum {
 	COMPRESSOR_IDLE = 0,
@@ -47,8 +47,5 @@ private:
 	bool checkAllConditions();
 	bool StopCompressor(bool isSync);
 	bool StartCompressor(bool isSync);
-
-
-
 };
 
