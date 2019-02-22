@@ -12,15 +12,17 @@ class ScriptPump :
 	public Script
 {
 public:
-	ScriptPump(Pump* p, bool enable, String label);
+	ScriptPump(Pump* p, bool enable, String label, unsigned int alarmDelay);
 	~ScriptPump();
-	//ScenarioCmd TriggerredCmd();
+	bool ForceStart();
 	bool Start(bool isSync);
 	bool Stop(bool isSync);
+	bool ForceStop();
 	bool begin() { return true; };
+	void CheckStartAlarm(bool isSync);
+	void CheckStopAlarm(bool isSync);
 
 private:
 	Pump* pump;
-	//PumpMode mode;
 };
 

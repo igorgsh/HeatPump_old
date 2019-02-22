@@ -106,7 +106,7 @@ bool AutoTests::RunTest() {
 }
 
 void AutoTests::TestMessage(String message) {
-	Debug("AUTOTESTS#" + currentName + "#run_time:" + String(Config.counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
+	Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
 }
 
 bool AutoTests::TestStart() {
@@ -317,7 +317,7 @@ bool AutoTests::TestStartBrokenLastStep() {
 	static unsigned long ts = 0;
 
 	if (step == 0) { //Start
-		sim->SetCaseNumber(0);
+		sim->SetCaseNumber(3);
 		TestMessage("Started!");
 		step++;
 		testStartTS = Config.counter1s;
@@ -387,6 +387,7 @@ bool AutoTests::TestStartBrokenLastStep() {
 
 	}
 	if (step == 6) { //compressor is started. Forced stop
+//		TestMessage("case:"+String(sim->GetCaseNumber()));
 		res = sim->SetPinValue(3, 8, 0.0); //Contactor Error
 		if (!res) Debug("3.Contactor Error");
 		TestMessage("Forced Stop!");
@@ -394,9 +395,9 @@ bool AutoTests::TestStartBrokenLastStep() {
 		ts = Config.counter1s;
 	}
 	if (step == 7) { //Wait 3 sec to avoid counter unsync
-		TestMessage("Timing:" + String(ts) + ";" + String(Config.counter1s));
+		//TestMessage("Timing:" + String(ts) + ";" + String(Config.counter1s));
 		if (ts + 3 <= Config.counter1s) {
-			TestMessage("Final Timing:" + String(ts) + ";" + String(Config.counter1s));
+			//TestMessage("Final Timing:" + String(ts) + ";" + String(Config.counter1s));
 			res = true;
 			TestMessage("Step 7 is over");
 			step++;
@@ -412,10 +413,11 @@ bool AutoTests::TestStartBrokenLastStep() {
 		else {
 			TestMessage("Compressor stop!!!");
 			step++;
+			ts = Config.counter1s;
 		}
 	}
 	if (step == 9) { //Wait pump GEO contour is stopped
-		if (testStartTS + Config.DevMgr.pumpGeo->minTimeOn + 5 <= Config.counter1s) {
+		if (ts + Config.DevMgr.pumpGeo->minTimeOn + 5 <= Config.counter1s) {
 			if (Config.DevMgr.pumpGeo->status != DeviceStatus::STATUS_OFF) {
 				TestMessage("Geo Pump didn't stopped!");
 				status = TestStatus::FAILED;

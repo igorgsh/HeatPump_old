@@ -17,6 +17,7 @@ Compressor::~Compressor()
 }
 
 bool Compressor::StopCompressor() {
+	Debug("Stop Compressor!!!");
 	disconnect();
 	lastStatusTimestamp = Config.counter1s;
 	return true;

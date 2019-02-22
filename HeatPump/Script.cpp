@@ -13,9 +13,10 @@ void Script::generateLabel() {
 	label = "S" + id;
 }
 
-Script::Script(bool enable, String label, OutputDevice* dev)
+Script::Script(bool enable, String label, unsigned int alarmDelay/*, OutputDevice* dev*/)
 {
-	device = dev;
+	//device = dev;
+	this->alarmDelay = alarmDelay;
 	Enabled = enable;
 	generateId();
 	
@@ -45,6 +46,14 @@ bool Script::Run(ScenarioCmd cmd) {
 	}
 	case ScenarioCmd::SCENARIO_STOP: {
 		res = Stop(false);
+		break;
+	}
+	case ScenarioCmd::SCENARIO_FORCE_STOP: {
+		res = ForceStop();
+		break;
+	}
+	case ScenarioCmd::SCENARIO_FORCE_START: {
+		res = ForceStart();
 		break;
 	}
 	}

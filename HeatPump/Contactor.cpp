@@ -47,8 +47,8 @@ bool Contactor::checkDataReady() {
 #ifdef _SIMULATOR_
 	//Debug("Point4");
 	currentValue = sim->GetRealResult(pin);
-	Debug("AS=" + String(actionStatus));
-	Debug2("CurrentValue=", currentValue);
+	//Debug("AS=" + String(actionStatus));
+	//Debug2("CurrentValue=", currentValue);
 #else
 	currentValue = digitalRead(pin);
 #endif // _SIMULATOR_

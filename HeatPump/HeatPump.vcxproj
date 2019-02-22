@@ -109,7 +109,7 @@
     <ClInclude Include="Relay.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptManager.h" />
-    <ClInclude Include="ScriptCompressor.h" />
+    <ClInclude Include="ScriptHeatPump.h" />
     <ClInclude Include="ScriptPump.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="Sim.h" />
@@ -130,7 +130,7 @@
     <ClCompile Include="Relay.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptManager.cpp" />
-    <ClCompile Include="ScriptCompressor.cpp" />
+    <ClCompile Include="ScriptHeatPump.cpp" />
     <ClCompile Include="ScriptPump.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="Sim.cpp" />

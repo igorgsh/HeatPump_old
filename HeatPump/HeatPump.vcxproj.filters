@@ -58,9 +58,6 @@
     <ClInclude Include="Relay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptCompressor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Compressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -78,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScriptManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptHeatPump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -115,9 +115,6 @@
     <ClCompile Include="Relay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptCompressor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Compressor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -134,6 +131,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScriptManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptHeatPump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

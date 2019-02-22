@@ -1,20 +1,21 @@
 #include "ScriptManager.h"
 #include "Configuration.h"
+#include "ScriptPump.h"
+#include "ScriptHeatPump.h"
 
 extern Configuration Config;
 
-ScriptManager::ScriptManager(DeviceManager* DevMgr)
+ScriptManager::ScriptManager()
 {
-	this->DevMgr = DevMgr;
 	init();
 }
 
 void ScriptManager::init() {
 
-	scriptPumpGeo = new ScriptPump(DevMgr->pumpGeo, true, "PG");
-	scriptPumpContour1 = new ScriptPump(DevMgr->pumpContour1, true, "P1");
-	scriptPumpContour2 = new ScriptPump(DevMgr->pumpContour2, true, "P2");
-	scriptCompressor = new ScriptCompressor(&(DevMgr->compressor), true,"C1", scriptPumpGeo, scriptPumpContour1, scriptPumpContour2);
+	scriptPumpGeo = new ScriptPump(Config.DevMgr.pumpGeo, true, "PG", 3 * 60);
+	scriptPumpContour1 = new ScriptPump(Config.DevMgr.pumpContour1, true, "P1", 3 * 60);
+	scriptPumpContour2 = new ScriptPump(Config.DevMgr.pumpContour2, true, "P2", 3 * 60);
+	scriptHeatPump = new ScriptHeatPump(true,"C1", 3 * 60);
 
 }
 
@@ -22,11 +23,6 @@ void ScriptManager::init() {
 
 ScriptManager::~ScriptManager()
 {
-	/*
-	for (int i = 0; i < NUMBER_OF_SCRIPTS; i++) {
-		delete scripts[i];
-	}
-	*/
 }
 
 
@@ -52,7 +48,7 @@ bool ScriptManager::setup() {
 
 void ScriptManager::loop() {
 	// Main loop for scenario run
-	scriptCompressor->Run(lastCmd);
+	scriptHeatPump->Run(lastCmd);
 }
 
 void ScriptManager::SetCmd(ScenarioCmd cmd) {

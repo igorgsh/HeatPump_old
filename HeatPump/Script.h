@@ -3,17 +3,10 @@
 #include "Definitions.h"
 #include "OutputDevice.h"
 
-//#include "ScenarioManager.h"
-/*
-typedef enum {
-	SCENARIO_NOT_RUN=0,
-	SCENARIO_RUN = 1
-} ScenarioStatus;
-*/
 class Script
 {
 public:
-	Script(bool enabled, String label, OutputDevice* dev);
+	Script(bool enabled, String label, unsigned int alarmDelay/*, OutputDevice* dev*/);
 	virtual ~Script();
 	bool IsActive = false;
 	bool Run(ScenarioCmd cmd);
@@ -23,25 +16,28 @@ public:
 	bool Enabled = true;
 	virtual bool Start(bool isSync)=0;
 	virtual bool Stop(bool isSync)=0;
-	//virtual bool ForceStop() = 0;
-	virtual bool begin()=0;
+	virtual bool ForceStop() = 0;
+	virtual bool ForceStart() = 0;
+//	virtual bool begin()=0;
 	int step = 0;
 	bool IsCompleted() { return (lastCmd==SCENARIO_NOCMD && step==0); }
+	bool IsStartAlarm() { return startAlarm > 0; }
+	bool IsStopAlarm() { return stopAlarm > 0; }
+
 private:
 	int id;
 	String label;
-	//bool completed = true;
 	void generateId();
 	void generateLabel();
-	OutputDevice* device;
-	//bool RunCmd();
+	//OutputDevice* device;
 
 protected:
 	unsigned long counterScript = 0;
-	//bool(*lastCommand)(void);
-	//ScenarioCmd prevCmd = ScenarioCmd::SCENARIO_NOCMD;
 	ScenarioCmd lastCmd = ScenarioCmd::SCENARIO_NOCMD;
-	//virtual ScenarioCmd TriggerredCmd() = 0;
-	
+	unsigned long startAlarm = 0;
+	unsigned long stopAlarm = 0;
+	virtual void CheckStartAlarm(bool isSync) = 0;
+	virtual void CheckStopAlarm(bool isSync) = 0;
+	unsigned int alarmDelay;
 };
 

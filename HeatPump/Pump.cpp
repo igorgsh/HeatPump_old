@@ -3,10 +3,11 @@
 
 extern Configuration Config;
 
-Pump::Pump(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) : 
+Pump::Pump(String label, PumpType pumpType, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) : 
 	Relay(pin,on)
 {
 	status = DeviceStatus::STATUS_OFF;
+	type = pumpType;
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
 	this->label = label;

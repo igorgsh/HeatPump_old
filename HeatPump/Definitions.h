@@ -36,5 +36,7 @@ extern AutoTests* test;
 typedef enum {
 	SCENARIO_NOCMD = 0,
 	SCENARIO_STOP = 1,
-	SCENARIO_START = 2
+	SCENARIO_START = 2,
+	SCENARIO_FORCE_STOP = 3,
+	SCENARIO_FORCE_START = 4
 } ScenarioCmd;

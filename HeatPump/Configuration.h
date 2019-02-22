@@ -27,7 +27,7 @@ public:
 	bool isHardwareReady = false;
 
 	DeviceManager DevMgr = DeviceManager();
-	ScriptManager ScriptMgr = ScriptManager(&DevMgr);
+	ScriptManager ScriptMgr = ScriptManager();
 	byte getDesiredTemp() /*{ return desiredTemp; }*/;
 	void setDesiredTemp(byte value);
 	float getTemp() { return DevMgr.currentTemp->getValue(); }

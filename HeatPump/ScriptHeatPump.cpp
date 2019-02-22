@@ -1,23 +1,20 @@
-#include "ScriptCompressor.h"
 #include "Configuration.h"
+#include "ScriptPump.h"
+#include "ScriptHeatPump.h"
 
 extern Configuration Config;
 
-ScriptCompressor::ScriptCompressor(Compressor* compressor, bool enable, String label, Script* pGeo, Script* p1, Script* p2) : Script(enable, label, compressor)
+ScriptHeatPump::ScriptHeatPump(bool enable, String label, unsigned int alarmDelay) : Script(enable, label, alarmDelay)
 {
-	//this->comp = compressor;
 	this->step = COMPRESSOR_IDLE;
-	//this->pumpGeo = (ScriptPump*)pGeo;
-	//this->pumpContour1 = (ScriptPump*)p1;
-	//this->pumpContour2 = (ScriptPump*)p2;
 }
 
 
-ScriptCompressor::~ScriptCompressor()
+ScriptHeatPump::~ScriptHeatPump()
 {
 }
 
-bool ScriptCompressor::checkInternalTempConditions() {
+bool ScriptHeatPump::checkInternalTempConditions() {
 	bool ret = true;
 	ret &= (Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tGeoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
@@ -31,14 +28,14 @@ bool ScriptCompressor::checkInternalTempConditions() {
 //	Debug2("Check Internal Temp Conditions=", ret);
 	return ret;
 }
-bool ScriptCompressor::checkContactors() {
+bool ScriptHeatPump::checkContactors() {
 	bool ret = true;
 	ret &= (Config.DevMgr.cFlow->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	//Debug2("CheckContactor=", ret);
 	return ret;
 }
 
-bool ScriptCompressor::IsStopNeeded() {
+bool ScriptHeatPump::IsStopNeeded() {
 	bool res;
 
 	res = checkAllConditions();
@@ -53,7 +50,7 @@ bool ScriptCompressor::IsStopNeeded() {
 	return res;
 }
 
-bool ScriptCompressor::IsStartNeeded() {
+bool ScriptHeatPump::IsStartNeeded() {
 	bool res;
 
 	res = (Config.ControlTemperature() < Config.getDesiredTemp());
@@ -62,36 +59,39 @@ bool ScriptCompressor::IsStartNeeded() {
 }
 
 
-bool ScriptCompressor::checkAllConditions() {
+bool ScriptHeatPump::checkAllConditions() {
 	return checkInternalTempConditions()
 		&& checkContactors();
 }
-/*
-ScenarioCmd ScriptCompressor::TriggerredCmd() {
 
-	ScenarioCmd retCmd = SCENARIO_NOCMD;
-	//Debug("ScriptCompressor.Trigger");
-	// check all internal temp sensors
-	if (IsForceOff()) {
-		retCmd = ScenarioCmd::SCENARIO_FORCE_STOP;
-	}
-	else {
-		if (IsStartNeeded()) {
-			//Debug("Compressor start ready");
+void ScriptHeatPump::CheckStopAlarm(bool isSync) {
+	stopAlarm = 0;
+}
 
-			if (comp->status == STATUS_ON ||
-				comp->status == STATUS_ERROR) {
-				retCmd = ScenarioCmd::SCENARIO_NOCMD;
-			}
-			else {
-				retCmd = ScenarioCmd::SCENARIO_START;
-			}
+void ScriptHeatPump::CheckStartAlarm(bool isSync) {
+	
+	bool alarm = false;
+	
+	alarm = checkAllConditions();
+
+	if (alarm) {
+		if (isSync) {
+			delay(alarmDelay * 1000);
+		}
+		else {
+			startAlarm = Config.counter1s; //set the timestamp with new counter
 		}
 	}
-	return retCmd;
+	else { //alarm is disappeared
+		if (Config.counter1s >= startAlarm + alarmDelay) { // ready to go!
+			startAlarm = 0;
+		}
+		else {//still waiting for delay...
+		}
+	}
 }
-*/
-bool ScriptCompressor::Start(bool isSync) {
+
+bool ScriptHeatPump::Start(bool isSync) {
 
 	//Debug("Compressor Start:" + String(step));
 	bool res = false;
@@ -110,7 +110,6 @@ bool ScriptCompressor::Start(bool isSync) {
 		Debug("The Compressor is starting");
 
 	}
-	
 	if (step == COMPRESSOR_IS_START_NEEDED) { // Is Start Needed
 		
 		if (IsStartNeeded()) {
@@ -171,11 +170,11 @@ bool ScriptCompressor::Start(bool isSync) {
 			res = true;
 		}
 	}
-	//Debug2("Return:", String(res));
+		//Debug2("Return:", String(res));
 	return res;
 }
 
-bool ScriptCompressor::Stop(bool isSync) {
+bool ScriptHeatPump::Stop(bool isSync) {
 	bool res = false;
 	if (step == COMPRESSOR_IDLE
 		|| step == COMPRESSOR_IS_START_NEEDED
@@ -208,41 +207,42 @@ bool ScriptCompressor::Stop(bool isSync) {
 }
 
 
-bool ScriptCompressor::StartCompressor(bool isSync) {
+bool ScriptHeatPump::StartCompressor(bool isSync) {
 	bool res = false;
 	if (Config.DevMgr.compressor.status == DeviceStatus::STATUS_ON) {
 		res = true;
 	}
 	else {
-		long waitingTime = Config.counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOff);
 
-		if (waitingTime < 0) {//not ready to start
-			if (isSync) {
-				Debug("Start Compressor delay:" + String(-waitingTime));
-				delay(-waitingTime * 1000);
-				waitingTime = 0;
+		if (checkAllConditions()) {
+			long waitingTime = Config.counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOff);
+			if (waitingTime < 0) {//not ready to start
+				if (isSync) {
+					Debug("Start Compressor delay:" + String(-waitingTime));
+					delay(-waitingTime * 1000);
+					waitingTime = 0;
+				}
+				else {
+					res = false;
+				}
 			}
-			else {
-				res = false;
-			}
-		}
-
-		if (waitingTime > 0) { //ready to start
-			if (checkAllConditions()) {
-				Config.DevMgr.compressor.StartCompressor();
-				Config.DevMgr.compressor.status = DeviceStatus::STATUS_ON;
-				res = true;
-			}
-			else {
-				Debug("Critical conditions are achieved!");
-				res = false;
+			if (waitingTime > 0) { //ready to start
+				if (checkAllConditions()) {
+					Config.DevMgr.compressor.StartCompressor();
+					Config.DevMgr.compressor.status = DeviceStatus::STATUS_ON;
+					res = true;
+				}
+				else {
+					Debug("Critical conditions are achieved!");
+					res = false;
+				}
 			}
 		}
 	}
 	return res;
 }
 
-bool ScriptCompressor::StopCompressor(bool isSync) {
+bool ScriptHeatPump::StopCompressor(bool isSync) {
 	bool res = false;
 	if (Config.DevMgr.compressor.status == DeviceStatus::STATUS_OFF) {
 		res = true;
@@ -264,4 +264,19 @@ bool ScriptCompressor::StopCompressor(bool isSync) {
 		}
 	}
 	return res;
+}
+
+bool ScriptHeatPump::ForceStop() {
+	bool res = false;
+	if (Config.DevMgr.compressor.status == DeviceStatus::STATUS_OFF) {
+		res = true;
+	}
+	else {
+		res = Config.DevMgr.compressor.StopCompressor();
+	}
+	return res;
+}
+
+bool ScriptHeatPump::ForceStart() {
+	return Start(true);
 }
