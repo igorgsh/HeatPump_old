@@ -19,8 +19,8 @@ public:
 	bool Stop(bool isSync);
 	bool ForceStop();
 	bool begin() { return true; };
-	void CheckStartAlarm(bool isSync);
-	void CheckStopAlarm(bool isSync);
+	bool IsStartAllowed(bool isSync);
+	bool IsStopAllowed(bool isSync);
 
 private:
 	Pump* pump;

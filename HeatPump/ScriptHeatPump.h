@@ -27,8 +27,8 @@ public:
 	~ScriptHeatPump();
 	bool Start(bool isSync);
 	bool Stop(bool isSync);
-	void CheckStartAlarm(bool isSync);
-	void CheckStopAlarm(bool isSync);
+	bool IsStartAllowed(bool isSync);
+	bool IsStopAllowed(bool isSync);
 	bool ForceStop();
 	bool ForceStart();
 
@@ -39,8 +39,8 @@ private:
 
 	bool checkInternalTempConditions();
 	bool checkContactors();
-	bool IsStartNeeded();
-	bool IsStopNeeded();
+	bool IsStartNeeded(bool isSync);
+	bool IsStopNeeded(bool isSync);
 	bool checkAllConditions();
 	bool StopCompressor(bool isSync);
 	bool StartCompressor(bool isSync);

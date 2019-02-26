@@ -64,10 +64,10 @@ void initSim() {
 	sim->SetCaseValues(3, 0);
 //	res = sim->SetPinValue(3, 8, 0.0);
 //	if (!res) Debug("3.Contactor Error");
-	res = sim->SetPinValue(3, 99, 30);
-	if (!res) Debug("3.Desired Temp Error");
-	res = sim->SetPinValue(3, 31, 28.0);
-	if (!res) Debug("3.T10 Error");
+//	res = sim->SetPinValue(3, 99, 30);
+//	if (!res) Debug("3.Desired Temp Error");
+//	res = sim->SetPinValue(3, 31, 28.0);
+//	if (!res) Debug("3.T10 Error");
 
 
 

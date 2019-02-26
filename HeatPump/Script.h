@@ -36,8 +36,8 @@ protected:
 	ScenarioCmd lastCmd = ScenarioCmd::SCENARIO_NOCMD;
 	unsigned long startAlarm = 0;
 	unsigned long stopAlarm = 0;
-	virtual void CheckStartAlarm(bool isSync) = 0;
-	virtual void CheckStopAlarm(bool isSync) = 0;
+	virtual bool IsStartAllowed(bool isSync) = 0;
+	virtual bool IsStopAllowed(bool isSync) = 0;
 	unsigned int alarmDelay;
 };
 

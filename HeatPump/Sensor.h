@@ -22,25 +22,10 @@ typedef enum {
 */
 typedef enum {
 	ACTION_NODATA = 0,
-	//ACTION_LOW_ALARM = 1,
-	//ACTION_LOW_ALARM_START = 2,
-	ACTION_NORMAL = 3,
-	//ACTION_HIGH_ALARM_START = 4,
-	//ACTION_HIGH_ALARM = 5,
-	ACTION_ALARM = 6
+	ACTION_NORMAL = 1,
+	ACTION_ALARM = 2
 } ActionStatus;
 
-/*
-#define NUMBER_OF_ACTIONPOINTS 4
-
-typedef enum {
-	ACTIONPOINT_ALARM_LOW=0,
-	ACTIONPOINT_START_LOW = 1,
-	ACTIONPOINT_START_HIGH = 2,
-	ACTIONPOINT_ALARM_HIGH = 3
-
-}ActionPointType;
-*/
 class Sensor
 {
 public:

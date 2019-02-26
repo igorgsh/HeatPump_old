@@ -12,10 +12,10 @@ ScriptManager::ScriptManager()
 
 void ScriptManager::init() {
 
-	scriptPumpGeo = new ScriptPump(Config.DevMgr.pumpGeo, true, "PG", 3 * 60);
-	scriptPumpContour1 = new ScriptPump(Config.DevMgr.pumpContour1, true, "P1", 3 * 60);
-	scriptPumpContour2 = new ScriptPump(Config.DevMgr.pumpContour2, true, "P2", 3 * 60);
-	scriptHeatPump = new ScriptHeatPump(true,"C1", 3 * 60);
+	scriptPumpGeo = new ScriptPump(Config.DevMgr.pumpGeo, true, "PG", 1); //TODO: set a real values for alarmdelay
+	scriptPumpContour1 = new ScriptPump(Config.DevMgr.pumpContour1, true, "P1", 1);
+	scriptPumpContour2 = new ScriptPump(Config.DevMgr.pumpContour2, true, "P2", 1);
+	scriptHeatPump = new ScriptHeatPump(true,"C1", 1);
 
 }
 

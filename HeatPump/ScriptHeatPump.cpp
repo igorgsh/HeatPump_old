@@ -16,7 +16,9 @@ ScriptHeatPump::~ScriptHeatPump()
 
 bool ScriptHeatPump::checkInternalTempConditions() {
 	bool ret = true;
+	//Debug("Point 0");
 	ret &= (Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	//if (!ret) Debug("Point 1#"+String(Config.DevMgr.tGeoI->getActionStatus()));
 	ret &= (Config.DevMgr.tGeoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tEvoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tEvoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
@@ -25,17 +27,20 @@ bool ScriptHeatPump::checkInternalTempConditions() {
 	ret &= (Config.DevMgr.tHpO->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tHpI->getActionStatus() == ActionStatus::ACTION_NORMAL);
 	ret &= (Config.DevMgr.tComp->getActionStatus() == ActionStatus::ACTION_NORMAL);
-//	Debug2("Check Internal Temp Conditions=", ret);
+
+	//Debug("Point 2#"+String(ret));
+
+	//	Debug2("Check Internal Temp Conditions=", ret);
 	return ret;
 }
 bool ScriptHeatPump::checkContactors() {
 	bool ret = true;
 	ret &= (Config.DevMgr.cFlow->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	//Debug2("CheckContactor=", ret);
+	//Debug("CheckContactor=" + String(Config.DevMgr.cFlow->getActionStatus()));
 	return ret;
 }
 
-bool ScriptHeatPump::IsStopNeeded() {
+bool ScriptHeatPump::IsStopNeeded(bool isSync) {
 	bool res;
 
 	res = checkAllConditions();
@@ -50,45 +55,68 @@ bool ScriptHeatPump::IsStopNeeded() {
 	return res;
 }
 
-bool ScriptHeatPump::IsStartNeeded() {
-	bool res;
-
-	res = (Config.ControlTemperature() < Config.getDesiredTemp());
-	//	Debug2("IsStartNeeded=", res);
+bool ScriptHeatPump::IsStartNeeded(bool isSync) {
+	bool res = false;
+	if (IsStartAllowed(isSync)) {
+		res = (Config.ControlTemperature() < Config.getDesiredTemp());
+		//	Debug2("IsStartNeeded=", res);
+	}
+	else {
+		//Debug("ScriptHeatPump: alarm!");
+	}
 	return res;
 }
 
 
 bool ScriptHeatPump::checkAllConditions() {
-	return checkInternalTempConditions()
-		&& checkContactors();
+	bool res = true;
+	res &= checkInternalTempConditions();
+	if (!res) Debug("ScriptHeatPump:Temp Condition Failed");
+	res &= checkContactors();
+	if (!res) Debug("ScriptHeatPump:Contactor Condition Failed");
+	return res;
 }
 
-void ScriptHeatPump::CheckStopAlarm(bool isSync) {
+bool ScriptHeatPump::IsStopAllowed(bool isSync) {
 	stopAlarm = 0;
+	return false;
 }
 
-void ScriptHeatPump::CheckStartAlarm(bool isSync) {
+bool ScriptHeatPump::IsStartAllowed(bool isSync) {
 	
 	bool alarm = false;
-	
-	alarm = checkAllConditions();
+	bool res = true;
 
+	alarm = !checkAllConditions();
+	//Debug("CheckStartAlarm=" + String(alarm));
 	if (alarm) {
 		if (isSync) {
 			delay(alarmDelay * 1000);
+			startAlarm = 0;
+			res = false;
 		}
 		else {
 			startAlarm = Config.counter1s; //set the timestamp with new counter
+			res = true;
 		}
 	}
 	else { //alarm is disappeared
-		if (Config.counter1s >= startAlarm + alarmDelay) { // ready to go!
-			startAlarm = 0;
+		if (startAlarm != 0) {
+			if (Config.counter1s >= startAlarm + alarmDelay) { // ready to go!
+				startAlarm = 0;
+				res = false;
+			}
+			else {//still waiting for delay...
+				res = true;
+			}
 		}
-		else {//still waiting for delay...
+		else {
+			res = false;
 		}
 	}
+	Debug("CheckStartAlarm:res=" + String(res));
+
+	return res;
 }
 
 bool ScriptHeatPump::Start(bool isSync) {
@@ -107,25 +135,25 @@ bool ScriptHeatPump::Start(bool isSync) {
 	
 	if (step == COMPRESSOR_IDLE) { //Nothing to do
 		step = COMPRESSOR_IS_START_NEEDED;
-		Debug("The Compressor is starting");
+		Debug("ScriptHeatPump:The HeatPump starting");
 
 	}
 	if (step == COMPRESSOR_IS_START_NEEDED) { // Is Start Needed
 		
-		if (IsStartNeeded()) {
-			Debug("Compressor: Start is needed");
+		if (IsStartNeeded(isSync)) {
+			Debug("ScriptHeatPump:ScriptCompressor:Compressor: Start is needed");
 			bool res1 = Config.ScriptMgr.scriptPumpContour1->Start(isSync);
 			bool res2 = Config.ScriptMgr.scriptPumpContour2->Start(isSync);
-			Debug("Pump contours:" + String(res1) + "#" + String(res2));
+			Debug("ScriptHeatPump:Pump contours:" + String(res1) + "#" + String(res2));
 			if (res1 && res2) {
 				step = COMPRESSOR_START_PUMP_GEO;
-				Debug("Compressor: Geo pump starting!");
+				Debug("ScriptHeatPump:Compressor: Geo pump starting!");
 			}
 		}
 	}
 	if (step == COMPRESSOR_START_PUMP_GEO) { // Start Pump Geo
 		if (Config.ScriptMgr.scriptPumpGeo->Start(isSync)) {
-			Debug("Compressor: Geo pump is done!");
+			Debug("ScriptHeatPump:Compressor: Geo pump is done!" + String(Config.DevMgr.pumpGeo->status));
 			step = COMPRESSOR_WAITING_PUMP_GEO_START;
 			counterScript = Config.counter1s;
 		}
@@ -133,39 +161,41 @@ bool ScriptHeatPump::Start(bool isSync) {
 	if (step == COMPRESSOR_WAITING_PUMP_GEO_START) {//delay before start compressor
 		if (Config.counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
 			step = COMPRESSOR_START;
-			Debug("Compressor is starting...");
+			Debug("ScriptHeatPump:Compressor starting...");
 		}
 	}
 	if (step == COMPRESSOR_START) { //Start Compressor
 		if (StartCompressor(isSync)) {
 			step = COMPRESSOR_IS_STOP_NEEDED;
-			Debug("Compressor: Started!");
+			Debug("ScriptHeatPump:Compressor Started!");
 		}
 	}
 	if (step == COMPRESSOR_IS_STOP_NEEDED) { // Is the temp achieved?
 //		Debug("Compressor: is stop needed?");
-		if (IsStopNeeded()) {
+		if (IsStopNeeded(isSync)) {
 			step = COMPRESSOR_STOP;
-			Debug("Compressor: Stop!");
+			Debug("ScriptHeatPump:Compressor Stop!");
 		}
 	}
 	if (step == COMPRESSOR_STOP) { // Stop Compressor
-		Debug("Compressor: Stop!");
+		Debug("ScriptHeatPump:Compressor: Stop!");
 		if (Config.DevMgr.compressor.StopCompressor()) {
-			Debug("Compressor: Stop done!");
+			Debug("ScriptHeatPump:Compressor: Stop done!");
 			step = COMPRESSOR_WAITING_PUMP_GEO_STOP;
 			counterScript = Config.counter1s;
-			Debug("Compressor: Waiting before Geo Pump stop");
+			Debug("ScriptHeatPump:Compressor: Waiting before Geo Pump stop");
 		}
 	}
 	if (step == COMPRESSOR_WAITING_PUMP_GEO_STOP) {//delay before stop Pump Geo
 		if (Config.counter1s - counterScript >= PUMP_OFF_TIMEOUT) {
 			step = COMPRESSOR_STOP_PUMP_GEO;
-			Debug("Compressor:Stop Geo Pump ");
+			Debug("ScriptHeatPump:Compressor:Stop Geo Pump ");
 		}
 	}
 	if (step == COMPRESSOR_STOP_PUMP_GEO) { // Stop Pump Geo
 		if (Config.ScriptMgr.scriptPumpGeo->Stop(false)) {
+			Debug("ScriptHeatPump:GeoPump Status=" + String(Config.DevMgr.pumpGeo->status));
+			Debug("ScriptHeatPump:Compressor:Finish ");
 			step = COMPRESSOR_IS_START_NEEDED;
 			res = true;
 		}

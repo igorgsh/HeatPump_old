@@ -55,6 +55,7 @@ bool TempSensor::loop() {
 		result = getData();
 		if (result) {
 			tryCounter = 0;
+			
 		}
 		else if (tryCounter == 9) {
 			actionStatus = ACTION_NODATA;

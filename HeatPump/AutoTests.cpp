@@ -64,13 +64,13 @@ bool AutoTests::PrepareTest() {
 }
 
 bool AutoTests::RunTest() {
-	bool res = false;
+	bool res = true;
 
 	switch (currentTestNumber) {
 	case 0: {
 		currentName = "Normal Start";
+//		res = TestDummySuccess();
 //		res = TestStart();
-		res = TestDummySuccess();
 		break;
 	}
 	case 1: {
@@ -81,15 +81,15 @@ bool AutoTests::RunTest() {
 	}
 	case 2: {
 		currentName = "No Start - no temperature achieved";
-		//res = TestNoStart();
+//		res = TestNoStart();
 		res = TestDummySuccess();
 
 		break;
 	}
 	case 3: {
 		currentName = "Start and stop on the last step";
-		//res = TestDummySuccess();
-		res = TestStartBrokenLastStep();
+		res = TestDummySuccess();
+//		res = TestStartBrokenLastStep();
 		break;
 	}
 	default: {
@@ -111,6 +111,7 @@ void AutoTests::TestMessage(String message) {
 
 bool AutoTests::TestStart() {
 	bool res = false;
+	static unsigned long ts = 0;
 	// Step 0: Is start needed
 	// Step 1: start Pump Geo
 	// Step 2: Waiting for 3 min
@@ -126,10 +127,12 @@ bool AutoTests::TestStart() {
 		TestMessage("Started!");
 		step++;
 		testStartTS = Config.counter1s;
+		ts = Config.counter1s;
 		res = true;
+
 	}
 	if (step == 1) { //Wait 3 sec to avoid counter unsync
-		if (testStartTS + 3 <= Config.counter1s) {
+		if (ts + 3 <= Config.counter1s) {
 			res = true;
 			TestMessage("Step 1 is over");
 			step++;
@@ -257,6 +260,7 @@ bool AutoTests::TestNoStart() {
 
 bool AutoTests::TestStop() {
 	bool res = false;
+	static unsigned long ts = 0;
 
 	if (step == 0) { //Start test
 		sim->SetCaseNumber(1);
@@ -269,31 +273,34 @@ bool AutoTests::TestStop() {
 			res = true;
 			TestMessage("Step 1 is over");
 			step++;
+			ts = Config.counter1s;
 		}
 	}
 	if (step == 2) { // Wait Compressor stop
-		if (testStartTS + Config.DevMgr.compressor.minTimeOn + 5 /* Some gap */ <= Config.counter1s) {
+		//Debug("ts=" + String(ts) + ";Counter1s=" + String(Config.counter1s));
+		if (ts + Config.DevMgr.compressor.minTimeOn + 5 /* Some gap */ <= Config.counter1s) {
 			if (Config.DevMgr.compressor.status != DeviceStatus::STATUS_OFF) {
 				TestMessage("Compressor didn't stopped!");
 				status = TestStatus::FAILED;
 				res = false;
 			}
 			else {
-				TestMessage("Compressor is stopped");
+				TestMessage("Compressor stopped");
 				step++;
+				ts = Config.counter1s;
 			}
 		}
 	}
 	
 	if (step == 3) { //Wait pump GEO contour is stopped
-		if (testStartTS + Config.DevMgr.pumpGeo->minTimeOn + 5  <= Config.counter1s) {
+		if (ts + Config.DevMgr.pumpGeo->minTimeOn + 5  <= Config.counter1s) {
 			if (Config.DevMgr.pumpGeo->status != DeviceStatus::STATUS_OFF) {
 				TestMessage("Geo Pump didn't stopped!");
 				status = TestStatus::FAILED;
 				res = false;
 			}
 			else {
-				TestMessage("Pump GEO is stopped");
+				TestMessage("Pump GEO stopped");
 				step++;
 			}
 		}
@@ -338,7 +345,7 @@ bool AutoTests::TestStartBrokenLastStep() {
 				res = false;
 			}
 			else {
-				TestMessage("Pump Contour1 is started");
+				TestMessage("Pump Contour1 started");
 				step++;
 			}
 		}
@@ -352,21 +359,22 @@ bool AutoTests::TestStartBrokenLastStep() {
 				res = false;
 			}
 			else {
-				TestMessage("Pump Contour2 is started");
+				TestMessage("Pump Contour2 started");
 				step++;
+				ts = Config.counter1s;
 			}
 		}
 	}
 
 	if (step == 4) { // Wait Pump Geo
-		if (testStartTS + Config.DevMgr.pumpGeo->minTimeOff <= Config.counter1s) {
+		if (ts + Config.DevMgr.pumpGeo->minTimeOff + 7 <= Config.counter1s) {
 			if (Config.DevMgr.pumpGeo->status != DeviceStatus::STATUS_ON) {
 				TestMessage("Pump Geo didn't started!");
 				status = TestStatus::FAILED;
 				res = false;
 			}
 			else {
-				TestMessage("Pump Geo is started");
+				TestMessage("Pump Geo started");
 				step++;
 			}
 		}

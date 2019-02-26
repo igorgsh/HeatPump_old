@@ -15,13 +15,16 @@ ScriptPump::~ScriptPump()
 {
 }
 
-void ScriptPump::CheckStopAlarm(bool isSync) {
+bool ScriptPump::IsStopAllowed(bool isSync) {
 	//Nothing to do
 	stopAlarm = 0;
+	return false;
 }
 
-void ScriptPump::CheckStartAlarm(bool isSync) {
+bool ScriptPump::IsStartAllowed(bool isSync) {
 	bool alarm = false;
+	bool res = true;
+
 	switch (pump->GetPumpType()) {
 	case PumpType::PUMP_GEO: {
 		alarm = !((Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL)
@@ -36,19 +39,29 @@ void ScriptPump::CheckStartAlarm(bool isSync) {
 	if (alarm) {
 		if (isSync) {
 			delay(alarmDelay * 1000);
+			startAlarm = 0;
+			res = false;
 		}
 		else {
 			startAlarm = Config.counter1s; //set the timestamp with new counter
+			res = true;
 		}
 	}
 	else { //alarm is disappeared
-		if (Config.counter1s >= startAlarm + alarmDelay) { // ready to go!
-			startAlarm = 0;
+		if (startAlarm != 0) {
+			if (Config.counter1s >= startAlarm + alarmDelay) { // ready to go!
+				startAlarm = 0;
+				res = true;
+			}
+			else {//still waiting for delay...
+				res = false;
+			}
 		}
-		else {//still waiting for delay...
-
+		else {
+			res = true;
 		}
 	}
+	return res;
 }
 
 bool ScriptPump::Start(bool isSync) {
@@ -58,8 +71,7 @@ bool ScriptPump::Start(bool isSync) {
 		res = true;
 	}
 	else {
-		CheckStartAlarm(isSync);
-		if (!IsStartAlarm()) {
+		if (IsStartAllowed(isSync)) {
 			long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOff);
 
 			if (waitingTime < 0) {//not ready to start
@@ -72,14 +84,16 @@ bool ScriptPump::Start(bool isSync) {
 					res = false;
 				}
 			}
-
 			if (waitingTime >= 0) { //ready to start
-				CheckStartAlarm(isSync);
-				if (!IsStartAlarm()) { // Some alarm occured
+				if (IsStartAllowed(isSync)) { // no alarm occured
 					pump->StartPump();
 					pump->status = DeviceStatus::STATUS_ON;
 					res = true;
 				}
+				else {
+					res = false;
+				}
+
 			}
 		}
 	}
@@ -92,8 +106,7 @@ bool ScriptPump::Stop(bool isSync) {
 		res = true;
 	}
 	else {
-		CheckStopAlarm(isSync);
-		if (!IsStopAlarm()) {
+		if (IsStopAllowed(isSync)) {
 			long waitingTime = Config.counter1s - (pump->lastStatusTimestamp + pump->minTimeOn);
 
 			if (waitingTime < 0) {//not ready to stop
@@ -108,11 +121,13 @@ bool ScriptPump::Stop(bool isSync) {
 			}
 
 			if (waitingTime >= 0) { //ready to stop
-				CheckStopAlarm(isSync);
-				if (!IsStopAlarm()) { // Some alarm occured
+				if (IsStopAllowed(isSync)) { // no alarm occured
 					pump->StopPump();
 					pump->status = DeviceStatus::STATUS_OFF;
 					res = true;
+				}
+				else {
+					res = false;
 				}
 			}
 		}

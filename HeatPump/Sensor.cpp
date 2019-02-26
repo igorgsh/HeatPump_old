@@ -1,19 +1,6 @@
 #include "Sensor.h"
+#include "Definitions.h"
 
-/*
-void Sensor::init(String label, int pin, float actionPoints[], int critThreshold) {
-
-	this->label = label;
-	this->pin = pin;
-	for (int i = 0; i < NUMBER_OF_ACTIONPOINTS; i++) {
-		if (actionPoints != NULL) {
-			this->actionPoints[i] = actionPoints[i];
-		}
-	}
-	this->criticalThreshold = critThreshold;
-	pinMode(pin, INPUT);
-}
-*/
 void Sensor::init(String label, int pin, float lowerRange, float upperRange) {
 
 	this->label = label;
@@ -38,18 +25,24 @@ bool Sensor::getData() {
 	bool res;
 
 	res = checkDataReady();
+	//Debug("GetData:" + String(res));
 	if (res) { //data is ready
 		actionStatus = checkStatus();
 		ErrorNoData = 0;
 		if (actionStatus == ActionStatus::ACTION_ALARM) {
+			//Debug("ALARM:" + getLabel());
+		
 			ErrorCounter++;
 		}
 		else {
+			actionStatus = ActionStatus::ACTION_NORMAL;
+			//Debug("NOT ALARM");
 			ErrorCounter = 0;
 		}
 	}
 	else { //result is absent
 		actionStatus = ACTION_NODATA;
+		//Debug("NO DATA");
 		ErrorNoData++;
 	}
 	return res;

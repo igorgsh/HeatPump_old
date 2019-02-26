@@ -37,15 +37,19 @@ bool Contactor::loop() {
 }
 
 bool Contactor::checkDataReady() {
-	//Debug("Point5");
 #ifdef _SIMULATOR_
-	//Debug("Point4");
 	currentValue = sim->GetRealResult(pin);
-	//Debug("AS=" + String(actionStatus));
-	//Debug2("CurrentValue=", currentValue);
 #else
 	currentValue = digitalRead(pin);
 #endif // _SIMULATOR_
+	if (currentValue == AlarmOn) {
+		//Debug("CurrentValue=" + String((int)currentValue));
+		actionStatus = ActionStatus::ACTION_ALARM;
+	}
+	else {
+		actionStatus = ActionStatus::ACTION_NORMAL;
+	}
+
 	return true;
 }
 
