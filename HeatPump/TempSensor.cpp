@@ -2,8 +2,8 @@
 #include "Definitions.h"
 //
 
-TempSensor::TempSensor(String label, int pin,  float actionPoints[], int critThreshold)
-	: Sensor(label, pin, actionPoints, critThreshold) {
+TempSensor::TempSensor(String label, int pin,  float lowerRange, float upperRange)
+	: Sensor(label, pin, lowerRange, upperRange) {
 	init();
 }
 
@@ -72,26 +72,9 @@ bool TempSensor::loop() {
 ActionStatus TempSensor::checkStatus() {
 	ActionStatus status = ActionStatus::ACTION_NORMAL;
 
-	if (currentValue <= actionPoints[ACTIONPOINT_ALARM_LOW]) {
-		status = ACTION_LOW_ALARM;
-		ErrorCounter++;
+	if (currentValue <= lowerRange
+		|| currentValue >= upperRange){
+		status = ACTION_ALARM;
 	}
-	else if (currentValue <= actionPoints[ACTIONPOINT_START_LOW]) {
-		status = ACTION_LOW_ALARM_START;
-		ErrorCounter = 0;
-	}
-	else if (currentValue <= actionPoints[ACTIONPOINT_START_HIGH]) {
-		status = ACTION_NORMAL;
-		ErrorCounter = 0;
-	}
-	else if (currentValue <= actionPoints[ACTIONPOINT_ALARM_HIGH]) {
-		status = ACTION_HIGH_ALARM_START;
-		ErrorCounter = 0;
-	}
-	else if (currentValue > actionPoints[ACTIONPOINT_ALARM_LOW]) {
-		status = ACTION_HIGH_ALARM;
-		ErrorCounter++;
-	}
-
 	return status;
 }

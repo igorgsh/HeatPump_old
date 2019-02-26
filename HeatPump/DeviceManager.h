@@ -17,19 +17,19 @@ public:
 
 	void begin();
 
-	TempSensor tempSensors[NUMBER_OF_TEMP] = { 
-	/* 0*/	TempSensor("GeoI",	22,new float[NUMBER_OF_ACTIONPOINTS] {-20.0,-15.0,40.0,50.0}, 5),	//T1
-	/* 1*/	TempSensor("GeoO",	23,new float[NUMBER_OF_ACTIONPOINTS] {-20.0,-15.0,40.0,50.0},5),	//T2
-	/* 2*/	TempSensor("EvoI",	24,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,40.0,50.0},5),	//T3 = T6
-	/* 3*/	TempSensor("EvoO",	25,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,40.0,50.0},5),	//T4
-	/* 4*/	TempSensor("CondI",	26,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,140.0,150.0},5),	//T5
-	/* 5*/	TempSensor("CondO",	27,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,40.0,50.0},5),	//T6 = T3
-	/* 6*/	TempSensor("HpO",	28,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,100.0,110.0},5),	//T7
-	/* 7*/	TempSensor("HpI",	29,new float[NUMBER_OF_ACTIONPOINTS] {-30.0,-15.0,100.0,110.0},5),	//T8
-	/* 8*/	TempSensor("Comp",	30,new float[NUMBER_OF_ACTIONPOINTS] { -30.0,-15.0,117.0,120.0 },5),//T9
-	/* 9*/	TempSensor("Unkn",	31,new float[NUMBER_OF_ACTIONPOINTS] { -50.0,-50.0,50.0,50.0 },5),	//T10
-	/*10*/	TempSensor("Room",	32,new float[NUMBER_OF_ACTIONPOINTS] { -50.0,-50.0,50.0,50.0 },5),	//T11
-	/*11*/	TempSensor("Street",33,new float[NUMBER_OF_ACTIONPOINTS] { -50.0,-50.0,50.0,50.0 },5)	//T12
+	TempSensor tempSensors[NUMBER_OF_TEMP] = {
+		/* 0*/	TempSensor("GeoI",	22,-20.0, 50.0),	//T1
+		/* 1*/	TempSensor("GeoO",	23,-20.0, 50.0),	//T2
+		/* 2*/	TempSensor("EvoI",	24,-30.0, 50.0),	//T3 = T6
+		/* 3*/	TempSensor("EvoO",	25,-30.0,50.0),	//T4
+		/* 4*/	TempSensor("CondI",	26,-30.0, 110.0),	//T5
+		/* 5*/	TempSensor("CondO",	27,-30.0,50.0),	//T6 = T3
+		/* 6*/	TempSensor("HpO",	28,-30.0, 110.0),	//T7
+		/* 7*/	TempSensor("HpI",	29,-30.0, 110.0),	//T8
+		/* 8*/	TempSensor("Comp",	30,-30.0,120.0),//T9
+		/* 9*/	TempSensor("Unkn",	31,-50.0,50.0),	//T10
+		/*10*/	TempSensor("Room",	32,-50.0,50.0),	//T11
+		/*11*/	TempSensor("Street",33,-50.0,50.0)	//T12
 	};
 
 	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", PumpType::PUMP_GEO , 40,HIGH,1,1), //Geo Contour
@@ -55,7 +55,7 @@ public:
 	TempSensor* currentTemp = &tempSensors[10];
 	TempSensor* tStreet = &tempSensors[11];
 
-	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, false, 5) };
+	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, LOW) };
 	
 	Contactor* cFlow = &contacts[0];
 

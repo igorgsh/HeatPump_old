@@ -22,14 +22,15 @@ typedef enum {
 */
 typedef enum {
 	ACTION_NODATA = 0,
-	ACTION_LOW_ALARM = 1,
-	ACTION_LOW_ALARM_START = 2,
+	//ACTION_LOW_ALARM = 1,
+	//ACTION_LOW_ALARM_START = 2,
 	ACTION_NORMAL = 3,
-	ACTION_HIGH_ALARM_START = 4,
-	ACTION_HIGH_ALARM = 5,
+	//ACTION_HIGH_ALARM_START = 4,
+	//ACTION_HIGH_ALARM = 5,
 	ACTION_ALARM = 6
 } ActionStatus;
 
+/*
 #define NUMBER_OF_ACTIONPOINTS 4
 
 typedef enum {
@@ -39,12 +40,12 @@ typedef enum {
 	ACTIONPOINT_ALARM_HIGH = 3
 
 }ActionPointType;
-
+*/
 class Sensor
 {
 public:
-	Sensor(String label, int pin, int critThreshold = 5);
-	Sensor(String label, int pin, float actionPoints[], int critThreshold = 5);
+	Sensor(String label, int pin);
+	Sensor(String label, int pin, float lowerRange, float higherRange);
 	//Type of Sensor
 	SensorType type = NOSENSOR;
 	SensorType getType() { return type; };
@@ -54,8 +55,9 @@ public:
 
 	// Number of errors occured
 	int ErrorCounter = 0;
+	int ErrorNoData = 0;
 	// Is error critical
-	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
+	//virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
 
 	//Label of Sensor
 	String getLabel() { return label; };
@@ -71,10 +73,6 @@ public:
 
 	ActionStatus getActionStatus() { return actionStatus; };
 
-	void setCriticalThreshold(int value) { criticalThreshold = value; };
-	int getCriticalThreshold() { return criticalThreshold; };
-	float getActionPoint(ActionPointType n) { if (n >= 0 && n < NUMBER_OF_ACTIONPOINTS) return actionPoints[n]; else return 0.0; };
-	void setActionPoint(ActionPointType n, float value) { if (n >= 0 && n < NUMBER_OF_ACTIONPOINTS) actionPoints[n] = value; };
 
 protected:
 	// Is Data Ready for this Sensor
@@ -87,15 +85,17 @@ protected:
 
 
 	// how many times alarm should be set before it became critical
-	int criticalThreshold;
+	//int criticalThreshold;
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
 
 	float currentValue;
-
-	float actionPoints[NUMBER_OF_ACTIONPOINTS] = { 0.0, 0.0, 0.0, 0.0 };
+	float lowerRange;
+	float upperRange;
+	//float actionPoints[NUMBER_OF_ACTIONPOINTS] = { 0.0, 0.0, 0.0, 0.0 };
 private:
-	void init(String label, int pin, float actionPoints[], int critThreshold);
+	//void init(String label, int pin, float actionPoints[], int critThreshold);
+	void init(String label, int pin, float lowerRange, float upperRange);
 
 };
 

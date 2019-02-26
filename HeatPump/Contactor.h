@@ -6,7 +6,7 @@ class Contactor :
 public:
 	~Contactor();
 
-	Contactor(String label, int pin, bool lhOn, bool alarmOn, int critThreshold);
+	Contactor(String label, int pin, bool lhOn, bool alarmOn);
 	void begin();
 	bool checkDataReady();
 	bool loop();

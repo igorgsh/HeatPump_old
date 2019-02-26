@@ -10,7 +10,7 @@ class TempSensor :
 {
 public:
 	~TempSensor();
-	TempSensor(String label, int pin, float actionPoints[], int critThreshold);
+	TempSensor(String label, int pin, float lowerRange, float upperRange);
 	void begin();
 	void requestTemperatures();
 	bool checkDataReady();

@@ -1,6 +1,6 @@
 #include "Sensor.h"
 
-
+/*
 void Sensor::init(String label, int pin, float actionPoints[], int critThreshold) {
 
 	this->label = label;
@@ -13,15 +13,26 @@ void Sensor::init(String label, int pin, float actionPoints[], int critThreshold
 	this->criticalThreshold = critThreshold;
 	pinMode(pin, INPUT);
 }
+*/
+void Sensor::init(String label, int pin, float lowerRange, float upperRange) {
 
-Sensor::Sensor(String label, int pin, int critThreshold) {
-	init(label, pin, NULL, critThreshold);
+	this->label = label;
+	this->pin = pin;
+	this->lowerRange = lowerRange;
+	this->upperRange = upperRange;
+	pinMode(pin, INPUT);
+}
+
+Sensor::Sensor(String label, int pin) {
+	init(label, pin, 0, 0);
 }
 
 
-Sensor::Sensor(String label, int pin, float actionPoints[], int critThreshold) {
-	init(label, pin, actionPoints, critThreshold);
+
+Sensor::Sensor(String label, int pin, float lowerRange, float upperRange) {
+	init(label, pin, lowerRange, upperRange);
 }
+
 
 bool Sensor::getData() {
 	bool res;
@@ -29,10 +40,8 @@ bool Sensor::getData() {
 	res = checkDataReady();
 	if (res) { //data is ready
 		actionStatus = checkStatus();
-
-		if (actionStatus == ACTION_LOW_ALARM
-			|| actionStatus == ACTION_HIGH_ALARM
-			|| actionStatus == ACTION_ALARM) {
+		ErrorNoData = 0;
+		if (actionStatus == ActionStatus::ACTION_ALARM) {
 			ErrorCounter++;
 		}
 		else {
@@ -40,12 +49,8 @@ bool Sensor::getData() {
 		}
 	}
 	else { //result is absent
-		if (isCritical()) {
-			actionStatus = ACTION_NODATA;
-		}
-		else {
-			// Nothing todo. Keep the previous status
-		}
+		actionStatus = ACTION_NODATA;
+		ErrorNoData++;
 	}
 	return res;
 }

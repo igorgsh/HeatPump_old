@@ -211,24 +211,25 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 	if (tpl.equals("%SensorsLabel%")) {
 		res = sensor->getLabel();
 	} else if (tpl.equals("%SensorsType%")) {
-		res = sensor->getType();
+		res = String(sensor->getType());
 	}
 	else if (tpl.equals("%SensorsCode%")) {
-		res = sensor->getPin();
+		res = String(sensor->getPin());
 	}
 	else if (tpl.equals("%SensorsValue%")) {
-		res = sensor->getValue();
+		res = String(sensor->getValue());
 	}
 	else if (tpl.equals("%SensorsError%")) {
-		res = sensor->getActionStatus();
+		res = String(sensor->getActionStatus());
 	}
-	else if (tpl.equals("%SensorsCritical%")) {
-		res = sensor->isCritical();
-	}
-	else if (tpl.equals("%SensorsCriticalCounter%")) {
-		res = sensor->getCriticalThreshold();
-	}
+//	else if (tpl.equals("%SensorsCritical%")) {
+//		res = sensor->isCritical();
+//	}
+//	else if (tpl.equals("%SensorsCriticalCounter%")) {
+//		res = sensor->getCriticalThreshold();
+//	}
 	
+/*
 	else if(tpl.equals("%SensorsAlarmLow%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_ALARM_LOW);
 	}
@@ -242,6 +243,7 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 	else if (tpl.equals("%SensorsStartHigh%")) {
 		res = sensor->getActionPoint(ACTIONPOINT_START_HIGH);
 	}
+*/
 	return res;
 }
 
@@ -332,6 +334,7 @@ void setArrayVar(String varName, int ind, String val) {
 		s->setLabel(decodeHex(val));
 		//s->setLabel(val);
 	}
+/*
 	else if (varName.equals("arrayCritCnt")) {
 		s->setCriticalThreshold(val.toInt());
 	}
@@ -347,6 +350,7 @@ void setArrayVar(String varName, int ind, String val) {
 	else if (varName.equals("arrayStartHigh")) {
 		s->setActionPoint(ACTIONPOINT_START_HIGH, val.toFloat());
 	}
+*/
 }
 
 void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
