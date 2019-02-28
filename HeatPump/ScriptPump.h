@@ -18,9 +18,11 @@ public:
 	bool Start(bool isSync);
 	bool Stop(bool isSync);
 	bool ForceStop();
-	bool begin() { return true; };
-	bool IsStartAllowed(bool isSync);
-	bool IsStopAllowed(bool isSync);
+	bool MainLoop(bool isSync) { return Start(isSync); }
+	bool IsAlarm();
+	//bool begin() { return true; };
+	//bool IsStartAllowed(bool isSync);
+	//bool IsStopAllowed(bool isSync);
 
 private:
 	Pump* pump;

@@ -69,7 +69,7 @@ bool AutoTests::RunTest() {
 	switch (currentTestNumber) {
 	case 0: {
 		currentName = "Normal Start";
-//		res = TestDummySuccess();
+		res = TestDummySuccess();
 //		res = TestStart();
 		break;
 	}
@@ -88,8 +88,8 @@ bool AutoTests::RunTest() {
 	}
 	case 3: {
 		currentName = "Start and stop on the last step";
-		res = TestDummySuccess();
-//		res = TestStartBrokenLastStep();
+//		res = TestDummySuccess();
+		res = TestStartBrokenLastStep();
 		break;
 	}
 	default: {

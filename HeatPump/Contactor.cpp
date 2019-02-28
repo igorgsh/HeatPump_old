@@ -43,7 +43,7 @@ bool Contactor::checkDataReady() {
 	currentValue = digitalRead(pin);
 #endif // _SIMULATOR_
 	if (currentValue == AlarmOn) {
-		//Debug("CurrentValue=" + String((int)currentValue));
+		//Debug("Alarm!CurrentValue=" + String((int)currentValue));
 		actionStatus = ActionStatus::ACTION_ALARM;
 	}
 	else {

@@ -15,7 +15,7 @@ public:
 	void requestTemperatures();
 	bool checkDataReady();
 	bool loop();
-	ActionStatus checkStatus();
+	//ActionStatus checkStatus();
 private:
 	DT* dt;
 	OneWire* wire;

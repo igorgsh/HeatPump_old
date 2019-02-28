@@ -27,7 +27,7 @@ bool Sensor::getData() {
 	res = checkDataReady();
 	//Debug("GetData:" + String(res));
 	if (res) { //data is ready
-		actionStatus = checkStatus();
+//		actionStatus = checkStatus();
 		ErrorNoData = 0;
 		if (actionStatus == ActionStatus::ACTION_ALARM) {
 			//Debug("ALARM:" + getLabel());

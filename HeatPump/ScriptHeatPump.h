@@ -25,19 +25,20 @@ class ScriptHeatPump :
 public:
 	ScriptHeatPump(bool enable, String label, unsigned int alarmDelay);
 	~ScriptHeatPump();
-	bool Start(bool isSync);
+	bool Start(bool isSync) { return MainLoop(isSync); }
 	bool Stop(bool isSync);
-	bool IsStartAllowed(bool isSync);
-	bool IsStopAllowed(bool isSync);
+	//bool IsStartAllowed(bool isSync);
+	//bool IsStopAllowed(bool isSync);
 	bool ForceStop();
-	bool ForceStart();
+	//bool ForceStart();
 
-
-	//	bool begin() {return true;};
+	bool MainLoop(bool isSync);
+	bool IsAlarm();
 
 private:
 
-	bool checkInternalTempConditions();
+
+	bool checkTempConditions();
 	bool checkContactors();
 	bool IsStartNeeded(bool isSync);
 	bool IsStopNeeded(bool isSync);

@@ -11,15 +11,8 @@ typedef enum {
 	THERMOMETER = 1,
 	CONTACT = 2
 } SensorType;
-/*
-typedef enum {
-	NO_ERROR = 0,
-	SENSOR_DISCONNECTED = 1,
-	LOW_VALUE = 2,
-	HIGH_VALUE = 3,
-	CONTACT_ERROR = 4
-} ErrorCode;
-*/
+
+
 typedef enum {
 	ACTION_NODATA = 0,
 	ACTION_NORMAL = 1,
@@ -41,8 +34,6 @@ public:
 	// Number of errors occured
 	int ErrorCounter = 0;
 	int ErrorNoData = 0;
-	// Is error critical
-	//virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
 
 	//Label of Sensor
 	String getLabel() { return label; };
@@ -56,30 +47,29 @@ public:
 
 	bool getData();
 
-	ActionStatus getActionStatus() { return actionStatus; };
+	ActionStatus getActionStatus() { 
+		if (actionStatus == ActionStatus::ACTION_NODATA) {
+			getData();
+		}
+		return actionStatus; };
 
 
 protected:
 	// Is Data Ready for this Sensor
 	virtual bool checkDataReady() = 0;
-	virtual ActionStatus checkStatus() = 0;
-	//	ErrorCode error = NO_ERROR;
+//	virtual ActionStatus checkStatus() = 0;
 	String label;
 	int pin;
 
 
 
-	// how many times alarm should be set before it became critical
-	//int criticalThreshold;
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
 
 	float currentValue;
 	float lowerRange;
 	float upperRange;
-	//float actionPoints[NUMBER_OF_ACTIONPOINTS] = { 0.0, 0.0, 0.0, 0.0 };
 private:
-	//void init(String label, int pin, float actionPoints[], int critThreshold);
 	void init(String label, int pin, float lowerRange, float upperRange);
 
 };

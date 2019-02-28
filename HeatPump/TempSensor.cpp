@@ -25,17 +25,31 @@ void TempSensor::requestTemperatures() {
 }
 
 bool TempSensor::checkDataReady() {
-	bool ret = true;
+	bool res = true;
 #ifdef _SIMULATOR_
 	currentValue = sim->GetRealResult(this->pin);
+	res = true;
 	//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
 #else
-	ret = dt->isConversionAvailable(0);
-	if (ret) {
+	res = dt->isConversionAvailable(0);
+	if (res) {
 		currentValue = dt->getTempCByIndex(0);
 	}
 #endif // _SIMULATOR_
-	return ret;
+	if (res) {
+		if (currentValue <= lowerRange
+			|| currentValue >= upperRange) {
+			actionStatus = ACTION_ALARM;
+		}
+		else {
+			actionStatus = ActionStatus::ACTION_NORMAL;
+		}
+	}
+	else {
+		actionStatus = ActionStatus::ACTION_NODATA;
+	}
+
+	return res;
 }
 
 void TempSensor::begin() {
@@ -68,14 +82,4 @@ bool TempSensor::loop() {
 	}
 	//Debug("temp=" + this->getLabel() + ";TryCounter=" + String(tryCounter)+";Temp="+String(currentValue));
 	return result;
-}
-
-ActionStatus TempSensor::checkStatus() {
-	ActionStatus status = ActionStatus::ACTION_NORMAL;
-
-	if (currentValue <= lowerRange
-		|| currentValue >= upperRange){
-		status = ACTION_ALARM;
-	}
-	return status;
 }
