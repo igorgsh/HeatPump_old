@@ -220,30 +220,15 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 		res = String(sensor->getValue());
 	}
 	else if (tpl.equals("%SensorsError%")) {
-		res = String(sensor->getActionStatus());
+		res = String(sensor->getActionStatus()==ActionStatus::ACTION_ALARM);
 	}
-//	else if (tpl.equals("%SensorsCritical%")) {
-//		res = sensor->isCritical();
-//	}
-//	else if (tpl.equals("%SensorsCriticalCounter%")) {
-//		res = sensor->getCriticalThreshold();
-//	}
-	
-/*
-	else if(tpl.equals("%SensorsAlarmLow%")) {
-		res = sensor->getActionPoint(ACTIONPOINT_ALARM_LOW);
+	else if (tpl.equals("%SensorsLowerRange%")) {
+		res = String(sensor->GetLowerRange());
 	}
-	else if (tpl.equals("%SensorsAlarmHigh%")) {
-		res = sensor->getActionPoint(ACTIONPOINT_ALARM_HIGH);
+	else if (tpl.equals("%SensorsUpperRange%")) {
+		res = String(sensor->GetUpperRange());
 	}
 	
-	else if (tpl.equals("%SensorsStartLow%")) {
-		res = sensor->getActionPoint(ACTIONPOINT_START_LOW);
-	}
-	else if (tpl.equals("%SensorsStartHigh%")) {
-		res = sensor->getActionPoint(ACTIONPOINT_START_HIGH);
-	}
-*/
 	return res;
 }
 
@@ -405,13 +390,8 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%SensorsCode%", GetTemplate("%SensorsCode%"));
 					s.replace("%SensorsValue%", GetTemplate("%SensorsValue%"));
 					s.replace("%SensorsError%", GetTemplate("%SensorsError%"));
-					s.replace("%SensorsCritical%", GetTemplate("%SensorsCritical%"));
-					s.replace("%SensorsCriticalCounter%", GetTemplate("%SensorsCriticalCounter%"));
-					s.replace("%SensorsAlarmLow%", GetTemplate("%SensorsAlarmLow%"));
-					s.replace("%SensorsAlarmHigh%", GetTemplate("%SensorsAlarmHigh%"));
-					s.replace("%SensorsStartLow%", GetTemplate("%SensorsStartLow%"));
-					s.replace("%SensorsStartHigh%", GetTemplate("%SensorsStartHigh%"));
-
+					s.replace("%SensorsLowerRange%", GetTemplate("%SensorsLowerRange%"));
+					s.replace("%SensorsUpperRange%", GetTemplate("%SensorsUpperRange%"));
 
 					s.replace("%DesiredTemperature%", String(Config.getDesiredTemp()));
 					s.replace("%CurrentTemperature%", String(Config.getTemp()));

@@ -52,7 +52,8 @@ public:
 			getData();
 		}
 		return actionStatus; };
-
+	float GetLowerRange() { return lowerRange; }
+	float GetUpperRange() { return upperRange; }
 
 protected:
 	// Is Data Ready for this Sensor

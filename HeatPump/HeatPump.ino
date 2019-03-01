@@ -26,7 +26,7 @@
 
 DebugLevel dLevel = D_ALL;
 
-//#define WEB_ENABLED
+#define WEB_ENABLED
 
 #define SDCARD_SS	4
 #define LED_PIN	13

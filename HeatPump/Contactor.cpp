@@ -12,6 +12,8 @@ Contactor::Contactor(String label, int pin, bool lhOn, bool alarmOn)
 	: Sensor(label, pin) {
 	this->lhOn = lhOn;
 	this->AlarmOn = alarmOn;
+	this->lowerRange = lhOn;
+	this->upperRange = lhOn;
 	init();
 
 }
