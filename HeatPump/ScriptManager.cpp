@@ -29,16 +29,16 @@ ScriptManager::~ScriptManager()
 
 bool ScriptManager::setup() {
 	bool res = true;
-	Debug("Starting Pump 1");
+	Loger::Debug("Starting Pump 1");
 	if (scriptPumpContour1->MainLoop(true)) {
-		Debug("Starting Pump 2");
+		Loger::Debug("Starting Pump 2");
 		if (!scriptPumpContour2->MainLoop(true)) {
-			Debug("Pump2 didn't started!");
+			Loger::Debug("Pump2 didn't started!");
 			res = false;
 		}
 	}
 	else {
-		Debug("Pump1 didn't started!");
+		Loger::Debug("Pump1 didn't started!");
 		res = false;
 	}
 //	SetCmd(ScenarioCmd::SCENARIO_START);
@@ -52,17 +52,17 @@ void ScriptManager::loop() {
 	if (scriptHeatPump->IsAlarm()) {
 		//Debug("ScriptManager#Alarm");
 		if (scriptHeatPump->GetAlarm() == 0) { //It is a new Alarm
-			Debug("ScriptManager#Alarm:Force Stop");
+			Loger::Debug("ScriptManager#Alarm:Force Stop");
 			scriptHeatPump->ForceStop();
 		}
 		scriptHeatPump->SetAlarm(Config.counter1s); //set the timestamp with new counter
 	}
 	else { //alarm is disappeared or not exists
 		if (scriptHeatPump->GetAlarm()!= 0) { // alarm is disappeared. Delay is needed
-			Debug("ScriptManager#No Alarm");
+			Loger::Debug("ScriptManager#No Alarm");
 
 			if (Config.counter1s >= scriptHeatPump->GetAlarm() + scriptHeatPump->GetAlarmDelay()) { // ready to go!
-				Debug("ScriptManager#Alarm finished");
+				Loger::Debug("ScriptManager#Alarm finished");
 
 				scriptHeatPump->SetAlarm(0);
 				scriptHeatPump->SetStep(0);
@@ -78,10 +78,5 @@ void ScriptManager::loop() {
 		}
 	}
 }
-
-
-//void ScriptManager::SetCmd(ScenarioCmd cmd) {
-//	lastCmd = cmd;
-//}
 
 

@@ -1,9 +1,7 @@
 #pragma once
 #include "Arduino.h"
 
-#ifdef _SIMULATOR_
 #include "Simulator.h"
-#endif // _SIMULATOR_
 
 
 typedef enum {

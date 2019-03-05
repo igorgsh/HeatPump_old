@@ -1,6 +1,8 @@
 #include "Contactor.h"
 #include "Definitions.h"
 
+extern Configuration Config;
+extern Simulator* sim;
 
 
 Contactor::~Contactor()
@@ -39,11 +41,12 @@ bool Contactor::loop() {
 }
 
 bool Contactor::checkDataReady() {
-#ifdef _SIMULATOR_
-	currentValue = sim->GetRealResult(pin);
-#else
-	currentValue = digitalRead(pin);
-#endif // _SIMULATOR_
+	if (Config.IsSimulator()) {
+		currentValue = sim->GetRealResult(pin);
+	}
+	else {
+		currentValue = digitalRead(pin);
+	}
 	if (currentValue == AlarmOn) {
 		//Debug("Alarm!CurrentValue=" + String((int)currentValue));
 		actionStatus = ActionStatus::ACTION_ALARM;

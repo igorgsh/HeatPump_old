@@ -52,7 +52,7 @@ bool AutoTests::PrepareTest() {
 		break;
 	}
 	default: {
-		status = TestStatus::ERROR;
+		status = TestStatus::FAILED;
 		currentName = "NoTest";
 		TestMessage("Case=" + String(currentTestNumber));
 		res = false;
@@ -93,7 +93,7 @@ bool AutoTests::RunTest() {
 		break;
 	}
 	default: {
-		status = TestStatus::ERROR;
+		status = TestStatus::FAILED;
 		currentName = "NoTest";
 		TestMessage("Case=" + String(currentTestNumber));
 		res = false;
@@ -106,7 +106,7 @@ bool AutoTests::RunTest() {
 }
 
 void AutoTests::TestMessage(String message) {
-	Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
+	Loger::Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
 }
 
 bool AutoTests::TestStart() {
@@ -397,7 +397,7 @@ bool AutoTests::TestStartBrokenLastStep() {
 	if (step == 6) { //compressor is started. Forced stop
 //		TestMessage("case:"+String(sim->GetCaseNumber()));
 		res = sim->SetPinValue(3, 8, 0.0); //Contactor Error
-		if (!res) Debug("3.Contactor Error");
+		if (!res) TestMessage("3.Contactor Error");
 		TestMessage("Forced Stop!");
 		step++;
 		ts = Config.counter1s;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DeviceManager.h"
 #include "Script.h"
+#include "DeviceManager.h"
 //#include "ScriptPump.h"
 //#include "ScriptHeatPump.h"
 
