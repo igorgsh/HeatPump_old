@@ -6,7 +6,7 @@ extern Configuration Config;
 extern Simulator* sim;
 
 TempSensor::TempSensor(String label, int pin,  float lowerRange, float upperRange)
-	: Sensor(label, pin, lowerRange, upperRange) {
+	: Sensor(label, DeviceType::THERMOMETER, pin, lowerRange, upperRange) {
 	init();
 }
 
@@ -18,7 +18,6 @@ TempSensor::~TempSensor()
 }
 
 void TempSensor::init() {
-	this->type = THERMOMETER;
 	wire = new OneWire(pin);
 	dt = new DT(wire);
 }
@@ -29,6 +28,7 @@ void TempSensor::requestTemperatures() {
 
 bool TempSensor::checkDataReady() {
 	bool res = true;
+	float oldValue = currentValue;
 
 	if (Config.IsSimulator()) {
 		currentValue = sim->GetRealResult(this->pin);
@@ -54,6 +54,9 @@ bool TempSensor::checkDataReady() {
 		actionStatus = ActionStatus::ACTION_NODATA;
 	}
 
+	if (oldValue != currentValue) {
+		Config.MqttClient()->Publish(this, String(currentValue));
+	}
 	return res;
 }
 

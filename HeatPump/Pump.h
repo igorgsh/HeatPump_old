@@ -19,9 +19,9 @@ public:
 	void begin();
 	void StopPump();
 	void StartPump();
-	PumpType GetPumpType() { return type; }
+	PumpType GetPumpType() { return pumpType; }
 
 private:
-	PumpType type = PUMP_NO_PUMP;
+	PumpType pumpType = PUMP_NO_PUMP;
 };
 

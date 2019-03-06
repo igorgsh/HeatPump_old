@@ -6,6 +6,7 @@
 
 // the setup function runs once when you press reset or power the board
 #include <EEPROM.h>
+#include <IPAddress.h>
 
 
 void EepromWrite(unsigned int addr, byte value) {
@@ -47,23 +48,18 @@ void ReadMqttCredentials() {
 	String str0;
 	char* buf;
 
+	Serial.print("IP#");
+	for (int i = 0; i < 4; i++) {
+		byte b = EepromRead(addr);
+		Serial.print(b);
+		Serial.print(".");
+		addr += 1;
+	}
+	Serial.println();
+
 	unsigned int port = EepromRead2(addr);
 	Serial.println("Port#" + String(port));
 	addr += 2;
-
-	len = EepromRead(addr);
-	Serial.print("Url#"+String(len)+":");
-	addr += 1;
-	buf = (char*) malloc(len + 1);
-
-	for (int i = 0; i < len; i++) {
-		buf[i] = EepromRead(addr);
-		addr++;
-	}
-	buf[len] = 0;
-	str0 = String(buf);
-	free(buf);
-	Serial.println(str0 + "#");
 
 	len = EepromRead(addr);
 	buf = (char*)malloc(len + 1);
@@ -125,21 +121,18 @@ void ReadMqttCredentials() {
 
 
 
-void WriteMqttCredentials(unsigned int port, String url, String root, String login, String password) {
+void WriteMqttCredentials(unsigned int port, IPAddress ip, String root, String login, String password) {
 	byte len;
 	unsigned int addr = 0x14;
 
+	// URL
+	for (int i = 0; i < 4; i++) {
+		EepromWrite(addr, ip[i]);
+		addr++;
+	}
 	// port
 	EepromWrite(addr, (unsigned int)port);
 	addr += 2;
-	// URL
-	len = url.length();
-	EepromWrite(addr, len);
-	addr += 1;
-	for (int i = 0; i < len; i++) {
-		EepromWrite(addr, (byte)(url[i]));
-		addr++;
-	}
 
 	// root
 	len = root.length();
@@ -184,7 +177,8 @@ void setup() {
 	EEPROM.write(1, 25 * 2);
 
 	//Mqtt Creds
-	WriteMqttCredentials(1883, "http://192.168.0.99", "HeatPump", "", "");
+	IPAddress ip(192, 168, 0, 99);
+	WriteMqttCredentials(1883, ip, "HeatPump", "", "");
 
 	byte b;
 	

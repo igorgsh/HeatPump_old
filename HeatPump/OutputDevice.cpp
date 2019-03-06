@@ -2,7 +2,7 @@
 
 
 
-OutputDevice::OutputDevice()
+OutputDevice::OutputDevice(String lbl, DeviceType tp) : Device(lbl, tp)
 {
 }
 

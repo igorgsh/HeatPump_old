@@ -1,6 +1,7 @@
 #include "Configuration.h"
 #include "Definitions.h"
 #include "EEPROM.h"
+#include <SD.h>
 
 extern Simulator* sim;
 
@@ -31,33 +32,42 @@ void Configuration::EthernetSetup() {
 
 	mac[5] = id;
 	boardName += id;
-	if (Ethernet.begin(mac) == 0) {
+	IPAddress ip(192, 168, 0, 101);
+
+	Loger::Debug("Boardname = " + boardName);
+
+	if (Ethernet.begin(mac, DHCP_TIMEOUT) == 0) {
 		Loger::Debug("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
 		// try to congifure using IP address instead of DHCP:
-		IPAddress ip(192, 168, 0, 100+id);
 		Ethernet.begin(mac, ip);
 	}
-	Loger::Debug("Server is at: " + String(Ethernet.localIP()));
-	isEthernetConnection = Ethernet.linkStatus() == EthernetLinkStatus::LinkON;
-
+	
+	Loger::Debug("Server is at: " + PrintIP(Ethernet.localIP()));
+	isEthernetConnection = true;
+	//isEthernetConnection = Ethernet.linkStatus() == EthernetLinkStatus::LinkON;
+	//Loger::Debug("IsEth=" + String(Ethernet.linkStatus()));
 }
 
 
 void Configuration::begin() {
 	ReadEepromInfo();
 
+	Loger::Debug("Point 2");
+
 	if (ethernet) {
 		EthernetSetup();
 	}
+	Loger::Debug("Point 3");
+
 	DevMgr.begin();
 
 	if (webServer) {
-		Loger::Info("Server Is Starting...");
+		Loger::Info("Web server is starting...");
 		web.begin();
 	}
 	if (mqttClientAvail) {
-
+		Loger::Info("MQTT is starting...");
 		mqttClient = new Mqtt();
 		mqttClient->begin();
 	}
@@ -83,20 +93,13 @@ void Configuration::ReadMqttCredentials() {
 	unsigned addr = EEPROM_MQTT;
 	char* buf;
 
-	MqttCreds.Port = EepromRead2(addr);
-	addr += 2;
-
-	len = EepromRead(addr);
-	addr += 1;
-	buf = (char*)malloc(len + 1);
-
-	for (int i = 0; i < len; i++) {
-		buf[i] = EepromRead(addr);
+	for (int i = 0; i < 4; i++) {
+		MqttCreds.ServerIP[i] = EepromRead(addr);
 		addr++;
 	}
-	buf[len] = 0;
-	MqttCreds.ServerURL = String(buf);
-	free(buf);
+
+	MqttCreds.Port = EepromRead2(addr);
+	addr += 2;
 
 	len = EepromRead(addr);
 	addr += 1;
@@ -159,15 +162,13 @@ void Configuration::WriteMqttCredentials() {
 	byte len;
 	unsigned addr = EEPROM_MQTT;
 
-	EepromWrite(addr, (unsigned)MqttCreds.Port);
-	addr += 2;
-	len = MqttCreds.ServerURL.length();
-	EepromWrite(addr, len);
-	addr += 1;
-	for (int i = 0; i < len; i++) {
-		EepromWrite(addr, (byte)MqttCreds.ServerURL[i]);
+	for (int i = 0; i < 4; i++) {
+		EepromWrite(addr, MqttCreds.ServerIP[i]);
 		addr++;
 	}
+
+	EepromWrite(addr, (unsigned)MqttCreds.Port);
+	addr += 2;
 
 	len = MqttCreds.Root.length();
 	EepromWrite(addr, len);
@@ -267,3 +268,8 @@ float Configuration::GetDesiredTemp() {
 		return desiredTemp;
 	}
 }
+
+String Configuration::PrintIP(IPAddress addr) {
+	return String(addr[0]) + "." + String(addr[1]) + "." + String(addr[2]) + "." + String(addr[3]);
+}
+

@@ -1,14 +1,9 @@
 #pragma once
 #include "Arduino.h"
 
+#include "Device.h"
 #include "Simulator.h"
 
-
-typedef enum {
-	NOSENSOR = 0,
-	THERMOMETER = 1,
-	CONTACT = 2
-} SensorType;
 
 
 typedef enum {
@@ -17,14 +12,13 @@ typedef enum {
 	ACTION_ALARM = 2
 } ActionStatus;
 
-class Sensor
+class Sensor : 
+	public Device
 {
 public:
-	Sensor(String label, int pin);
-	Sensor(String label, int pin, float lowerRange, float higherRange);
+	Sensor(String lbl, DeviceType tp, int pin);
+	Sensor(String lbl, DeviceType tp, int pin, float lowerRange, float higherRange);
 	//Type of Sensor
-	SensorType type = NOSENSOR;
-	SensorType getType() { return type; };
 
 	//Current value of sensor
 	virtual float getValue() { return currentValue; };
@@ -33,9 +27,6 @@ public:
 	int ErrorCounter = 0;
 	int ErrorNoData = 0;
 
-	//Label of Sensor
-	String getLabel() { return label; };
-	void setLabel(String lbl) { label = lbl; };
 
 	//Pin where sensor is connected
 	int getPin() { return pin; };
@@ -52,16 +43,11 @@ public:
 		return actionStatus; };
 	float GetLowerRange() { return lowerRange; }
 	float GetUpperRange() { return upperRange; }
-
 protected:
 	// Is Data Ready for this Sensor
 	virtual bool checkDataReady() = 0;
 //	virtual ActionStatus checkStatus() = 0;
-	String label;
 	int pin;
-
-
-
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
 
@@ -69,7 +55,7 @@ protected:
 	float lowerRange;
 	float upperRange;
 private:
-	void init(String label, int pin, float lowerRange, float upperRange);
+	void init(int pin, float lowerRange, float upperRange);
 
 };
 
