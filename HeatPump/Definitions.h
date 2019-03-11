@@ -12,9 +12,6 @@ typedef enum {
 
 extern DebugLevel dLevel;
 
-#define _SIMULATOR_
-//#undef _SIMULATOR_
-#define _AUTO_TESTING_
 #include "AutoTests.h"
 #include "Simulator.h"
 

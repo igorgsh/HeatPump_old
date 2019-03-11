@@ -14,32 +14,21 @@
 #include "Definitions.h"
 #include "Configuration.h"
 #include "Simulator.h"
+#include "AutoTests.h"
 
 DebugLevel dLevel = D_ALL;
 
-#define WEB_ENABLED
 
 #define SDCARD_SS	4
 #define LED_PIN	13
-//#define _SIMULATOR_
-//#include "Sim.h"
-#include "AutoTests.h"
 
-#ifdef _SIMULATOR_
 Simulator* sim;
-#ifdef _AUTO_TESTING_
 AutoTests* test;
-#endif //_AUTO_TESTING_
-#endif //_SIMULATOR_
-
 
 extern void initSim();
 
 Configuration Config;
 
-//bool isReady = false;
-
-// the setup function runs once when you press reset or power the board
 
 void Timer2() { //it is started every 100ms
 	if (Config.IsReady()) {
@@ -60,6 +49,7 @@ void setup() {
 	Serial.begin(115200);
 	randomSeed(analogRead(0));
 	Debug("Begin 1.0");
+
 	// Prepare the light indicator 
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
@@ -67,35 +57,31 @@ void setup() {
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
 
-	#ifdef _SIMULATOR_
-	//sim = new Simulator();
-	initSim();
-	sim->SetCaseNumber(0);
-	#endif
-#ifdef _AUTO_TESTING_
-	test = new AutoTests();
-	
-#endif // _AUTO_TESTING_
+	if (Config.IsSimulator()) {
+		initSim();
+		sim->SetCaseNumber(0);
+	}
+	if (Config.IsAutoTesting()) {
+		test = new AutoTests();
+	}
 
 	SD.begin(SDCARD_SS);
 
-	// Initialize configuration
-	Config.begin();
+	Config.setup();
 
-	Debug("Start!!!");
-	//	delay(500);
 	Debug("Setup is over#" + String(Config.IsReady()));
+	digitalWrite(LED_PIN, HIGH);
 
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-#ifdef _SIMULATOR_
-	sim->loop();
-#endif
+	if (Config.IsSimulator()) {
+		sim->loop();
+	}
 	Config.loop();
-#ifdef _AUTO_TESTING_
-	test->loop();
-#endif //_AUTO_TESTING_
 
+	if (Config.IsAutoTesting()) {
+		test->loop();
+	}
 }

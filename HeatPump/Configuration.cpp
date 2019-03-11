@@ -10,9 +10,6 @@ Configuration::Configuration()
 }
 
 
-Configuration::~Configuration()
-{
-}
 
 void Configuration::loop() {
 	DevMgr.loop();
@@ -22,9 +19,9 @@ void Configuration::loop() {
 #endif // WEB_ENABLED
 }
 
-void Configuration::begin() {
+void Configuration::setup() {
 
-	ReadEepromInfo();
+	readEepromInfo();
 
 	DevMgr.begin();
 	isReady = ScriptMgr.setup();
@@ -46,22 +43,22 @@ float Configuration::OutTemp() {
 	return outTemp;
 }
 
-void Configuration::EepromWrite(unsigned int addr, byte value) {
+void Configuration::eepromWrite(unsigned int addr, byte value) {
 
 	EEPROM.write(addr, value);
 }
 
-void Configuration::EepromWrite(unsigned int addr, unsigned int value) {
+void Configuration::eepromWrite(unsigned int addr, unsigned int value) {
 
 	EEPROM.write(addr, value % 0xFF);
 	EEPROM.write(addr + 1, (value >> 8) & 0xFF);
 }
 
-byte Configuration::EepromRead(unsigned int addr) {
+byte Configuration::eepromRead(unsigned int addr) {
 	return EEPROM.read(addr);
 }
 
-unsigned int Configuration::EepromRead2(unsigned int addr) {
+unsigned int Configuration::eepromRead2(unsigned int addr) {
 	byte x;
 	byte b;
 
@@ -75,142 +72,142 @@ void Configuration::SetDesiredTemp(float value) {
 
 	if (desiredTemp != value) { //optimization: reduce number of write to EEPROM
 		desiredTemp = value;
-		EepromWrite(EEPROM_DESIRED_TEMP, (byte)(desiredTemp*2));
+		eepromWrite(EEPROM_DESIRED_TEMP, (byte)(desiredTemp*2));
 	}
 }
 
 float Configuration::GetDesiredTemp() {
-#ifdef _SIMULATOR_
-	return sim->GetRealResult(99);
-#else
-	return desiredTemp;
-#endif // _SIMULATOR_
-
+	if (IsSimulator()) {
+		return sim->GetRealResult(99);
+	}
+	else {
+		return desiredTemp;
+	}
 }
 
-void Configuration::ReadEepromInfo() {
+void Configuration::readEepromInfo() {
 	byte b;
 
 	// Read Id
-	boardId = EepromRead(EEPROM_ID);
+	boardId = eepromRead(EEPROM_ID);
 	// Read desired temp
-	b = EepromRead(EEPROM_DESIRED_TEMP);
+	b = eepromRead(EEPROM_DESIRED_TEMP);
 	desiredTemp = ((float)b)/2.0;
 
 	Debug("BoardId=" + String(boardId));
 
 	//Read MQTT Credentials
 	if (availMqttClient) {
-		ReadMqttCredentials();
+		readMqttCredentials();
 	}
 }
 
-void Configuration::ReadMqttCredentials() {
+void Configuration::readMqttCredentials() {
 	byte len;
 	unsigned addr = EEPROM_MQTT;
 	char* buf;
 
 	for (int i = 0; i < 4; i++) {
-		MqttCreds.ServerIP[i] = EepromRead(addr);
+		mqttCreds.ServerIP[i] = eepromRead(addr);
 		addr++;
 	}
 
-	MqttCreds.Port = EepromRead2(addr);
+	mqttCreds.Port = eepromRead2(addr);
 	addr += 2;
 
-	len = EepromRead(addr);
+	len = eepromRead(addr);
 	addr += 1;
 	buf = (char*)malloc(len + 1);
 
 	for (int i = 0; i < len; i++) {
-		buf[i] = EepromRead(addr);
+		buf[i] = eepromRead(addr);
 		addr++;
 	}
 	buf[len] = 0;
-	MqttCreds.Root = String(buf);
+	mqttCreds.Root = String(buf);
 	free(buf);
 
 
-	len = EepromRead(addr);
+	len = eepromRead(addr);
 	addr += 1;
 	if (len != 0) {
 		buf = (char*)malloc(len + 1);
 
 		for (int i = 0; i < len; i++) {
-			buf[i] = EepromRead(addr);
+			buf[i] = eepromRead(addr);
 			addr++;
 		}
 		buf[len] = 0;
-		MqttCreds.Login = String(buf);
+		mqttCreds.Login = String(buf);
 		free(buf);
 	}
 	else {
-		MqttCreds.Login = "";
+		mqttCreds.Login = "";
 	}
-	len = EepromRead(addr);
+	len = eepromRead(addr);
 	addr += 1;
 	if (len != 0) {
 		buf = (char*)malloc(len + 1);
 
 		for (int i = 0; i < len; i++) {
-			buf[i] = EepromRead(addr);
+			buf[i] = eepromRead(addr);
 			addr++;
 		}
 		buf[len] = 0;
-		MqttCreds.Password = String(buf);
+		mqttCreds.Password = String(buf);
 		free(buf);
 
-		MqttCreds.Password[len] = 0;
+		mqttCreds.Password[len] = 0;
 	}
 	else {
-		MqttCreds.Password = "";
+		mqttCreds.Password = "";
 	}
 	
-		Debug("EEPROM:MQTT:URL:" +  PrintIP(MqttCreds.ServerIP));
-		Debug("EEPROM:MQTT:Port:" + String(MqttCreds.Port));
-		Debug("EEPROM:MQTT:Root:" + String(MqttCreds.Root));
-		Debug("EEPROM:MQTT:Login:" + String(MqttCreds.Login));
-		Debug("EEPROM:MQTT:Password:" + String(MqttCreds.Password));
+		Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
+		Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
+		Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
+		Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
+		Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
 		
 }
 
 
-void Configuration::WriteMqttCredentials() {
+void Configuration::writeMqttCredentials() {
 	byte len;
 	unsigned addr = EEPROM_MQTT;
 
 	for (int i = 0; i < 4; i++) {
-		EepromWrite(addr, MqttCreds.ServerIP[i]);
+		eepromWrite(addr, mqttCreds.ServerIP[i]);
 		addr++;
 	}
 
-	EepromWrite(addr, (unsigned)MqttCreds.Port);
+	eepromWrite(addr, (unsigned)mqttCreds.Port);
 	addr += 2;
 
-	len = MqttCreds.Root.length();
-	EepromWrite(addr, len);
+	len = mqttCreds.Root.length();
+	eepromWrite(addr, len);
 	addr += 1;
 	for (int i = 0; i < len; i++) {
-		EepromWrite(addr, (byte)MqttCreds.Root[i]);
+		eepromWrite(addr, (byte)mqttCreds.Root[i]);
 		addr++;
 	}
 
-	len = MqttCreds.Login.length();
-	EepromWrite(addr, len);
+	len = mqttCreds.Login.length();
+	eepromWrite(addr, len);
 	addr += 1;
 	if (len != 0) {
 		for (int i = 0; i < len; i++) {
-			EepromWrite(addr, (byte)MqttCreds.Login[i]);
+			eepromWrite(addr, (byte)mqttCreds.Login[i]);
 			addr++;
 		}
 	}
 
-	len = MqttCreds.Password.length();
-	EepromWrite(addr, len);
+	len = mqttCreds.Password.length();
+	eepromWrite(addr, len);
 	addr += 1;
 	if (len != 0) {
 		for (int i = 0; i < len; i++) {
-			EepromWrite(addr, (byte)MqttCreds.Password[i]);
+			eepromWrite(addr, (byte)mqttCreds.Password[i]);
 			addr++;
 		}
 	}

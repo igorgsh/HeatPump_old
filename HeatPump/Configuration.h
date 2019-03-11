@@ -18,9 +18,9 @@ class Configuration
 {
 public:
 	Configuration();
-	~Configuration();
+	//~Configuration();
 
-	void begin();
+	void setup();
 	void loop();
 
 	unsigned long Counter100 = 0;
@@ -36,11 +36,18 @@ public:
 	float OutTemp();
 	float ControlTemperature() { return DevMgr.currentTemp->getValue(); };
 	byte GetBoardId() { return boardId; };
-	MqttCredentials GetMqttCreds() { return MqttCreds; }
+	MqttCredentials GetMqttCreds() { return mqttCreds; }
 	String PrintIP(IPAddress addr);
 
 	// Check methods
 	bool IsReady() { return isReady; }
+
+	//Modules configuration Checks 
+	bool IsAutoTesting() { return availAutoTesting; };
+	bool IsEthernet() { return availEthernet; }
+	bool IsSimulator() { return availSimulator; }
+	bool IsWeb() { return availWebServer; }
+
 
 private:
 	// Flag variables
@@ -49,20 +56,25 @@ private:
 
 	ArduinoServer web = ArduinoServer();
 	float desiredTemp;
-	void EepromWrite(unsigned int addr, byte value);
-	void EepromWrite(unsigned int addr, unsigned int value);
-	byte EepromRead(unsigned int addr);
-	unsigned int EepromRead2(unsigned int addr);
+	void eepromWrite(unsigned int addr, byte value);
+	void eepromWrite(unsigned int addr, unsigned int value);
+	byte eepromRead(unsigned int addr);
+	unsigned int eepromRead2(unsigned int addr);
 
-	void ReadEepromInfo();
-	void ReadMqttCredentials();
-	void WriteMqttCredentials();
+	void readEepromInfo();
+	void readMqttCredentials();
+	void writeMqttCredentials();
 
 	byte boardId;
-	MqttCredentials MqttCreds;
+	MqttCredentials mqttCreds;
+
 	//Modules configuraton
 
 	const bool availMqttClient = true;
+	const bool availAutoTesting = true;
+	const bool availEthernet = true;
+	const bool availSimulator = true;
+	const bool availWebServer = true;
 
 };
 
