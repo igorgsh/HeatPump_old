@@ -7,7 +7,6 @@
 #include "Loger.h"
 //#include "configuration.h"
 //#include "ext_global.h"
-#include "Sensor.h"
 
 
 
@@ -34,6 +33,7 @@
 //#define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
 //#define MQTT_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Action"
 //#define MQTT_RESET_BOARD "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Reset"
+//#define MQTT_EQUIPMENT "Equipment" 
 //#define MQTT_VIRTUAL_EQUIPMENT MQTT_EQUIPMENT MQTT_SEPARATOR "Virtual"
 #define MQTT_LOG  "Logs" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "%s"
 //#define MQTT_BUTTONS MQTT_EQUIPMENT MQTT_SEPARATOR "Buttons"
@@ -43,17 +43,6 @@
 //#define MQTT_POWERMETER  MQTT_EQUIPMENT MQTT_SEPARATOR "PowerMeter"
 //#define MQTT_VIRTUAL_BUTTONS  MQTT_VIRTUAL_EQUIPMENT MQTT_SEPARATOR "Buttons"
 //#define MQTT_CONTACTOR  MQTT_EQUIPMENT MQTT_SEPARATOR "Contactors"
-#define MQTT_SENSORS "Sensors" 
-#define MQTT_OUTPUTDEVICES "Devices" 
-#define MQTT_THERMO MQTT_SENSORS MQTT_SEPARATOR "Thermometers" MQTT_SEPARATOR
-#define MQTT_CONTACTOR MQTT_SENSORS MQTT_SEPARATOR "Contactors" MQTT_SEPARATOR
-#define MQTT_COMPRESSOR MQTT_OUTPUTDEVICES MQTT_SEPARATOR "Compressor" MQTT_SEPARATOR
-#define MQTT_PUMPS MQTT_OUTPUTDEVICES MQTT_SEPARATOR "Pumps" MQTT_SEPARATOR
-
-#define MQTT_DESIRED_TEMP "Desired Temperature"
-#define MQTT_CONTROL_TEMP "Controllable Temperature"
-
-#define MQTT_HEADER sprintf(topic, "%s%s%s%s", Config.GetMqttCredentials().Root.c_str(), MQTT_SEPARATOR, Config.BoardName().c_str(), MQTT_SEPARATOR);
 
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
@@ -78,15 +67,10 @@ public:
 	//void WatchDog();
 	void begin();
 	void SubscribeDevices();
-	bool Publish(Device* dev, String value);
-
 private:
 	char *boardId = (char*)BOARD_ID;
 	const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 
 	bool MqttReconnect();
-	char* MqttDeviceTopicName(char* topic, Device* dev);
-	char* MqttSpecialTopic(char* topic, int spec);
-
 };
 

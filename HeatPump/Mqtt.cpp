@@ -16,19 +16,14 @@ extern Configuration Config;
 
 //extern Mqtt MqttClient;
 
-EthernetClient ethClientMqtt;
-
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 	Config.MqttClient()->Callback(topic, payload, length);
 }
 
-Mqtt::Mqtt() : PubSubClient(Config.GetMqttCredentials().ServerIP, Config.GetMqttCredentials().Port, callbackFunc, ethClientMqtt ) {
+Mqtt::Mqtt() : PubSubClient() {
 	mqttWaiting = MQTT_INITIAL_RETRY_DELAY;
-
-	Loger::Debug("IP=" + Config.PrintIP(Config.GetMqttCredentials().ServerIP));
-	Loger::Debug("Port=" + String(Config.GetMqttCredentials().Port));
-	//this->setServer(Config.GetMqttCredentials().ServerURL.c_str(), Config.GetMqttCredentials().Port);
-	//this->setCallback(callbackFunc);
+	this->setServer(Config.GetMqttCredentials().ServerURL.c_str(), Config.GetMqttCredentials().Port);
+	this->setCallback(callbackFunc);
 }
 
 
@@ -179,15 +174,6 @@ void Mqtt::PublishLog(DebugLevel level, String message) {
 	}
 }
 
-bool Mqtt::Publish(Device* dev, String value) {
-	char topic[TOPIC_LENGTH];
-	Loger::Debug("Point 10");
-	MqttDeviceTopicName(topic, dev);
-	Loger::Debug("Topic:" + String(topic) + "; Value=" + value);
-	return Publish(topic, value.c_str());
-}
-
-
 
 bool Mqtt::Publish(const char* topic, const char* payload) {
 	if (connected()) {
@@ -209,86 +195,9 @@ void Mqtt::Subscribe(const char* topic) {
 
 void Mqtt::SubscribeDevices() {
 	char topic[TOPIC_LENGTH];
-/*
-	for (int i = 0; i < NUMBER_OF_CONTACTOR; i++) {
-		MqttDeviceTopicName(topic, &(Config.DevMgr.contacts[i]));
+	const char* unitPrefix = "test";
+	if (unitPrefix != NULL) {
+		sprintf(topic,"%s%s%s%s%s", Config.GetMqttCredentials().Root.c_str(), MQTT_SEPARATOR, unitPrefix, MQTT_SEPARATOR, Config.DevMgr.cFlow->getLabel().c_str());
 		Subscribe(topic);
 	}
-
-	for (int i = 0; i < NUMBER_OF_TEMP; i++) {
-		MqttDeviceTopicName(topic, &(Config.DevMgr .tempSensors[i]));
-		Subscribe(topic);
-	}
-	
-	for (int i = 0; i < NUMBER_OF_PUMP; i++) {
-		MqttDeviceTopicName(topic, &(Config.DevMgr.pumps[i]));
-		Subscribe(topic);
-	}
-*/
-	MqttSpecialTopic(topic, 0);
-	Subscribe(topic);
-	MqttSpecialTopic(topic, 1);
-	Subscribe(topic);
-
-}
-
-char* Mqtt::MqttDeviceTopicName(char* topic, Device* dev) {
-
-	//char topic0[TOPIC_LENGTH];
-
-	//topic[0] = 0;
-//	sprintf(topic, "%s%s%s%s", Config.GetMqttCredentials().Root.c_str(), MQTT_SEPARATOR, Config.BoardName().c_str(), MQTT_SEPARATOR);
-	//strcat(topic, Config.GetMqttCredentials().Root.c_str());
-	//strcat(topic)
-	//strcat(topic, MQTT_SEPARATOR);
-
-	MQTT_HEADER;
-
-	switch (dev->getType()) {
-	case DeviceType::CONTACT:
-	{
-		strcat(topic, MQTT_CONTACTOR);
-		break;
-	}
-	case DeviceType::THERMOMETER: {
-		strcat(topic, MQTT_THERMO);
-		break;
-	}
-	case DeviceType::COMPRESSOR: {
-		strcat(topic, MQTT_COMPRESSOR);
-		break; 
-	}
-	case DeviceType::PUMP: {
-		strcat(topic, MQTT_PUMPS);
-		break;
-	}
-	default: {
-		strcat(topic, "Unknown");
-		break;
-	}
-	}
-	strcat(topic, dev->getLabel().c_str());
-	return topic;
-}
-
-char* Mqtt::MqttSpecialTopic(char* topic, int spec) {
-
-	//char topic0[TOPIC_LENGTH];
-//	sprintf(topic, "%s%s%s%s", Config.GetMqttCredentials().Root.c_str(), MQTT_SEPARATOR, Config.BoardName().c_str(), MQTT_SEPARATOR);
-	MQTT_HEADER;
-
-//	topic[0] = 0;
-//	strcat(topic, Config.GetMqttCredentials().Root.c_str());
-//	strcat(topic, MQTT_SEPARATOR);
-
-	switch (spec) {
-	case 0: {//Desired temp
-		strcat(topic, MQTT_DESIRED_TEMP);
-		break;
-	} case 1: {//Controllable temp
-		strcat(topic, MQTT_CONTROL_TEMP);
-		break;
-	}
-	}
-	return topic;
 }

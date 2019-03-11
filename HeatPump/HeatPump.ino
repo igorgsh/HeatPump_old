@@ -22,7 +22,7 @@
 //#include <Ethernet.h>
 //#include <Dns.h>
 //#include <Dhcp.h>
-//#include <SD.h>
+#include <SD.h>
 #include "Configuration.h"
 #include <MsTimer2.h>
 #include "Definitions.h"
@@ -67,19 +67,14 @@ void setup() {
 	Loger::Debug("Begin 1.0");
 	Config.begin();
 
-	Loger::Debug("Point 1");
-
 	if (Config.IsSimulator()) {
 		initSim();
 		sim->SetCaseNumber(0);
 	}
-	Loger::Debug("Point 4");
-
 	if (Config.IsAutoTesting()) {
 		test = new AutoTests();
 	}
 	// Initialize configuration
-	Loger::Debug("Point 5");
 
 	//Set a timer 
 	MsTimer2::set(100, Timer2);

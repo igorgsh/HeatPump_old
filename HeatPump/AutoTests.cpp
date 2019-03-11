@@ -20,7 +20,6 @@ AutoTests::~AutoTests()
 bool AutoTests::loop() {
 	bool res = false;
 
-	
 	if (status == TestStatus::NO_TEST) {
 		res = PrepareTest();
 		if (res) {
@@ -53,7 +52,7 @@ bool AutoTests::PrepareTest() {
 		break;
 	}
 	default: {
-		status = TestStatus::FINISHED;
+		status = TestStatus::FAILED;
 		currentName = "NoTest";
 		TestMessage("Case=" + String(currentTestNumber));
 		res = false;
@@ -94,7 +93,7 @@ bool AutoTests::RunTest() {
 		break;
 	}
 	default: {
-		status = TestStatus::FINISHED;
+		status = TestStatus::FAILED;
 		currentName = "NoTest";
 		TestMessage("Case=" + String(currentTestNumber));
 		res = false;
@@ -437,13 +436,13 @@ bool AutoTests::TestStartBrokenLastStep() {
 				step++;
 			}
 		}
+
 	}
 
 	if (step == 10) { //Final!
 		TestMessage("Finish Successfully!");
 		status = TestStatus::SUCCESS;
-		res = true;
-		//step++;
+		step++;
 	}
 
 	if (status == TestStatus::FAILED) {

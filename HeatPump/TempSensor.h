@@ -15,7 +15,6 @@ public:
 	void requestTemperatures();
 	bool checkDataReady();
 	bool loop();
-
 	//ActionStatus checkStatus();
 private:
 	DT* dt;

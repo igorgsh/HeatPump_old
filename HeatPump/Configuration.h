@@ -6,7 +6,6 @@
 //#define SDCARD_ENABLED
 
 #define SDCARD_SS	4
-#define DHCP_TIMEOUT 10000UL
 
 //#include "EEPROM.h"
 #include "Loger.h" 
@@ -68,12 +67,9 @@ public:
 	bool IsWebServerAvailable() { return webServer; }
 	bool IsMqttAvailable() { return mqttClientAvail; }
 	String BoardName() { return boardName; }
-	String PrintIP(IPAddress addr);
 
 private:
-	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x07 };
-	//byte mac[6] = { 0xAB, 0xBC, 0x18, 0xF5, 0xD4, 0xA6 };
-	IPAddress staticIP = IPAddress(192, 168, 0, 101);
+	byte mac[6] = { 0x01, 0xAA, 0x22, 0x07, 0x69, 0x07 };
 	String boardName = "HeatPump_";
 	int id = 0;
 	ArduinoServer web = ArduinoServer();
@@ -99,8 +95,8 @@ private:
 	const bool autoTesting = true;
 	const bool ethernet = true;
 	const bool simulator = true;
-	const bool webServer = false;
-	const bool mqttClientAvail = false;
+	const bool webServer = true;
+	const bool mqttClientAvail = true;
 
 };
 

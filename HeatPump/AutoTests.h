@@ -6,8 +6,7 @@ typedef enum {
 	NO_TEST = 0,
 	STARTED = 1,
 	SUCCESS = 2,
-	FAILED = 3,
-	FINISHED =4
+	FAILED = 3
 } TestStatus;
 
 class AutoTests

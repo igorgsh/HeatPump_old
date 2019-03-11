@@ -5,10 +5,11 @@
 extern Configuration Config;
 
 Compressor::Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) :
-	Relay(label, DeviceType::COMPRESSOR, pin, on)
+	Relay(pin, on)
 {
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
+	this->label = label;
 }
 
 Compressor::~Compressor()
@@ -18,7 +19,6 @@ Compressor::~Compressor()
 bool Compressor::StopCompressor() {
 	Loger::Debug("Stop Compressor!!!");
 	disconnect();
-	Config.MqttClient()->Publish(this, String(DeviceStatus::STATUS_OFF));
 	lastStatusTimestamp = Config.counter1s;
 	return true;
 }
@@ -26,7 +26,6 @@ bool Compressor::StopCompressor() {
 bool Compressor::StartCompressor() {
 	Loger::Debug("Start Compressor!!!");
 	connect();
-	Config.MqttClient()->Publish(this, String(DeviceStatus::STATUS_ON));
 	lastStatusTimestamp = Config.counter1s;
 	return true;
 }

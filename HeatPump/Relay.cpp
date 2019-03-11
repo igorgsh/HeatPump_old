@@ -2,7 +2,7 @@
 #include "Arduino.h"
 #include "Definitions.h"
 
-Relay::Relay(String lbl, DeviceType tp, int pin, bool on) : OutputDevice(lbl,tp){
+Relay::Relay(int pin, bool on) {
 	this->pin = pin;
 	this->on = on;
 
