@@ -19,12 +19,12 @@ Pump::~Pump()
 
 void Pump::StopPump() {
 	disconnect();
-	lastStatusTimestamp = Config.counter1s;
+	lastStatusTimestamp = Config.Counter1s;
 }
 
 void Pump::StartPump() {
 	connect();
-	lastStatusTimestamp = Config.counter1s;
+	lastStatusTimestamp = Config.Counter1s;
 }
 
 void Pump::begin() {

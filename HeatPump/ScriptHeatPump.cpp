@@ -50,13 +50,13 @@ bool ScriptHeatPump::checkContactors() {
 bool ScriptHeatPump::IsStopNeeded(bool isSync) {
 	bool res;
 
-	res = (Config.ControlTemperature() >= Config.OutTemperature());
+	res = (Config.ControlTemperature() >= Config.OutTemp());
 	return res;
 }
 
 bool ScriptHeatPump::IsStartNeeded(bool isSync) {
 	bool res = false;
-	res = (Config.ControlTemperature() < Config.getDesiredTemp());
+	res = (Config.ControlTemperature() < Config.GetDesiredTemp());
 	return res;
 }
 
@@ -114,7 +114,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 			if (Config.ScriptMgr.scriptPumpGeo->Start(isSync)) {
 				Debug("ScriptHeatPump:Compressor: Geo pump is done!" + String(Config.DevMgr.pumpGeo->status));
 				step = COMPRESSOR_WAITING_PUMP_GEO_START;
-				counterScript = Config.counter1s;
+				counterScript = Config.Counter1s;
 			}
 		}
 		else {
@@ -123,7 +123,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 		break;
 	}
 	case COMPRESSOR_WAITING_PUMP_GEO_START: {//delay before start compressor
-		if (Config.counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
+		if (Config.Counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
 			step = COMPRESSOR_START;
 			Debug("ScriptHeatPump:Compressor starting...");
 		}
@@ -154,13 +154,13 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 		if (Config.DevMgr.compressor.StopCompressor()) {
 			Debug("ScriptHeatPump:Compressor: Stop done!");
 			step = COMPRESSOR_WAITING_PUMP_GEO_STOP;
-			counterScript = Config.counter1s;
+			counterScript = Config.Counter1s;
 			Debug("ScriptHeatPump:Compressor: Waiting before Geo Pump stop");
 		}
 		break;
 	}
 	case COMPRESSOR_WAITING_PUMP_GEO_STOP: {//delay before stop Pump Geo
-		if (Config.counter1s - counterScript >= PUMP_OFF_TIMEOUT) {
+		if (Config.Counter1s - counterScript >= PUMP_OFF_TIMEOUT) {
 			step = COMPRESSOR_STOP_PUMP_GEO;
 			Debug("ScriptHeatPump:Compressor:Stop Geo Pump ");
 		}
@@ -196,7 +196,7 @@ bool ScriptHeatPump::Stop(bool isSync) {
 		if (Config.ScriptMgr.scriptPumpGeo->Stop(isSync)) {
 			step = COMPRESSOR_IDLE;
 			res = true;
-			counterScript = Config.counter1s;
+			counterScript = Config.Counter1s;
 		}
 	}
 	if (step == COMPRESSOR_START
@@ -222,7 +222,7 @@ bool ScriptHeatPump::StartCompressor(bool isSync) {
 	else {
 
 		if (checkAllConditions()) {
-			long waitingTime = Config.counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOff);
+			long waitingTime = Config.Counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOff);
 			if (waitingTime < 0) {//not ready to start
 				if (isSync) {
 					Debug("Start Compressor delay:" + String(-waitingTime));
@@ -255,7 +255,7 @@ bool ScriptHeatPump::StopCompressor(bool isSync) {
 		res = true;
 	}
 	else {
-		long waitingTime = Config.counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOn);
+		long waitingTime = Config.Counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOn);
 
 		if (waitingTime > 0) { //ready to start
 			Config.DevMgr.compressor.StopCompressor();

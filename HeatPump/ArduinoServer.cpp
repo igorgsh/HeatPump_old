@@ -358,7 +358,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 				
 				int ind = request.getIndexOfParmKey("desTemp");
 				if (ind != -1) {
-					Config.setDesiredTemp(request.getParmValue(ind).toFloat());
+					Config.SetDesiredTemp(request.getParmValue(ind).toFloat());
 				}
 				
 			}
@@ -393,8 +393,8 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%SensorsLowerRange%", GetTemplate("%SensorsLowerRange%"));
 					s.replace("%SensorsUpperRange%", GetTemplate("%SensorsUpperRange%"));
 
-					s.replace("%DesiredTemperature%", String(Config.getDesiredTemp()));
-					s.replace("%CurrentTemperature%", String(Config.getTemp()));
+					s.replace("%DesiredTemperature%", String(Config.GetDesiredTemp()));
+					s.replace("%CurrentTemperature%", String(Config.GetCurrentTemp()));
 
 					s.replace("%CurrentTime%", "'Date-Time here'");
 

@@ -42,6 +42,7 @@ bool ScriptManager::setup() {
 		res = false;
 	}
 //	SetCmd(ScenarioCmd::SCENARIO_START);
+
 	return res;
 }
 
@@ -55,13 +56,13 @@ void ScriptManager::loop() {
 			Debug("ScriptManager#Alarm:Force Stop");
 			scriptHeatPump->ForceStop();
 		}
-		scriptHeatPump->SetAlarm(Config.counter1s); //set the timestamp with new counter
+		scriptHeatPump->SetAlarm(Config.Counter1s); //set the timestamp with new counter
 	}
 	else { //alarm is disappeared or not exists
 		if (scriptHeatPump->GetAlarm()!= 0) { // alarm is disappeared. Delay is needed
 			Debug("ScriptManager#No Alarm");
 
-			if (Config.counter1s >= scriptHeatPump->GetAlarm() + scriptHeatPump->GetAlarmDelay()) { // ready to go!
+			if (Config.Counter1s >= scriptHeatPump->GetAlarm() + scriptHeatPump->GetAlarmDelay()) { // ready to go!
 				Debug("ScriptManager#Alarm finished");
 
 				scriptHeatPump->SetAlarm(0);

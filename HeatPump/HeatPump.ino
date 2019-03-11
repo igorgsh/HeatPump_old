@@ -37,18 +37,18 @@ extern void initSim();
 
 Configuration Config;
 
-bool isReady = false;
+//bool isReady = false;
 
 // the setup function runs once when you press reset or power the board
 
 void Timer2() { //it is started every 100ms
-	if (isReady) {
-		Config.counter100++;
-		if (Config.counter100 % 5 == 0) {
-			Config.counter500++;
+	if (Config.IsReady()) {
+		Config.Counter100++;
+		if (Config.Counter100 % 5 == 0) {
+			Config.Counter500++;
 		}
-		if (Config.counter100 % 10 == 0) {
-			Config.counter1s++;
+		if (Config.Counter100 % 10 == 0) {
+			Config.Counter1s++;
 		}
 	}
 }
@@ -60,6 +60,12 @@ void setup() {
 	Serial.begin(115200);
 	randomSeed(analogRead(0));
 	Debug("Begin 1.0");
+	// Prepare the light indicator 
+	pinMode(LED_PIN, OUTPUT);
+	digitalWrite(LED_PIN, LOW);
+	//Set a timer 
+	MsTimer2::set(100, Timer2);
+	MsTimer2::start();
 
 	#ifdef _SIMULATOR_
 	//sim = new Simulator();
@@ -76,17 +82,9 @@ void setup() {
 	// Initialize configuration
 	Config.begin();
 
-	// Prepare the light indicator 
-	pinMode(LED_PIN, OUTPUT);
-	digitalWrite(LED_PIN, LOW);
-	//Set a timer 
-	MsTimer2::set(100, Timer2);
-	MsTimer2::start();
 	Debug("Start!!!");
-	Config.isHardwareReady = Config.ScriptMgr.setup();
-	isReady = true;
 	//	delay(500);
-	Debug("Setup is over#" + String(Config.isHardwareReady) + "#" + String(isReady));
+	Debug("Setup is over#" + String(Config.IsReady()));
 
 }
 

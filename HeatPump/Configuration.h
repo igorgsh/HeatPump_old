@@ -23,25 +23,32 @@ public:
 	void begin();
 	void loop();
 
-	unsigned long counter100 = 0;
-	unsigned long counter500 = 0;
-	unsigned long counter1s = 0;
-	bool isHardwareReady = false;
+	unsigned long Counter100 = 0;
+	unsigned long Counter500 = 0;
+	unsigned long Counter1s = 0;
 
 	DeviceManager DevMgr = DeviceManager();
 	ScriptManager ScriptMgr = ScriptManager();
-	byte getDesiredTemp() /*{ return desiredTemp; }*/;
-	void setDesiredTemp(byte value);
-	float getTemp() { return DevMgr.currentTemp->getValue(); }
-	float OutTemperature();
+
+	float GetDesiredTemp() /*{ return desiredTemp; }*/;
+	void SetDesiredTemp(float value);
+	float GetCurrentTemp() { return DevMgr.currentTemp->getValue(); }
+	float OutTemp();
 	float ControlTemperature() { return DevMgr.currentTemp->getValue(); };
 	byte GetBoardId() { return boardId; };
 	MqttCredentials GetMqttCreds() { return MqttCreds; }
 	String PrintIP(IPAddress addr);
 
+	// Check methods
+	bool IsReady() { return isReady; }
+
 private:
+	// Flag variables
+	bool isReady = false;
+	
+
 	ArduinoServer web = ArduinoServer();
-	byte desiredTemp=EepromRead(EEPROM_DESIRED_TEMP);
+	float desiredTemp;
 	void EepromWrite(unsigned int addr, byte value);
 	void EepromWrite(unsigned int addr, unsigned int value);
 	byte EepromRead(unsigned int addr);

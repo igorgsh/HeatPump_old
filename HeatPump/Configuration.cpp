@@ -16,9 +16,7 @@ Configuration::~Configuration()
 
 void Configuration::loop() {
 	DevMgr.loop();
-	if (isHardwareReady) {
-		ScriptMgr.loop();
-	}
+	ScriptMgr.loop();
 #ifdef WEB_ENABLED
 	web.loop();
 #endif // WEB_ENABLED
@@ -29,6 +27,7 @@ void Configuration::begin() {
 	ReadEepromInfo();
 
 	DevMgr.begin();
+	isReady = ScriptMgr.setup();
 
 #ifdef WEB_ENABLED
 	Debug("Server Is Starting...");
@@ -36,7 +35,7 @@ void Configuration::begin() {
 #endif
 }
 
-float Configuration::OutTemperature() {
+float Configuration::OutTemp() {
 	float outTemp = 0;
 	if (desiredTemp <= 20)
 		outTemp = 25;
@@ -72,17 +71,17 @@ unsigned int Configuration::EepromRead2(unsigned int addr) {
 }
 
 
-void Configuration::setDesiredTemp(byte value) {
+void Configuration::SetDesiredTemp(float value) {
 
 	if (desiredTemp != value) { //optimization: reduce number of write to EEPROM
 		desiredTemp = value;
-		EepromWrite(EEPROM_DESIRED_TEMP, desiredTemp);
+		EepromWrite(EEPROM_DESIRED_TEMP, (byte)(desiredTemp*2));
 	}
 }
 
-byte Configuration::getDesiredTemp() {
+float Configuration::GetDesiredTemp() {
 #ifdef _SIMULATOR_
-	return (byte)(sim->GetIntResult(99));
+	return sim->GetRealResult(99);
 #else
 	return desiredTemp;
 #endif // _SIMULATOR_
@@ -96,7 +95,7 @@ void Configuration::ReadEepromInfo() {
 	boardId = EepromRead(EEPROM_ID);
 	// Read desired temp
 	b = EepromRead(EEPROM_DESIRED_TEMP);
-	setDesiredTemp(b);
+	desiredTemp = ((float)b)/2.0;
 
 	Debug("BoardId=" + String(boardId));
 
