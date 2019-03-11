@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HeatPump", "HeatPump\HeatPu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "..\Simulator\Simulator.vcxitems", "{0FF7BF96-094F-4CF3-83EA-14B2CD1FB227}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EepromDefault", "EepromDefault\EepromDefault.vcxproj", "{5B1E64BB-49E4-4544-BC7A-8A996B99D71A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\Simulator\Simulator.vcxitems*{0ff7bf96-094f-4cf3-83ea-14b2cd1fb227}*SharedItemsImports = 9
@@ -21,6 +23,10 @@ Global
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
 		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+		{5B1E64BB-49E4-4544-BC7A-8A996B99D71A}.Debug|x86.ActiveCfg = Debug|Win32
+		{5B1E64BB-49E4-4544-BC7A-8A996B99D71A}.Debug|x86.Build.0 = Debug|Win32
+		{5B1E64BB-49E4-4544-BC7A-8A996B99D71A}.Release|x86.ActiveCfg = Release|Win32
+		{5B1E64BB-49E4-4544-BC7A-8A996B99D71A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
