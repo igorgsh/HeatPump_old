@@ -1,14 +1,26 @@
 #pragma once
-#include "Configuration.h"
 
-//extern DebugLevel dLevel;
+typedef enum {
+	D_OFF = 0,
+	D_FATAL = 1,
+	D_ERROR = 2,
+	D_WARN = 3,
+	D_INFO = 4,
+	D_DEBUG = 5,
+	D_ALL = 6
+} DebugLevel;
 
-//#define _AUTO_TESTING_
+extern DebugLevel dLevel;
+
+#define _SIMULATOR_
+//#undef _SIMULATOR_
+#define _AUTO_TESTING_
 #include "AutoTests.h"
 #include "Simulator.h"
 
+extern Simulator* sim;
+extern AutoTests* test;
 
-/*
 #define SerialLog2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),Y);}};
 #define SerialLog2_(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.print((X),Y);}};
 #define SerialLog(LEVEL, X) {if (LEVEL <= dLevel) {Serial.println((X));}};
@@ -18,7 +30,7 @@
 #define Debug2(X,Y)	SerialLog_(D_DEBUG,X); SerialLog(D_DEBUG, Y);
 #define Debug2_(X,Y)	SerialLog_(D_DEBUG,X); SerialLog_(D_DEBUG, Y);
 #define Debug3(X,Y,Z)	SerialLog_(D_DEBUG,X); SerialLog2(D_DEBUG, Y, Z);
-*/
+
 
 
 /*

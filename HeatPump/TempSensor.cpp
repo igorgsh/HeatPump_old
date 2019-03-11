@@ -2,9 +2,6 @@
 #include "Definitions.h"
 //
 
-extern Configuration Config;
-extern Simulator* sim;
-
 TempSensor::TempSensor(String label, int pin,  float lowerRange, float upperRange)
 	: Sensor(label, pin, lowerRange, upperRange) {
 	init();
@@ -29,18 +26,16 @@ void TempSensor::requestTemperatures() {
 
 bool TempSensor::checkDataReady() {
 	bool res = true;
-
-	if (Config.IsSimulator()) {
-		currentValue = sim->GetRealResult(this->pin);
-		res = true;
-		//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
+#ifdef _SIMULATOR_
+	currentValue = sim->GetRealResult(this->pin);
+	res = true;
+	//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
+#else
+	res = dt->isConversionAvailable(0);
+	if (res) {
+		currentValue = dt->getTempCByIndex(0);
 	}
-	else {
-		res = dt->isConversionAvailable(0);
-		if (res) {
-			currentValue = dt->getTempCByIndex(0);
-		}
-	}
+#endif // _SIMULATOR_
 	if (res) {
 		if (currentValue <= lowerRange
 			|| currentValue >= upperRange) {

@@ -55,7 +55,7 @@ public:
 	TempSensor* currentTemp = &tempSensors[10];
 	TempSensor* tStreet = &tempSensors[11];
 
-	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Pressure", 8, HIGH, LOW) };
+	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, LOW) };
 	
 	Contactor* cFlow = &contacts[0];
 

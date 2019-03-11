@@ -17,14 +17,14 @@ Compressor::~Compressor()
 }
 
 bool Compressor::StopCompressor() {
-	Loger::Debug("Stop Compressor!!!");
+	Debug("Stop Compressor!!!");
 	disconnect();
 	lastStatusTimestamp = Config.counter1s;
 	return true;
 }
 
 bool Compressor::StartCompressor() {
-	Loger::Debug("Start Compressor!!!");
+	Debug("Start Compressor!!!");
 	connect();
 	lastStatusTimestamp = Config.counter1s;
 	return true;

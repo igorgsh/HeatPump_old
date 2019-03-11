@@ -5,13 +5,8 @@
 
  Heat Pump controller
 */
-
-#include <PubSubClient.h>
-//#include <EEPROM.h>
 #include <Keypad.h>
 #include <Key.h>
-
-
 
 //#include <OneWire.h>
 //#include <DallasTemperature.h>
@@ -29,13 +24,22 @@
 #include "Configuration.h"
 #include "Simulator.h"
 
+DebugLevel dLevel = D_ALL;
 
+#define WEB_ENABLED
 
+#define SDCARD_SS	4
 #define LED_PIN	13
+//#define _SIMULATOR_
+//#include "Sim.h"
 #include "AutoTests.h"
 
+#ifdef _SIMULATOR_
 Simulator* sim;
+#ifdef _AUTO_TESTING_
 AutoTests* test;
+#endif //_AUTO_TESTING_
+#endif //_SIMULATOR_
 
 
 extern void initSim();
@@ -64,40 +68,45 @@ void setup() {
 	//Configure Serial port and SD card
 	Serial.begin(115200);
 	randomSeed(analogRead(0));
-	Loger::Debug("Begin 1.0");
+	Debug("Begin 1.0");
+
+	#ifdef _SIMULATOR_
+	//sim = new Simulator();
+	initSim();
+	sim->SetCaseNumber(0);
+	#endif
+#ifdef _AUTO_TESTING_
+	test = new AutoTests();
+	
+#endif // _AUTO_TESTING_
+
+	SD.begin(SDCARD_SS);
+
+	// Initialize configuration
 	Config.begin();
 
-	if (Config.IsSimulator()) {
-		initSim();
-		sim->SetCaseNumber(0);
-	}
-	if (Config.IsAutoTesting()) {
-		test = new AutoTests();
-	}
-	// Initialize configuration
-
-	//Set a timer 
-	MsTimer2::set(100, Timer2);
-	MsTimer2::start();
-	Loger::Debug("Start!!!");
-	Config.isHardwareReady = Config.ScriptMgr.setup();
-	isReady = true;
-	//	delay(500);
-	Loger::Debug("Setup is over#" + String(Config.isHardwareReady) + "#" + String(isReady));
 	// Prepare the light indicator 
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
+	//Set a timer 
+	MsTimer2::set(100, Timer2);
+	MsTimer2::start();
+	Debug("Start!!!");
+	Config.isHardwareReady = Config.ScriptMgr.setup();
+	isReady = true;
+	//	delay(500);
+	Debug("Setup is over#" + String(Config.isHardwareReady) + "#" + String(isReady));
 
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	if (Config.IsSimulator()) {
-		sim->loop();
-	}
+#ifdef _SIMULATOR_
+	sim->loop();
+#endif
 	Config.loop();
-	if (Config.IsAutoTesting()) {
-		test->loop();
-	}
+#ifdef _AUTO_TESTING_
+	test->loop();
+#endif //_AUTO_TESTING_
 
 }

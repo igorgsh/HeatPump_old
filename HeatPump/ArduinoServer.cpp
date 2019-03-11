@@ -22,7 +22,7 @@ ArduinoServer::~ArduinoServer()
 void ArduinoServer::begin() {
 
 	//Debug("Point1");
-/*
+
 	if (Ethernet.begin(mac) == 0) {
 		Debug("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
@@ -31,9 +31,9 @@ void ArduinoServer::begin() {
 		Ethernet.begin(mac, ip);
 	}
 	//Debug("Point2");
-	*/
 	server->begin();
-	SD.begin(SDCARD_SS);
+	Debug2("Server is at: ",Ethernet.localIP());
+
 }
 
 bool ArduinoServer::loop() {
@@ -198,10 +198,10 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Loger::Error("File not found:" + request.URL);
+		Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
 	}
-	//Loger::Debug("End PrintAnyFile");
+	Debug("End PrintAnyFile");
 
 }
 
@@ -238,7 +238,7 @@ String GetPumpParams(Pump* pump, String tpl) {
 		res = pump->getLabel();
 	}
 	else if (tpl.equals("%PumpsStatus%")) {
-		res = String(pump->status);
+		res = pump->status;
 	}
 	return res;
 }
@@ -358,7 +358,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 				
 				int ind = request.getIndexOfParmKey("desTemp");
 				if (ind != -1) {
-					Config.SetDesiredTemp(request.getParmValue(ind).toFloat());
+					Config.setDesiredTemp(request.getParmValue(ind).toFloat());
 				}
 				
 			}
@@ -393,7 +393,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%SensorsLowerRange%", GetTemplate("%SensorsLowerRange%"));
 					s.replace("%SensorsUpperRange%", GetTemplate("%SensorsUpperRange%"));
 
-					s.replace("%DesiredTemperature%", String(Config.GetDesiredTemp()));
+					s.replace("%DesiredTemperature%", String(Config.getDesiredTemp()));
 					s.replace("%CurrentTemperature%", String(Config.getTemp()));
 
 					s.replace("%CurrentTime%", "'Date-Time here'");
@@ -422,7 +422,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Loger::Error("File not found:" + request.URL);
+		Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found!", "File:" + request.URL);
 	}
 	//Debug("End PrintMainPage");

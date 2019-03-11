@@ -14,6 +14,7 @@ public:
 	ArduinoServer();
 	~ArduinoServer();
 private:
+	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x07 };
 	byte serverPort = 80;
 	EthernetServer* server;
 	int ProcessRequest(Client& client);

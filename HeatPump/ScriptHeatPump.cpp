@@ -56,7 +56,7 @@ bool ScriptHeatPump::IsStopNeeded(bool isSync) {
 
 bool ScriptHeatPump::IsStartNeeded(bool isSync) {
 	bool res = false;
-	res = (Config.ControlTemperature() < Config.GetDesiredTemp());
+	res = (Config.ControlTemperature() < Config.getDesiredTemp());
 	return res;
 }
 
@@ -89,19 +89,19 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 
 	case 0: { //Nothing to do
 		step = COMPRESSOR_IS_START_NEEDED;
-		Loger::Debug("ScriptHeatPump:The HeatPump starting");
+		Debug("ScriptHeatPump:The HeatPump starting");
 		break;
 	}
 	case COMPRESSOR_IS_START_NEEDED: { // Is Start Needed
 
 		if (IsStartNeeded(isSync)) {
-			Loger::Debug("ScriptHeatPump:ScriptCompressor:Compressor: Start is needed");
+			Debug("ScriptHeatPump:ScriptCompressor:Compressor: Start is needed");
 			bool res1 = Config.ScriptMgr.scriptPumpContour1->Start(isSync);
 			bool res2 = Config.ScriptMgr.scriptPumpContour2->Start(isSync);
-			Loger::Debug("ScriptHeatPump:Pump contours:" + String(res1) + "#" + String(res2));
+			Debug("ScriptHeatPump:Pump contours:" + String(res1) + "#" + String(res2));
 			if (res1 && res2) {
 				step = COMPRESSOR_START_PUMP_GEO;
-				Loger::Debug("ScriptHeatPump:Compressor: Geo pump starting!");
+				Debug("ScriptHeatPump:Compressor: Geo pump starting!");
 			}
 		}
 		else {
@@ -112,7 +112,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 	case COMPRESSOR_START_PUMP_GEO: { // Start Pump Geo
 		if (IsStartNeeded(isSync)) {
 			if (Config.ScriptMgr.scriptPumpGeo->Start(isSync)) {
-				Loger::Debug("ScriptHeatPump:Compressor: Geo pump is done!" + String(Config.DevMgr.pumpGeo->status));
+				Debug("ScriptHeatPump:Compressor: Geo pump is done!" + String(Config.DevMgr.pumpGeo->status));
 				step = COMPRESSOR_WAITING_PUMP_GEO_START;
 				counterScript = Config.counter1s;
 			}
@@ -125,7 +125,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 	case COMPRESSOR_WAITING_PUMP_GEO_START: {//delay before start compressor
 		if (Config.counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
 			step = COMPRESSOR_START;
-			Loger::Debug("ScriptHeatPump:Compressor starting...");
+			Debug("ScriptHeatPump:Compressor starting...");
 		}
 		break;
 	}
@@ -133,7 +133,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 		if (IsStartNeeded(isSync)) {
 			if (StartCompressor(isSync)) {
 				step = COMPRESSOR_IS_STOP_NEEDED;
-				Loger::Debug("ScriptHeatPump:Compressor Started!");
+				Debug("ScriptHeatPump:Compressor Started!");
 			}
 		}
 		else {
@@ -145,31 +145,31 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 //		Debug("Compressor: is stop needed?");
 		if (IsStopNeeded(isSync)) {
 			step = COMPRESSOR_STOP;
-			Loger::Debug("ScriptHeatPump:Compressor Stop!");
+			Debug("ScriptHeatPump:Compressor Stop!");
 		}
 		break;
 	}
 	case COMPRESSOR_STOP: { // Stop Compressor
-		Loger::Debug("ScriptHeatPump:Compressor: Stop!");
+		Debug("ScriptHeatPump:Compressor: Stop!");
 		if (Config.DevMgr.compressor.StopCompressor()) {
-			Loger::Debug("ScriptHeatPump:Compressor: Stop done!");
+			Debug("ScriptHeatPump:Compressor: Stop done!");
 			step = COMPRESSOR_WAITING_PUMP_GEO_STOP;
 			counterScript = Config.counter1s;
-			Loger::Debug("ScriptHeatPump:Compressor: Waiting before Geo Pump stop");
+			Debug("ScriptHeatPump:Compressor: Waiting before Geo Pump stop");
 		}
 		break;
 	}
 	case COMPRESSOR_WAITING_PUMP_GEO_STOP: {//delay before stop Pump Geo
 		if (Config.counter1s - counterScript >= PUMP_OFF_TIMEOUT) {
 			step = COMPRESSOR_STOP_PUMP_GEO;
-			Loger::Debug("ScriptHeatPump:Compressor:Stop Geo Pump ");
+			Debug("ScriptHeatPump:Compressor:Stop Geo Pump ");
 		}
 		break;
 	}
 	case COMPRESSOR_STOP_PUMP_GEO: { // Stop Pump Geo
 		if (Config.ScriptMgr.scriptPumpGeo->Stop(false)) {
-			Loger::Debug("ScriptHeatPump:GeoPump Status=" + String(Config.DevMgr.pumpGeo->status));
-			Loger::Debug("ScriptHeatPump:Compressor:Finish ");
+			Debug("ScriptHeatPump:GeoPump Status=" + String(Config.DevMgr.pumpGeo->status));
+			Debug("ScriptHeatPump:Compressor:Finish ");
 			step = COMPRESSOR_IS_START_NEEDED;
 			res = true;
 		}
@@ -225,7 +225,7 @@ bool ScriptHeatPump::StartCompressor(bool isSync) {
 			long waitingTime = Config.counter1s - (Config.DevMgr.compressor.lastStatusTimestamp + Config.DevMgr.compressor.minTimeOff);
 			if (waitingTime < 0) {//not ready to start
 				if (isSync) {
-					Loger::Debug("Start Compressor delay:" + String(-waitingTime));
+					Debug("Start Compressor delay:" + String(-waitingTime));
 					delay(-waitingTime * 1000);
 					waitingTime = 0;
 				}
@@ -240,7 +240,7 @@ bool ScriptHeatPump::StartCompressor(bool isSync) {
 					res = true;
 				}
 				else {
-					Loger::Debug("Critical conditions are achieved!");
+					Debug("Critical conditions are achieved!");
 					res = false;
 				}
 			}
