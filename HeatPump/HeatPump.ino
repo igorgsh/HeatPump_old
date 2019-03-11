@@ -8,15 +8,6 @@
 #include <Keypad.h>
 #include <Key.h>
 
-//#include <OneWire.h>
-//#include <DallasTemperature.h>
-//#include <EEPROM.h>
-//#include <EthernetUdp.h>
-//#include <EthernetServer.h>
-//#include <EthernetClient.h>
-//#include <Ethernet.h>
-//#include <Dns.h>
-//#include <Dhcp.h>
 #include <SD.h>
 #include "Configuration.h"
 #include <MsTimer2.h>
