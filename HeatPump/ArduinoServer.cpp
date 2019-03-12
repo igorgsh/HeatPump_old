@@ -20,20 +20,7 @@ ArduinoServer::~ArduinoServer()
 }
 
 void ArduinoServer::begin() {
-
-	//Debug("Point1");
-
-	if (Ethernet.begin(mac) == 0) {
-		Debug("Failed to configure Ethernet using DHCP");
-		// no point in carrying on, so do nothing forevermore:
-		// try to congifure using IP address instead of DHCP:
-		IPAddress ip(192, 168, 0, 101);
-		Ethernet.begin(mac, ip);
-	}
-	//Debug("Point2");
 	server->begin();
-	Debug2("Server is at: ",Ethernet.localIP());
-
 }
 
 bool ArduinoServer::loop() {

@@ -2,7 +2,6 @@
 #include "Definitions.h"
 #include "EEPROM.h"
 
-#define WEB_ENABLED
 
 
 Configuration::Configuration()
@@ -14,22 +13,25 @@ Configuration::Configuration()
 void Configuration::loop() {
 	DevMgr.loop();
 	ScriptMgr.loop();
-#ifdef WEB_ENABLED
-	web.loop();
-#endif // WEB_ENABLED
+	if (IsWeb()) {
+		web.loop();
+	}
 }
 
 void Configuration::setup() {
 
 	readEepromInfo();
 
+	if (IsEthernet()) {
+		ethernetSetup();
+	}
 	DevMgr.begin();
 	isReady = ScriptMgr.setup();
 
-#ifdef WEB_ENABLED
-	Debug("Server Is Starting...");
-	web.begin();
-#endif
+	if (IsWeb()) {
+		Debug("Web Server Is Starting...");
+		web.begin();
+	}
 }
 
 float Configuration::OutTemp() {
@@ -216,4 +218,19 @@ void Configuration::writeMqttCredentials() {
 
 String Configuration::PrintIP(IPAddress addr) {
 	return String(addr[0]) + "." + String(addr[1]) + "." + String(addr[2]) + "." + String(addr[3]);
+}
+
+void Configuration::ethernetSetup() {
+	
+	mac[5] = boardId;
+
+	if (Ethernet.begin(mac) == 0) {
+		Debug("Failed to configure Ethernet using DHCP");
+		// no point in carrying on, so do nothing forevermore:
+		// try to congifure using IP address instead of DHCP:
+		IPAddress ip(192, 168, 0, 101);
+		Ethernet.begin(mac, ip);
+	}
+	//Debug("Point2");
+	Debug("Server is at: " +PrintIP(Ethernet.localIP()));
 }

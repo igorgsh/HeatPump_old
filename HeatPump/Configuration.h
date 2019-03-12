@@ -5,9 +5,6 @@
 #include "ScriptManager.h"
 #include "MqttCredentials.h"
 
-//#define WEB_ENABLED
-//#undef WEB_ENABLED
-
 #define EEPROM_ID	0x00  //1 bytes
 #define EEPROM_DESIRED_TEMP	0x01  //1 bytes
 #define EEPROM_MQTT			0x14	//Initial addr is 0x14=20
@@ -43,17 +40,19 @@ public:
 	bool IsReady() { return isReady; }
 
 	//Modules configuration Checks 
-	bool IsAutoTesting() { return availAutoTesting; };
+	bool IsAutoTesting() { return availSimulator & availAutoTesting; };
 	bool IsEthernet() { return availEthernet; }
 	bool IsSimulator() { return availSimulator; }
-	bool IsWeb() { return availWebServer; }
-
+	bool IsWeb() { return availEthernet & availWebServer; }
+	bool IsMqtt() { return availEthernet & availMqttClient; }
 
 private:
 	// Flag variables
 	bool isReady = false;
 	
+	byte mac[6] = { 0x02, 0xAA, 0x22, 0x07, 0x69, 0x07 };
 
+	void ethernetSetup();
 	ArduinoServer web = ArduinoServer();
 	float desiredTemp;
 	void eepromWrite(unsigned int addr, byte value);
