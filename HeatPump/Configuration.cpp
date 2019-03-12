@@ -1,7 +1,7 @@
 #include "Configuration.h"
-#include "Definitions.h"
 #include "EEPROM.h"
 
+extern Simulator* sim;
 
 
 Configuration::Configuration()
@@ -22,15 +22,26 @@ void Configuration::setup() {
 
 	readEepromInfo();
 
-	if (IsEthernet()) {
+	if (availEthernet) {
 		ethernetSetup();
+		isEthernetReady = true;
 	}
+
 	DevMgr.begin();
+
+
+	if (IsEthernet() && availMqttClient) {
+		mqttClient = new Mqtt();
+		mqttClient->InitMqtt();
+		isMqttReady = true;
+	}
+
 	isReady = ScriptMgr.setup();
 
-	if (IsWeb()) {
-		Debug("Web Server Is Starting...");
+	if (IsEthernet() && availWebServer) {
+		Loger::Debug("Web Server Is Starting...");
 		web.begin();
+		isWebReady = true;
 	}
 }
 
@@ -96,7 +107,7 @@ void Configuration::readEepromInfo() {
 	b = eepromRead(EEPROM_DESIRED_TEMP);
 	desiredTemp = ((float)b)/2.0;
 
-	Debug("BoardId=" + String(boardId));
+	Loger::Debug("BoardId=" + String(boardId)+"; BoardName=" + BoardName());
 
 	//Read MQTT Credentials
 	if (availMqttClient) {
@@ -165,11 +176,11 @@ void Configuration::readMqttCredentials() {
 		mqttCreds.Password = "";
 	}
 	
-		Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
-		Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
-		Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
-		Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
-		Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
+	Loger::Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
+	Loger::Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
+	Loger::Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
+	Loger::Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
+	Loger::Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
 		
 }
 
@@ -225,12 +236,12 @@ void Configuration::ethernetSetup() {
 	mac[5] = boardId;
 
 	if (Ethernet.begin(mac) == 0) {
-		Debug("Failed to configure Ethernet using DHCP");
+		Loger::Debug("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
 		// try to congifure using IP address instead of DHCP:
 		IPAddress ip(192, 168, 0, 101);
 		Ethernet.begin(mac, ip);
 	}
 	//Debug("Point2");
-	Debug("Server is at: " +PrintIP(Ethernet.localIP()));
+	Loger::Debug("Server is at: " +PrintIP(Ethernet.localIP()));
 }

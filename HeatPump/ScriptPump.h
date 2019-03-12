@@ -1,7 +1,6 @@
 #pragma once
 #include "Script.h"
 #include "Pump.h"
-#include "Definitions.h"
 
 typedef enum {
 	NO_ACTION=0,

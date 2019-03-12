@@ -9,7 +9,6 @@
 	#include "WProgram.h"
 #endif
 
-#include "Definitions.h"
 #include "Simulator.h"
 
 const byte ROWS0 = 4; // 4 строки

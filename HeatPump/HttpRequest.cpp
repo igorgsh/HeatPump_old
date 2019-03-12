@@ -1,5 +1,5 @@
 #include "HttpRequest.h"
-#include "Definitions.h"
+#include "Loger.h"
 
 
 HttpRequest::HttpRequest()

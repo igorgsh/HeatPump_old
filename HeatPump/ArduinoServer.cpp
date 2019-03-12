@@ -1,9 +1,9 @@
 ﻿#include "ArduinoServer.h"
-#include "Definitions.h"
 #include "Configuration.h"
 #include "HttpRequest.h"
 #include "SD.h"
 #include "SPI.h"
+#include "Loger.h"
 
 extern Configuration Config;
 
@@ -185,10 +185,10 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Debug("File not found:" + request.URL);
+		Loger::Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
 	}
-	Debug("End PrintAnyFile");
+	Loger::Debug("End PrintAnyFile");
 
 }
 
@@ -225,7 +225,7 @@ String GetPumpParams(Pump* pump, String tpl) {
 		res = pump->getLabel();
 	}
 	else if (tpl.equals("%PumpsStatus%")) {
-		res = pump->status;
+		res = String(pump->status);
 	}
 	return res;
 }
@@ -409,7 +409,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 	}
 	else
 	{
-		Debug("File not found:" + request.URL);
+		Loger::Debug("File not found:" + request.URL);
 		PrintErrorPage(client, "404 Not Found!", "File:" + request.URL);
 	}
 	//Debug("End PrintMainPage");

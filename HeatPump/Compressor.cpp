@@ -1,6 +1,7 @@
 #include "Compressor.h"
 #include "Arduino.h"
 #include "Configuration.h"
+#include "Loger.h"
 
 extern Configuration Config;
 
@@ -17,14 +18,14 @@ Compressor::~Compressor()
 }
 
 bool Compressor::StopCompressor() {
-	Debug("Stop Compressor!!!");
+	Loger::Debug("Stop Compressor!!!");
 	disconnect();
 	lastStatusTimestamp = Config.Counter1s;
 	return true;
 }
 
 bool Compressor::StartCompressor() {
-	Debug("Start Compressor!!!");
+	Loger::Debug("Start Compressor!!!");
 	connect();
 	lastStatusTimestamp = Config.Counter1s;
 	return true;

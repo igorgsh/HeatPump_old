@@ -1,5 +1,6 @@
 #pragma once
 //#include "EEPROM.h"
+#include "Mqtt.h"
 #include "DeviceManager.h"
 #include "ArduinoServer.h"
 #include "ScriptManager.h"
@@ -27,29 +28,36 @@ public:
 	DeviceManager DevMgr = DeviceManager();
 	ScriptManager ScriptMgr = ScriptManager();
 
+
 	float GetDesiredTemp() /*{ return desiredTemp; }*/;
 	void SetDesiredTemp(float value);
 	float GetCurrentTemp() { return DevMgr.currentTemp->getValue(); }
 	float OutTemp();
-	float ControlTemperature() { return DevMgr.currentTemp->getValue(); };
+	float GetControlTemperature() { return DevMgr.currentTemp->getValue(); };
+	//void SetControlTemperature(float value;) { }
 	byte GetBoardId() { return boardId; };
+	String BoardName() { return "HeatPump_" + String(boardId); }
 	MqttCredentials GetMqttCreds() { return mqttCreds; }
 	String PrintIP(IPAddress addr);
-
+	Mqtt* GetMqttClient() { return mqttClient; }
 	// Check methods
 	bool IsReady() { return isReady; }
 
 	//Modules configuration Checks 
 	bool IsAutoTesting() { return availSimulator & availAutoTesting; };
-	bool IsEthernet() { return availEthernet; }
+	bool IsEthernet() { return isEthernetReady;}
 	bool IsSimulator() { return availSimulator; }
-	bool IsWeb() { return availEthernet & availWebServer; }
-	bool IsMqtt() { return availEthernet & availMqttClient; }
+	bool IsWeb() { return isWebReady; /* availEthernet & availWebServer;*/ }
+	bool IsMqtt() { return isMqttReady;/*availEthernet & availMqttClient;*/ }
+
 
 private:
 	// Flag variables
 	bool isReady = false;
-	
+	bool isEthernetReady = false;
+	bool isMqttReady = false;
+	bool isWebReady = false;
+
 	byte mac[6] = { 0x02, 0xAA, 0x22, 0x07, 0x69, 0x07 };
 
 	void ethernetSetup();
@@ -66,6 +74,7 @@ private:
 
 	byte boardId;
 	MqttCredentials mqttCreds;
+	Mqtt* mqttClient;
 
 	//Modules configuraton
 

@@ -5,9 +5,6 @@
 class MqttCredentials
 {
 public:
-	MqttCredentials();
-	~MqttCredentials();
-
 	IPAddress ServerIP;
 	int Port = 0;
 	String Login = "";

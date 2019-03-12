@@ -37,9 +37,6 @@
     <ClInclude Include="DT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ArduinoServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +78,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MqttCredentials.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mqtt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,6 +143,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MqttCredentials.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mqtt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

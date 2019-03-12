@@ -1,6 +1,6 @@
 #include "Relay.h"
 #include "Arduino.h"
-#include "Definitions.h"
+#include "Loger.h"
 
 Relay::Relay(int pin, bool on) {
 	this->pin = pin;

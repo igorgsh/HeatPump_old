@@ -1,8 +1,8 @@
 #include "AutoTests.h"
-#include "Definitions.h"
 #include "Simulator.h"
 #include "OutputDevice.h"
 #include "Configuration.h"
+#include "Loger.h"
 
 
 extern Simulator *sim;
@@ -106,7 +106,7 @@ bool AutoTests::RunTest() {
 }
 
 void AutoTests::TestMessage(String message) {
-	Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.Counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
+	Loger::Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.Counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
 }
 
 bool AutoTests::TestStart() {
@@ -397,7 +397,7 @@ bool AutoTests::TestStartBrokenLastStep() {
 	if (step == 6) { //compressor is started. Forced stop
 //		TestMessage("case:"+String(sim->GetCaseNumber()));
 		res = sim->SetPinValue(3, 8, 0.0); //Contactor Error
-		if (!res) Debug("3.Contactor Error");
+		if (!res) Loger::Debug("3.Contactor Error");
 		TestMessage("Forced Stop!");
 		step++;
 		ts = Config.Counter1s;

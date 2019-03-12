@@ -66,7 +66,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\HeatPump;$(ProjectDir)..\..\..\Documents\Arduino\libraries\Keypad\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SD\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\DallasTemperature;$(ProjectDir)..\..\..\Documents\Arduino\libraries\OneWire;C:\Program Files (x86)\Arduino\libraries\Ethernet\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\MsTimer2;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SD\src\utility;$(ProjectDir)..\..\Simulator;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;$(ProjectDir)..\..\..\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\avr;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.8.1\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.2\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\HeatPump;C:\Program Files (x86)\Arduino\libraries\Ethernet\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\Keypad\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SD\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PubSubClient\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\DallasTemperature;$(ProjectDir)..\..\..\Documents\Arduino\libraries\OneWire;$(ProjectDir)..\..\..\Documents\Arduino\libraries\MsTimer2;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM\src;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SD\src\utility;$(ProjectDir)..\..\Simulator;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;$(ProjectDir)..\..\..\Documents\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\avr;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.8.1\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.2\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.HeatPump.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=10807;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -100,10 +100,11 @@
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Contactor.h" />
-    <ClInclude Include="Definitions.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="HttpRequest.h" />
+    <ClInclude Include="Loger.h" />
+    <ClInclude Include="Mqtt.h" />
     <ClInclude Include="MqttCredentials.h" />
     <ClInclude Include="OutputDevice.h" />
     <ClInclude Include="Pump.h" />
@@ -126,6 +127,8 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
+    <ClCompile Include="Loger.cpp" />
+    <ClCompile Include="Mqtt.cpp" />
     <ClCompile Include="MqttCredentials.cpp" />
     <ClCompile Include="OutputDevice.cpp" />
     <ClCompile Include="Pump.cpp" />

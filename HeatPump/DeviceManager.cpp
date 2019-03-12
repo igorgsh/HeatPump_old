@@ -1,5 +1,5 @@
 #include "DeviceManager.h"
-#include "Definitions.h"
+#include "Loger.h"
 
 
 DeviceManager::DeviceManager()

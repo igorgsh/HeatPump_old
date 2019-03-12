@@ -52,7 +52,7 @@ bool ScriptPump::Stop(bool isSync) {
 	bool res = false;
 	if (pump->status == DeviceStatus::STATUS_OFF) {
 		res = true;
-		Debug("Pump Stopped(OFF)!");
+		Loger::Debug("Pump Stopped(OFF)!");
 	}
 	else {
 		pump->StopPump();

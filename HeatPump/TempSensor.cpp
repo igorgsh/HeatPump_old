@@ -1,8 +1,9 @@
 #include "TempSensor.h"
-#include "Definitions.h"
+#include "Loger.h"
 #include "Configuration.h"
 
 extern Configuration Config;
+extern Simulator* sim;
 
 
 TempSensor::TempSensor(String label, int pin,  float lowerRange, float upperRange)

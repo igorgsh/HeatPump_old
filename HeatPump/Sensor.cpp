@@ -1,5 +1,4 @@
 #include "Sensor.h"
-#include "Definitions.h"
 
 void Sensor::init(String label, int pin, float lowerRange, float upperRange) {
 

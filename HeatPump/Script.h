@@ -1,6 +1,5 @@
 #pragma once
 #include "Arduino.h"
-#include "Definitions.h"
 #include "OutputDevice.h"
 
 class Script

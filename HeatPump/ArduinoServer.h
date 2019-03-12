@@ -2,6 +2,7 @@
 #include "Arduino.h"
 #include "Ethernet.h"
 #include "HttpRequest.h"
+#include "EthernetServer.h" 
 
 
 

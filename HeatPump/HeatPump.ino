@@ -5,16 +5,18 @@
 
  Heat Pump controller
 */
+//#include <PubSubClient.h>
+#include <Ethernet.h>
 #include <Keypad.h>
 #include <Key.h>
 
 #include <SD.h>
 #include "Configuration.h"
 #include <MsTimer2.h>
-#include "Definitions.h"
 #include "Configuration.h"
 #include "Simulator.h"
 #include "AutoTests.h"
+#include "Loger.h"
 
 DebugLevel dLevel = D_ALL;
 
@@ -48,7 +50,7 @@ void setup() {
 	//Configure Serial port and SD card
 	Serial.begin(115200);
 	randomSeed(analogRead(0));
-	Debug("Begin 1.0");
+	Loger::Debug("Begin 1.0");
 
 	// Prepare the light indicator 
 	pinMode(LED_PIN, OUTPUT);
@@ -69,7 +71,7 @@ void setup() {
 
 	Config.setup();
 
-	Debug("Setup is over#" + String(Config.IsReady()));
+	Loger::Debug("Setup is over#" + String(Config.IsReady()));
 	digitalWrite(LED_PIN, HIGH);
 
 }

@@ -1,8 +1,9 @@
 #include "Contactor.h"
-#include "Definitions.h"
+#include "Loger.h"
 #include "Configuration.h"
 
 extern Configuration Config;
+extern Simulator* sim;
 
 Contactor::~Contactor()
 {
