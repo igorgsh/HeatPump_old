@@ -7,6 +7,7 @@
 //#include "Ñonfiguration.h"
 #include "Loger.h"
 #include <EthernetClient.h>
+#include "Sensor.h"
 
 
 
@@ -51,6 +52,7 @@ class Mqtt : public PubSubClient
 		void PublishLog(DebugLevel level, String message);
 		void Subscribe(String topic);
 		bool Publish(String topic, String payload);
+		bool Publish(Sensor* dev);
 
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);

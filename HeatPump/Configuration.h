@@ -31,9 +31,9 @@ public:
 
 	float GetDesiredTemp() /*{ return desiredTemp; }*/;
 	void SetDesiredTemp(float value);
-	float GetCurrentTemp() { return DevMgr.currentTemp->getValue(); }
+	float GetCurrentTemp() { return DevMgr.currentTemp->GetValue(); }
 	float OutTemp();
-	float GetControlTemperature() { return DevMgr.currentTemp->getValue(); };
+	float GetControlTemperature() { return DevMgr.currentTemp->GetValue(); };
 	//void SetControlTemperature(float value;) { }
 	byte GetBoardId() { return boardId; };
 	String BoardName() { return "HeatPump_" + String(boardId); }

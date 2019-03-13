@@ -2,7 +2,7 @@
 #include "Arduino.h"
 #include "Loger.h"
 
-Relay::Relay(int pin, bool on) {
+Relay::Relay(String label, int pin, UnitType relayType, bool on) : OutputDevice(label, relayType) {
 	this->pin = pin;
 	this->on = on;
 

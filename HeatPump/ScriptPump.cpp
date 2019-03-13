@@ -19,10 +19,10 @@ ScriptPump::~ScriptPump()
 bool ScriptPump::IsAlarm() {
 	bool res = true;
 
-	switch (pump->GetPumpType()) {
-	case PumpType::PUMP_GEO: {
-		res = !((Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL)
-			& (Config.DevMgr.tGeoO->getActionStatus() == ActionStatus::ACTION_NORMAL));
+	switch (pump->GetType()) {
+	case UnitType::UT_Pump_Geo: {
+		res = !((Config.DevMgr.tGeoI->GetActionStatus() == ActionStatus::ACTION_NORMAL)
+			& (Config.DevMgr.tGeoO->GetActionStatus() == ActionStatus::ACTION_NORMAL));
 
 		break;
 	}

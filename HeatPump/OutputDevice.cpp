@@ -2,7 +2,7 @@
 
 
 
-OutputDevice::OutputDevice()
+OutputDevice::OutputDevice(String label, UnitType deviceType) : Unit(label, deviceType)
 {
 }
 

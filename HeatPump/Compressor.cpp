@@ -6,11 +6,10 @@
 extern Configuration Config;
 
 Compressor::Compressor(String label, int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) :
-	Relay(pin, on)
+	Relay(label, pin, UnitType::UT_Compressor, on)
 {
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
-	this->label = label;
 }
 
 Compressor::~Compressor()

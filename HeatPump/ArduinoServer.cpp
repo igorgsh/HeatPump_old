@@ -196,18 +196,18 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 String GetSensorParams(Sensor* sensor, String tpl) {
 	String res = "";
 	if (tpl.equals("%SensorsLabel%")) {
-		res = sensor->getLabel();
+		res = sensor->GetLabel();
 	} else if (tpl.equals("%SensorsType%")) {
-		res = String(sensor->getType());
+		res = String(sensor->GetType());
 	}
 	else if (tpl.equals("%SensorsCode%")) {
-		res = String(sensor->getPin());
+		res = String(sensor->GetPin());
 	}
 	else if (tpl.equals("%SensorsValue%")) {
-		res = String(sensor->getValue());
+		res = String(sensor->GetValue());
 	}
 	else if (tpl.equals("%SensorsError%")) {
-		res = String(sensor->getActionStatus()==ActionStatus::ACTION_ALARM);
+		res = String(sensor->GetActionStatus()==ActionStatus::ACTION_ALARM);
 	}
 	else if (tpl.equals("%SensorsLowerRange%")) {
 		res = String(sensor->GetLowerRange());
@@ -222,7 +222,7 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 String GetPumpParams(Pump* pump, String tpl) {
 	String res = "";
 	if (tpl.equals("%PumpsLabel%")) {
-		res = pump->getLabel();
+		res = pump->GetLabel();
 	}
 	else if (tpl.equals("%PumpsStatus%")) {
 		res = String(pump->status);
@@ -303,7 +303,7 @@ void setArrayVar(String varName, int ind, String val) {
 		//s = &(Config.contacts[ind - Config.getNumberTemp()]);
 	}
 	if (varName.equals("arrayLabel")) {
-		s->setLabel(decodeHex(val));
+		s->SetLabel(decodeHex(val));
 		//s->setLabel(val);
 	}
 /*

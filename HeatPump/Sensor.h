@@ -2,13 +2,7 @@
 #include "Arduino.h"
 
 #include "Simulator.h"
-
-
-typedef enum {
-	NOSENSOR = 0,
-	THERMOMETER = 1,
-	CONTACT = 2
-} SensorType;
+#include "Unit.h"
 
 
 typedef enum {
@@ -17,51 +11,38 @@ typedef enum {
 	ACTION_ALARM = 2
 } ActionStatus;
 
-class Sensor
+class Sensor : public Unit
 {
 public:
-	Sensor(String label, int pin);
-	Sensor(String label, int pin, float lowerRange, float higherRange);
-	//Type of Sensor
-	SensorType type = NOSENSOR;
-	SensorType getType() { return type; };
+	Sensor(String label, int pin, UnitType sensorType, float lowerRange=0.0, float higherRange=0.0);
 
 	//Current value of sensor
-	virtual float getValue() { return currentValue; };
+	virtual float GetValue() { return currentValue; };
 
 	// Number of errors occured
 	int ErrorCounter = 0;
 	int ErrorNoData = 0;
 
-	//Label of Sensor
-	String getLabel() { return label; };
-	void setLabel(String lbl) { label = lbl; };
 
 	//Pin where sensor is connected
-	int getPin() { return pin; };
+	int GetPin() { return pin; };
 
 	// Request values from sensor
 	virtual bool loop() = 0;
 
-	bool getData();
+	bool GetData();
 
-	ActionStatus getActionStatus() { 
+	ActionStatus GetActionStatus() { 
 		if (actionStatus == ActionStatus::ACTION_NODATA) {
-			getData();
+			GetData();
 		}
 		return actionStatus; };
 	float GetLowerRange() { return lowerRange; }
 	float GetUpperRange() { return upperRange; }
 
 protected:
-	// Is Data Ready for this Sensor
 	virtual bool checkDataReady() = 0;
-//	virtual ActionStatus checkStatus() = 0;
-	String label;
 	int pin;
-
-
-
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;
 
@@ -69,7 +50,6 @@ protected:
 	float lowerRange;
 	float upperRange;
 private:
-	void init(String label, int pin, float lowerRange, float upperRange);
-
+	void init(int pin, float lowerRange, float upperRange);
 };
 

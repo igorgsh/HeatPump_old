@@ -32,9 +32,9 @@ public:
 		/*11*/	TempSensor("Street",33,-50.0,50.0)	//T12
 	};
 
-	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", PumpType::PUMP_GEO , 40,HIGH,1,1), //Geo Contour
-									Pump("PC1", PumpType::PUMP_CONTOUR1, 42,HIGH,1,1),	//Pump between HP and Tank
-									Pump("PC2", PumpType::PUMP_CONTOUR2, 44,HIGH,1,1), //Pump between Tank and Heaters
+	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", UnitType::UT_Pump_Geo , 40,HIGH,1,1), //Geo Contour
+									Pump("PC1", UnitType::UT_Pump_C1, 42,HIGH,1,1),	//Pump between HP and Tank
+									Pump("PC2", UnitType::UT_Pump_C2, 44,HIGH,1,1), //Pump between Tank and Heaters
 	};
 	Compressor compressor = Compressor("PComp", 38, HIGH, 1, 1);
 

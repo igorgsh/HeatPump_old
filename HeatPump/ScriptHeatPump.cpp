@@ -25,16 +25,16 @@ bool ScriptHeatPump::IsAlarm() {
 bool ScriptHeatPump::checkTempConditions() {
 	bool ret = true;
 	//Debug("Point 0");
-	ret &= (Config.DevMgr.tGeoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tGeoI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
 	//if (!ret) Debug("Point 1#"+String(Config.DevMgr.tGeoI->getActionStatus()));
-	ret &= (Config.DevMgr.tGeoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tEvoI->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tEvoO->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tCondI->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tCondO->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tHpO->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tHpI->getActionStatus() == ActionStatus::ACTION_NORMAL);
-	ret &= (Config.DevMgr.tComp->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tGeoO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tEvoI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tEvoO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tCondI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tCondO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tHpO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tHpI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.tComp->GetActionStatus() == ActionStatus::ACTION_NORMAL);
 
 	//Debug("Point 2#"+String(ret));
 
@@ -43,7 +43,7 @@ bool ScriptHeatPump::checkTempConditions() {
 }
 bool ScriptHeatPump::checkContactors() {
 	bool ret = true;
-	ret &= (Config.DevMgr.cFlow->getActionStatus() == ActionStatus::ACTION_NORMAL);
+	ret &= (Config.DevMgr.cFlow->GetActionStatus() == ActionStatus::ACTION_NORMAL);
 	//Debug("CheckContactor=" + String(Config.DevMgr.cFlow->getActionStatus()));
 	return ret;
 }

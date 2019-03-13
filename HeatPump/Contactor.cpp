@@ -11,7 +11,7 @@ Contactor::~Contactor()
 
 
 Contactor::Contactor(String label, int pin, bool lhOn, bool alarmOn)
-	: Sensor(label, pin) {
+	: Sensor(label, pin, UnitType::UT_Contactor) {
 	this->lhOn = lhOn;
 	this->AlarmOn = alarmOn;
 	this->lowerRange = lhOn;
@@ -23,7 +23,6 @@ Contactor::Contactor(String label, int pin, bool lhOn, bool alarmOn)
 
 
 void Contactor::init() {
-	this->type = CONTACT;
 }
 
 ActionStatus Contactor::checkStatus() {
@@ -36,11 +35,13 @@ void Contactor::begin() {
 bool Contactor::loop() {
 	bool res;
 
-	res = getData();
+	res = GetData();
 	return res;
 }
 
 bool Contactor::checkDataReady() {
+	float oldValue = currentValue;
+
 	if (Config.IsSimulator()) {
 		currentValue = sim->GetRealResult(pin);
 	}
@@ -54,7 +55,9 @@ bool Contactor::checkDataReady() {
 	else {
 		actionStatus = ActionStatus::ACTION_NORMAL;
 	}
-
+	if (oldValue != currentValue) {
+		Config.GetMqttClient()->Publish(this);
+	}
 	return true;
 }
 

@@ -116,6 +116,7 @@
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="Sim.h" />
     <ClInclude Include="TempSensor.h" />
+    <ClInclude Include="Unit.h" />
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="Sim.cpp" />
     <ClCompile Include="TempSensor.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="configuration.txt" />

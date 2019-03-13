@@ -1,26 +1,21 @@
 #include "Sensor.h"
 
-void Sensor::init(String label, int pin, float lowerRange, float upperRange) {
+void Sensor::init(int pin, float lowerRange, float upperRange) {
 
-	this->label = label;
 	this->pin = pin;
 	this->lowerRange = lowerRange;
 	this->upperRange = upperRange;
 	pinMode(pin, INPUT);
 }
 
-Sensor::Sensor(String label, int pin) {
-	init(label, pin, 0, 0);
+
+
+Sensor::Sensor(String label, int pin, UnitType sensorType, float lowerRange, float upperRange) : Unit(label, sensorType) {
+	init(pin, lowerRange, upperRange);
 }
 
 
-
-Sensor::Sensor(String label, int pin, float lowerRange, float upperRange) {
-	init(label, pin, lowerRange, upperRange);
-}
-
-
-bool Sensor::getData() {
+bool Sensor::GetData() {
 	bool res;
 
 	res = checkDataReady();

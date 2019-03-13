@@ -7,6 +7,7 @@ Author:	Igor Shevchenko
 #include "Mqtt.h"
 #include "Loger.h"
 #include "Configuration.h"
+#include "Sensor.h"
 
 //extern Mqtt MqttClient;
 extern Configuration Config;
@@ -56,7 +57,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 		if (strTopic.endsWith(str0)) { //Desired Teamperature
 			Config.SetDesiredTemp(strPayload.toFloat());
 		}
-		else if (strTopic.endsWith(MQTT_CONTROL_TEMP)) {
+		else /*if (strTopic.endsWith(MQTT_CONTROL_TEMP))*/ {
 			//Config.GetControlTemperature()
 		}
 	}
@@ -132,6 +133,27 @@ bool Mqtt::Publish(String topic, String payload) {
 	}
 }
 
+bool Mqtt::Publish(Sensor* dev) {
+	String topic = rootPath();
+
+	switch (dev->GetType()) {
+	case UnitType::UT_Thermometer: {
+		topic += MQTT_THERMOMETERS_PREFIX;
+		break;
+	}
+	case UnitType::UT_Contactor: {
+		topic += MQTT_CONTACTORS_PREFIX;
+		break;
+	}
+	default:
+		break;
+	}
+	topic += dev->GetLabel();
+	String payLoad = String(dev->GetValue());
+
+	return Publish(topic, payLoad);
+}
+
 
 void Mqtt::Subscribe(String topic) {
 	Loger::Debug("Subscribe [" + topic + "]");
@@ -148,8 +170,8 @@ void Mqtt::subscribeTopics() {
 	topic0 = rootPath() + MQTT_DESIRED_TEMP;
 	Subscribe(topic0);
 
-	topic0 = rootPath() + MQTT_CONTROL_TEMP;
-	Subscribe(topic0);
+//	topic0 = rootPath() + MQTT_CONTROL_TEMP;
+//	Subscribe(topic0);
 /*
 	// Subscribe for compressor
 

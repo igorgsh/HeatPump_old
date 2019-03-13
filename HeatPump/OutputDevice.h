@@ -1,6 +1,6 @@
 #pragma once
 #include "Arduino.h"
-
+#include "Unit.h"
 
 typedef enum {
 	STATUS_UNKNOWN = 0,
@@ -10,20 +10,17 @@ typedef enum {
 	STATUS_IDLE = 4
 } DeviceStatus;
 
-class OutputDevice
+class OutputDevice : public Unit
 {
 public:
-	OutputDevice();
+	OutputDevice(String label, UnitType deviceType);
 	~OutputDevice();
 
 	DeviceStatus status = STATUS_UNKNOWN;
-	String getLabel() { return label; };
-	void setLabel(String lbl) { label = lbl; };
 	virtual void begin() = 0;
 	unsigned long lastStatusTimestamp = 0;
 	unsigned int minTimeOff = 0;
 	unsigned int minTimeOn = 0;
 protected:
-	String label;
 };
 
