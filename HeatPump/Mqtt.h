@@ -8,6 +8,7 @@
 #include "Loger.h"
 #include <EthernetClient.h>
 #include "Sensor.h"
+#include "Relay.h"
 
 
 
@@ -19,7 +20,7 @@
 #define MQTT_WAITING_RESPONSE 10000
 #define MQTT_RESUBSCRIBE_TRY_COUNT 1
 #define MQTT_RESUBSCRIPTION_DELAY	50
-#define MQTT_ETHERNET_TIME (5*1000)
+//#define MQTT_ETHERNET_TIME (5*1000)
 
 
 //#define BOARD_ID "Board_%02d"
@@ -54,6 +55,7 @@ class Mqtt : public PubSubClient
 		bool Publish(String topic, String payload);
 		bool Publish(Sensor* dev);
 		bool PublishDesiredTemp(float temp);
+		bool PublishRelay(Relay* dev);
 
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);

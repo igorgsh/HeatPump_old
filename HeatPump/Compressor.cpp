@@ -17,16 +17,22 @@ Compressor::~Compressor()
 }
 
 bool Compressor::StopCompressor() {
-	Loger::Debug("Stop Compressor!!!");
-	disconnect();
-	lastStatusTimestamp = Config.Counter1s;
+	if (status != DeviceStatus::STATUS_OFF) {
+		Loger::Debug("Stop Compressor!!!");
+		disconnect();
+		lastStatusTimestamp = Config.Counter1s;
+		Config.GetMqttClient()->PublishRelay(this);
+	}
 	return true;
 }
 
 bool Compressor::StartCompressor() {
-	Loger::Debug("Start Compressor!!!");
-	connect();
-	lastStatusTimestamp = Config.Counter1s;
+	if (status != DeviceStatus::STATUS_ON) {
+		Loger::Debug("Start Compressor!!!");
+		connect();
+		lastStatusTimestamp = Config.Counter1s;
+		Config.GetMqttClient()->PublishRelay(this);
+	}
 	return true;
 }
 

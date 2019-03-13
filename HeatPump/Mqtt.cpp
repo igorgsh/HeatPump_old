@@ -120,6 +120,31 @@ bool Mqtt::PublishDesiredTemp(float temp) {
 	return Publish(topic, payLoad);
 }
 
+bool Mqtt::PublishRelay(Relay* dev) {
+	String topic = rootPath();
+	
+
+	switch (dev->GetType()) {
+	case UnitType::UT_Pump_C1:
+	case UnitType::UT_Pump_C2:
+	case UnitType::UT_Pump_Geo:
+	case UnitType::UT_Pump_F1:
+	case UnitType::UT_Pump_F2: {
+		topic += MQTT_PUMPS_PREFIX;
+		break;
+	}
+	case UnitType::UT_Compressor: {
+		topic += MQTT_COMPRESSOR_PREFIX;
+		break;
+	}
+	default:
+		return false;
+	}
+	topic += dev->GetLabel();
+	String payLoad = String(dev->status);
+	return Publish(topic, payLoad);
+}
+
 
 /*
 void Mqtt::WatchDog() {

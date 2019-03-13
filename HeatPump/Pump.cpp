@@ -16,13 +16,19 @@ Pump::~Pump()
 }
 
 void Pump::StopPump() {
-	disconnect();
-	lastStatusTimestamp = Config.Counter1s;
+	if (status != DeviceStatus::STATUS_OFF) {
+		disconnect();
+		lastStatusTimestamp = Config.Counter1s;
+		Config.GetMqttClient()->PublishRelay(this);
+	}
 }
 
 void Pump::StartPump() {
-	connect();
-	lastStatusTimestamp = Config.Counter1s;
+	if (status != DeviceStatus::STATUS_ON) {
+		connect();
+		lastStatusTimestamp = Config.Counter1s;
+		Config.GetMqttClient()->PublishRelay(this);
+	}
 }
 
 void Pump::begin() {
