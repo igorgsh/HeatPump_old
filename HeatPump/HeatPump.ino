@@ -21,7 +21,6 @@
 DebugLevel dLevel = D_ALL;
 
 
-#define SDCARD_SS	4
 #define LED_PIN	13
 
 Simulator* sim;
@@ -67,7 +66,7 @@ void setup() {
 		test = new AutoTests();
 	}
 
-	SD.begin(SDCARD_SS);
+//	SD.begin(SDCARD_SS);
 
 	Config.setup();
 

@@ -7,10 +7,14 @@
 
 extern Configuration Config;
 
+constexpr auto SDCARD_SS = 4;
+
 
 ArduinoServer::ArduinoServer()
 {
 	server = new EthernetServer(serverPort);
+	bool res = SD.begin(SDCARD_SS);
+	Loger::SimpleLog("SDCARD.begin=" + String(res));
 }
 
 
@@ -19,8 +23,9 @@ ArduinoServer::~ArduinoServer()
 	//delete server;
 }
 
-void ArduinoServer::begin() {
+bool ArduinoServer::setup() {
 	server->begin();
+	return true;
 }
 
 bool ArduinoServer::loop() {
@@ -113,6 +118,11 @@ void ArduinoServer::HttpHeader(Client& client, String error) {
 void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 
 	//Debug("Start ParseCommand");
+
+	if (request.URL.length() == 0) { //open main.htm when no page defined
+		request.URL = "main.htm";
+	}
+
 	if (request.URL.endsWith(".htm")) {
 		PrintHtmPage(client, request);
 	}
@@ -172,14 +182,15 @@ void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 
 	//Debug("Start PrintAnyFile");
-
+	
 	File file = SD.open(request.URL, FILE_READ);
+	
 	if (file) {
 		HttpHeader(client, "200 Ok");
 		while (file.available()) {
 			uint8_t buf[100];
-			file.readBytes(buf, 100);
-			client.write(buf, 100);
+			size_t sz = file.readBytes(buf, 100);
+			client.write(buf, sz);
 		}
 		file.close();
 	}

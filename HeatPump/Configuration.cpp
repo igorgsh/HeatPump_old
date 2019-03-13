@@ -17,7 +17,7 @@ void Configuration::loop() {
 		mqttClient->MqttLoop();
 	}
 	if (IsWeb()) {
-		web.loop();
+		web->loop();
 	}
 }
 
@@ -35,16 +35,17 @@ void Configuration::setup() {
 
 	if (IsEthernet() && availMqttClient) {
 		mqttClient = new Mqtt();
-		mqttClient->InitMqtt();
-		isMqttReady = true;
+		isMqttReady = mqttClient->setup();
+		mqttClient->InitialActions();
 	}
 
 	isReady = ScriptMgr.setup();
 
 	if (IsEthernet() && availWebServer) {
 		Loger::Debug("Web Server Is Starting...");
-		web.begin();
-		isWebReady = true;
+		web = new ArduinoServer();
+
+		isWebReady = web->setup();
 	}
 }
 
@@ -89,7 +90,9 @@ void Configuration::SetDesiredTemp(float value) {
 	if (desiredTemp != value) { //optimization: reduce number of write to EEPROM
 		desiredTemp = value;
 		eepromWrite(EEPROM_DESIRED_TEMP, (byte)(desiredTemp*2));
-		mqttClient->PublishDesiredTemp(desiredTemp);
+		if (IsMqtt()) {
+			mqttClient->PublishDesiredTemp(desiredTemp);
+		}
 	}
 }
 
@@ -180,11 +183,11 @@ void Configuration::readMqttCredentials() {
 		mqttCreds.Password = "";
 	}
 	
-	Loger::Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
-	Loger::Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
-	Loger::Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
-	Loger::Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
-	Loger::Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
+	//Loger::Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
+	//Loger::Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
+	//Loger::Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
+	//Loger::Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
+	//Loger::Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
 		
 }
 

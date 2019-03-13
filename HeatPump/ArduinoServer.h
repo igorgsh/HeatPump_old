@@ -10,7 +10,7 @@
 class ArduinoServer
 {
 public:
-	void begin();
+	bool setup();
 	bool loop();
 	ArduinoServer();
 	~ArduinoServer();

@@ -61,7 +61,7 @@ private:
 	byte mac[6] = { 0x02, 0xAA, 0x22, 0x07, 0x69, 0x07 };
 
 	void ethernetSetup();
-	ArduinoServer web = ArduinoServer();
+	ArduinoServer* web;
 	float desiredTemp;
 	void eepromWrite(unsigned int addr, byte value);
 	void eepromWrite(unsigned int addr, unsigned int value);

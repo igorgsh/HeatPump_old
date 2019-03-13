@@ -48,7 +48,7 @@ class Mqtt : public PubSubClient
 
 
 		unsigned long mqttWaiting;
-		void InitMqtt();
+		bool setup();
 		void MqttLoop();
 		void PublishLog(DebugLevel level, String message);
 		void Subscribe(String topic);
@@ -60,6 +60,8 @@ class Mqtt : public PubSubClient
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);
 //		void WatchDog();
+		void InitialActions();
+
 
 private:
 		//char *boardId = (char*)BOARD_ID;
