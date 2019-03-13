@@ -13,6 +13,9 @@ Configuration::Configuration()
 void Configuration::loop() {
 	DevMgr.loop();
 	ScriptMgr.loop();
+	if (IsMqtt()) {
+		mqttClient->MqttLoop();
+	}
 	if (IsWeb()) {
 		web.loop();
 	}

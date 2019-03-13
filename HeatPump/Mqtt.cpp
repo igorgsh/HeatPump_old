@@ -14,6 +14,7 @@ extern Configuration Config;
 EthernetClient EthClient;
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
+	Loger::SimpleLog("callbackFunc[" + String(topic) + "](" + String(length) +")"  );
 	Config.GetMqttClient()->Callback(topic, payload, length);
 }
 
@@ -51,10 +52,11 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 		//		char subscription[TOPIC_LENGTH];
 		String str0;
 
-		Loger::Debug("[" + strTopic + "]:" + strPayload + "#");
+		Loger::Debug("CallBack:[" + strTopic + "]:" + strPayload + "#");
 
 		str0 = MQTT_DESIRED_TEMP;
-		if (strTopic.endsWith(str0)) { //Desired Teamperature
+		if (strTopic.endsWith(str0)) { //Desired Temperature
+			Loger::Debug("Set Desired temp:" + strPayload);
 			Config.SetDesiredTemp(strPayload.toFloat());
 		}
 		else /*if (strTopic.endsWith(MQTT_CONTROL_TEMP))*/ {
@@ -202,6 +204,8 @@ void Mqtt::subscribeTopics() {
 	// Subscribe for Special Temperatures
 	topic0 = rootPath() + MQTT_DESIRED_TEMP;
 	Subscribe(topic0);
+
+	PublishDesiredTemp(Config.GetDesiredTemp());
 
 //	topic0 = rootPath() + MQTT_CONTROL_TEMP;
 //	Subscribe(topic0);
