@@ -112,6 +112,14 @@ void Mqtt::PublishLog(DebugLevel level, String message) {
 	}
 }
 
+bool Mqtt::PublishDesiredTemp(float temp) {
+	String topic;
+	topic = rootPath() + MQTT_DESIRED_TEMP;
+	String payLoad = String(temp);
+
+	return Publish(topic, payLoad);
+}
+
 
 /*
 void Mqtt::WatchDog() {

@@ -53,6 +53,7 @@ class Mqtt : public PubSubClient
 		void Subscribe(String topic);
 		bool Publish(String topic, String payload);
 		bool Publish(Sensor* dev);
+		bool PublishDesiredTemp(float temp);
 
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);

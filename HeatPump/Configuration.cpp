@@ -86,6 +86,7 @@ void Configuration::SetDesiredTemp(float value) {
 	if (desiredTemp != value) { //optimization: reduce number of write to EEPROM
 		desiredTemp = value;
 		eepromWrite(EEPROM_DESIRED_TEMP, (byte)(desiredTemp*2));
+		mqttClient->PublishDesiredTemp(desiredTemp);
 	}
 }
 
