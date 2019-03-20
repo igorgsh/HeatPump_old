@@ -16,7 +16,7 @@ void DT::begin() {
 	setCheckForConversion(false);
 	setWaitForConversion(false);
 }
-
+/*
 bool DT::getAddress(uint8_t* address, uint8_t index) {
 	if (index >= 0 && index < getDeviceCount()) {
 		address = addresses[index];
@@ -26,13 +26,17 @@ bool DT::getAddress(uint8_t* address, uint8_t index) {
 		return false;
 	}
 }
-
+*/
+/*
 bool DT::isConversionAvailable(int index) {
 	if (index >= 0 && index < getDeviceCount()) {
-		return DallasTemperature::isConversionAvailable(addresses[index]);
+		DallasTemperature::isConversionComplete()
+		return DallasTemperature:: isConversionAvailable(addresses[index]);
+
 	}
 	else {
 		return false;
 	}
 
 }
+*/

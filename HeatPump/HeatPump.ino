@@ -6,9 +6,11 @@
  Heat Pump controller
 */
 //#include <PubSubClient.h>
+//#include <Keyboard.h>
+//#include <DallasTemperature.h>
 #include <Ethernet.h>
-#include <Keypad.h>
-#include <Key.h>
+//#include <Keypad.h>
+//#include <Key.h>
 
 #include <SD.h>
 #include "Configuration.h"

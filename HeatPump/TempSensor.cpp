@@ -6,37 +6,39 @@ extern Configuration Config;
 extern Simulator* sim;
 
 
-TempSensor::TempSensor(String label, int pin,  float lowerRange, float upperRange)
+TempSensorSingle::TempSensorSingle(String label, int pin,  float lowerRange, float upperRange)
 	: Sensor(label, pin, UnitType::UT_Thermometer, lowerRange, upperRange) {
 	init();
 }
 
 
-TempSensor::~TempSensor()
+TempSensorSingle::~TempSensorSingle()
 {
 	delete dt;
 	delete wire;
 }
 
-void TempSensor::init() {
+void TempSensorSingle::init() {
 	wire = new OneWire(pin);
-	dt = new DT(wire);
+//	dt = new DT(wire);
+	dt = new DallasTemperature(wire);
 }
 
-void TempSensor::requestTemperatures() {
+void TempSensorSingle::requestTemperatures() {
 	dt->requestTemperatures();
 }
 
-bool TempSensor::checkDataReady() {
+bool TempSensorSingle::checkDataReady() {
 	bool res = true;
 	float oldValue = currentValue;
 	if (Config.IsSimulator()) {
-	currentValue = sim->GetRealResult(this->pin);
-	res = true;
-	//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
+		currentValue = sim->GetRealResult(this->pin);
+		res = true;
+		//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
 	}
 	else {
-		res = dt->isConversionAvailable(0);
+		//res = dt->isConversionAvailable(0);
+		res = dt->isConversionComplete();
 		if (res) {
 			currentValue = dt->getTempCByIndex(0);
 		}
@@ -59,12 +61,13 @@ bool TempSensor::checkDataReady() {
 	return res;
 }
 
-void TempSensor::begin() {
+void TempSensorSingle::begin() {
 	dt->begin();
-	dt->setResolution(DEFAULT_RESOLUTION);
+	dt->setResolution(DT_DEFAULT_RESOLUTION);
+	
 }
 
-bool TempSensor::loop() {
+bool TempSensorSingle::loop() {
 	bool result = true;
 
 	if (tryCounter == 0) {//first loop - request for data

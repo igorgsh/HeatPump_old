@@ -17,19 +17,19 @@ public:
 
 	void begin();
 
-	TempSensor tempSensors[NUMBER_OF_TEMP] = {
-		/* 0*/	TempSensor("GeoI",	22,-20.0, 50.0),	//T1
-		/* 1*/	TempSensor("GeoO",	23,-20.0, 50.0),	//T2
-		/* 2*/	TempSensor("EvoI",	24,-30.0, 50.0),	//T3 = T6
-		/* 3*/	TempSensor("EvoO",	25,-30.0,50.0),	//T4
-		/* 4*/	TempSensor("CondI",	26,-30.0, 110.0),	//T5
-		/* 5*/	TempSensor("CondO",	27,-30.0,50.0),	//T6 = T3
-		/* 6*/	TempSensor("HpO",	28,-30.0, 110.0),	//T7
-		/* 7*/	TempSensor("HpI",	29,-30.0, 110.0),	//T8
-		/* 8*/	TempSensor("Comp",	30,-30.0,120.0),//T9
-		/* 9*/	TempSensor("Unkn",	31,-50.0,50.0),	//T10
-		/*10*/	TempSensor("Room",	32,-50.0,50.0),	//T11
-		/*11*/	TempSensor("Street",33,-50.0,50.0)	//T12
+	TempSensorSingle tempSensors[NUMBER_OF_TEMP] = {
+		/* 0*/	TempSensorSingle("GeoI",	22,-20.0, 50.0),	//T1
+		/* 1*/	TempSensorSingle("GeoO",	23,-20.0, 50.0),	//T2
+		/* 2*/	TempSensorSingle("EvoI",	24,-30.0, 50.0),	//T3 = T6
+		/* 3*/	TempSensorSingle("EvoO",	25,-30.0,50.0),	//T4
+		/* 4*/	TempSensorSingle("CondI",	26,-30.0, 110.0),	//T5
+		/* 5*/	TempSensorSingle("CondO",	27,-30.0,50.0),	//T6 = T3
+		/* 6*/	TempSensorSingle("HpO",	28,-30.0, 110.0),	//T7
+		/* 7*/	TempSensorSingle("HpI",	29,-30.0, 110.0),	//T8
+		/* 8*/	TempSensorSingle("Comp",	30,-30.0,120.0),//T9
+		/* 9*/	TempSensorSingle("Unkn",	31,-50.0,50.0),	//T10
+		/*10*/	TempSensorSingle("Room",	32,-50.0,50.0),	//T11
+		/*11*/	TempSensorSingle("Street",33,-50.0,50.0)	//T12
 	};
 
 	Pump pumps[NUMBER_OF_PUMP] = { Pump("PGeo", UnitType::UT_Pump_Geo , 40,HIGH,1,1), //Geo Contour
@@ -42,18 +42,18 @@ public:
 	Pump* pumpContour1 = &pumps[1];
 	Pump* pumpContour2 = &pumps[2];
 
-	TempSensor* tGeoI = &tempSensors[0];
-	TempSensor* tGeoO = &tempSensors[1];
-	TempSensor* tEvoI = &tempSensors[2];
-	TempSensor* tEvoO = &tempSensors[3];
-	TempSensor* tCondI = &tempSensors[4];
-	TempSensor* tCondO = &tempSensors[5];
-	TempSensor* tHpO = &tempSensors[6];
-	TempSensor* tHpI = &tempSensors[7];
-	TempSensor* tComp = &tempSensors[8];
-	TempSensor* tUnkn = &tempSensors[9];
-	TempSensor* currentTemp = &tempSensors[10];
-	TempSensor* tStreet = &tempSensors[11];
+	TempSensorSingle* tGeoI = &tempSensors[0];
+	TempSensorSingle* tGeoO = &tempSensors[1];
+	TempSensorSingle* tEvoI = &tempSensors[2];
+	TempSensorSingle* tEvoO = &tempSensors[3];
+	TempSensorSingle* tCondI = &tempSensors[4];
+	TempSensorSingle* tCondO = &tempSensors[5];
+	TempSensorSingle* tHpO = &tempSensors[6];
+	TempSensorSingle* tHpI = &tempSensors[7];
+	TempSensorSingle* tComp = &tempSensors[8];
+	TempSensorSingle* tUnkn = &tempSensors[9];
+	TempSensorSingle* currentTemp = &tempSensors[10];
+	TempSensorSingle* tStreet = &tempSensors[11];
 
 	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("Flow", 8, HIGH, LOW) };
 	
