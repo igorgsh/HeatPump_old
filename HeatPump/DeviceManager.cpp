@@ -12,6 +12,9 @@ DeviceManager::~DeviceManager()
 }
 
 void DeviceManager::begin() {
+
+	TempBus.begin();
+
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].begin();
 	}
@@ -31,6 +34,7 @@ void DeviceManager::loop() {
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].loop();
 	}
+	TempBus.RequestTemperature();
 	//check all contactors
 	for (int i = 0; i < getNumberCont(); i++) {
 		contacts[i].loop();

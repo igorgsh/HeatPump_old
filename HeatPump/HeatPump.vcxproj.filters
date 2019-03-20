@@ -86,13 +86,16 @@
     <ClInclude Include="Unit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TempSensorMultiple.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TempSensorSingle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TempSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemperatureBus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemperatureDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -160,13 +163,16 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TempSensorMultiple.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TempSensorSingle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TempSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemperatureBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemperatureDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

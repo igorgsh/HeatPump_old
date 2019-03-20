@@ -122,6 +122,13 @@ void Configuration::readEepromInfo() {
 	desiredTemp = ((float)b)/2.0;
 
 	Loger::Debug("BoardId=" + String(boardId)+"; BoardName=" + BoardName());
+	//Read Temperature's sensor Addresses
+
+	for (int i = 0; i < DevMgr.getNumberTemp; i++) {
+		for (int j = 0; j < 8; j++) {
+			DevMgr.tempSensors[i].DevAddress[j] = eepromRead(EEPROM_T_ADDRESS + i * 8 + j);
+		}
+	}
 
 	//Read MQTT Credentials
 	if (availMqttClient) {
