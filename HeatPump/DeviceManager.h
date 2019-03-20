@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TempSensor.h"
+#include "TempSensorSingle.h"
 #include "Pump.h"
 #include "Compressor.h"
 #include "Contactor.h"

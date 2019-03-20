@@ -8,7 +8,9 @@ void Sensor::init(int pin, float lowerRange, float upperRange) {
 	pinMode(pin, INPUT);
 }
 
-
+Sensor::Sensor(UnitType sensorType) : Unit("", sensorType){
+	init(-1, 0.0, 0.0);
+}
 
 Sensor::Sensor(String label, int pin, UnitType sensorType, float lowerRange, float upperRange) : Unit(label, sensorType) {
 	init(pin, lowerRange, upperRange);

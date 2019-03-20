@@ -6,9 +6,34 @@
 #include "ScriptManager.h"
 #include "MqttCredentials.h"
 
+//EEPROM STRUCTURE
 #define EEPROM_ID	0x00  //1 bytes
 #define EEPROM_DESIRED_TEMP	0x01  //1 bytes
-#define EEPROM_MQTT			0x14	//Initial addr is 0x14=20
+#define EEPROM_T_ADDRESS 0x14 // 8* bytes
+#define EEPROM_MQTT			100	//Initial addr is 100
+/*
+addr   |len|value
+--------------
+ 0     |1  |BoardId
+ 1     |1  |Desired Temp
+ 2-19  |18 |Reserved
+20-27  |8  |T1 Address
+28-35  |8  |T2 Address
+36-43  |8  |T3 Address
+44-51  |8  |T4 Address
+52-59  |8  |T5 Address
+60-67  |8  |T6 Address
+68-75  |8  |T7 Address
+76-99  |24 |Reserved
+100-103|4  |MQTT IP
+104-105|2  |MQTT Port
+106-106|1  |Length of login (LL)
+107-...|LL |Login
+...-...|1  |Length of Password (LP)
+...-...|LP |Password
+
+
+*/
 
 #define TEMPERATURE_DELTA	5
 
@@ -63,6 +88,7 @@ private:
 	void ethernetSetup();
 	ArduinoServer* web;
 	float desiredTemp;
+	void eepromWrite(unsigned int addr, byte value[8]);
 	void eepromWrite(unsigned int addr, byte value);
 	void eepromWrite(unsigned int addr, unsigned int value);
 	byte eepromRead(unsigned int addr);

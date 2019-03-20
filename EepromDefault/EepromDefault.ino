@@ -8,6 +8,42 @@
 #include <EEPROM.h>
 #include <IPAddress.h>
 
+//EEPROM STRUCTURE
+#define EEPROM_ID	0x00  //1 bytes
+#define EEPROM_DESIRED_TEMP	0x01  //1 bytes
+#define EEPROM_T_ADDRESS 0x14 // 8* bytes
+#define EEPROM_MQTT			100	//Initial addr is 100
+/*
+addr   |len|value
+--------------
+ 0     |1  |BoardId
+ 1     |1  |Desired Temp
+ 2-19  |18 |Reserved
+20-27  |8  |T1 Address
+28-35  |8  |T2 Address
+36-43  |8  |T3 Address
+44-51  |8  |T4 Address
+52-59  |8  |T5 Address
+60-67  |8  |T6 Address
+68-75  |8  |T7 Address
+76-99  |24 |Reserved
+100-103|4  |MQTT IP
+104-105|2  |MQTT Port
+106-106|1  |Length of login (LL)
+107-...|LL |Login
+...-...|1  |Length of Password (LP)
+...-...|LP |Password
+
+
+*/
+
+void EepromWrite(unsigned int addr, byte value[8]) {
+
+	for (int i = 0; i < 8; i++) {
+		EEPROM.write(addr + i, value[i]);
+	}
+}
+
 
 void EepromWrite(unsigned int addr, byte value) {
 
@@ -44,7 +80,7 @@ unsigned int EepromRead2(unsigned int addr) {
 
 void ReadMqttCredentials() {
 	byte len;
-	unsigned int addr = 0x14;
+	unsigned int addr = EEPROM_MQTT;
 	String str0;
 	char* buf;
 
@@ -123,7 +159,7 @@ void ReadMqttCredentials() {
 
 void WriteMqttCredentials(unsigned int port, IPAddress ip, String root, String login, String password) {
 	byte len;
-	unsigned int addr = 0x14;
+	unsigned int addr = EEPROM_MQTT;
 
 	// URL
 	for (int i = 0; i < 4; i++) {
@@ -166,15 +202,40 @@ void WriteMqttCredentials(unsigned int port, IPAddress ip, String root, String l
 	}
 }
 
+void ReadTAddresses() {
+	Serial.println("Thermometer addresses:");
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 8; j++) {
+			Serial.print(String(EepromRead(EEPROM_T_ADDRESS + i * 8 + j), HEX));
+		}
+		Serial.println();
+	}
+}
+
 
 void setup() {
 
 	Serial.begin(115200);
 
 	// Board ID
-	EEPROM.write(0, 0x07);
+	EEPROM.write(EEPROM_ID, 0x07);
 	// Desired temp 25 degree
-	EEPROM.write(1, 25 * 2);
+	EEPROM.write(EEPROM_DESIRED_TEMP, 25 * 2);
+
+	//Thermometer Addresses
+	byte tAddr[7][8] = {
+		{0x28, 0x4F, 0x32,0x34,0x08,0x00,0x00,0x2B},
+		{0x28,0xFF,0x40,0xA8,0xB4,0x16,0x03,0x92},
+		{0x28,0xFF,0x08,0x96,0x90,0x16,0x04,0x91},
+		{0x28,0xFF,0x68,0xE5,0x90,0x16,0x04,0xA0},
+		{0x28,0xFF,0xFC,0x90,0x90,0x16,0x04,0x21},
+		{0x28,0xFF,0x72,0x9C,0x90,0x16,0x04,0x5A},
+		{0x28,0xFF,0x25,0xF3,0x87,0x16,0x03,0x27}
+	};
+
+	for (int i = 0; i < 7; i++) {
+		EepromWrite(EEPROM_T_ADDRESS + i * 8, tAddr[i]);
+	}
 
 	//Mqtt Creds
 	IPAddress ip(192, 168, 0, 99);
@@ -187,6 +248,7 @@ void setup() {
 	b = EEPROM.read(1);
 	Serial.println("Temp#" + String((float)b / 2));
 
+	ReadTAddresses();
 	ReadMqttCredentials();
 
 	Serial.println("Done!");

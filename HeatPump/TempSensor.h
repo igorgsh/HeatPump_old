@@ -1,28 +1,15 @@
 #pragma once
 #include "Sensor.h"
-//#include "DT.h"
-#include "OneWire.h"
-#include "DallasTemperature.h"
-#define DT_DEFAULT_RESOLUTION 10
 
+#include <DallasTemperature.h>
 
-class TempSensorSingle :
+class TempSensor :
 	public Sensor
 {
 public:
-	~TempSensorSingle();
-	TempSensorSingle(String label, int pin, float lowerRange, float upperRange);
-	void begin();
-	void requestTemperatures();
-	bool checkDataReady();
-	bool loop();
-	//ActionStatus checkStatus();
-private:
-	//DT* dt;
-	DallasTemperature* dt;
-	OneWire* wire;
-	void init();
-	int tryCounter = 0;
-
+	TempSensor();
+	
+	~TempSensor();
+	DeviceAddress addr;
 };
 

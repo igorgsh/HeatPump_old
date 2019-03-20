@@ -15,6 +15,7 @@ class Sensor : public Unit
 {
 public:
 	Sensor(String label, int pin, UnitType sensorType, float lowerRange=0.0, float higherRange=0.0);
+	Sensor(UnitType sensorType);
 
 	//Current value of sensor
 	virtual float GetValue() { return currentValue; };

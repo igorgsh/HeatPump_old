@@ -65,6 +65,13 @@ void Configuration::eepromWrite(unsigned int addr, byte value) {
 	EEPROM.write(addr, value);
 }
 
+void Configuration::eepromWrite(unsigned int addr, byte value[8]) {
+
+	for (int i = 0; i < 8; i++) {
+		EEPROM.write(addr + i, value[i]);
+	}
+}
+
 void Configuration::eepromWrite(unsigned int addr, unsigned int value) {
 
 	EEPROM.write(addr, value % 0xFF);

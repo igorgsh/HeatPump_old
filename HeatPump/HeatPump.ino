@@ -8,6 +8,7 @@
 //#include <PubSubClient.h>
 //#include <Keyboard.h>
 //#include <DallasTemperature.h>
+#include "TempSensorMultiple.h"
 #include <Ethernet.h>
 //#include <Keypad.h>
 //#include <Key.h>
