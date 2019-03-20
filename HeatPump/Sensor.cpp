@@ -16,10 +16,11 @@ Sensor::Sensor(String label, int pin, UnitType sensorType, float lowerRange, flo
 	init(pin, lowerRange, upperRange);
 }
 
-
+/*
 bool Sensor::GetData() {
 	bool res;
 
+	
 	res = checkDataReady();
 	//Debug("GetData:" + String(res));
 	if (res) { //data is ready
@@ -43,4 +44,5 @@ bool Sensor::GetData() {
 	}
 	return res;
 }
+*/
 

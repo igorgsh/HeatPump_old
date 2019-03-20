@@ -30,18 +30,23 @@ bool TemperatureBus::begin() {
 	for (int i = 0; i < numberOfSensors; i++) {
 		dt->getAddress(knownDevs[i], i);
 		knownDevAvail[i] = false;
-		for (int j = 0; j < Config.DevMgr.getNumberTemp; j++) {
+		for (int j = 0; j < Config.DevMgr.getNumberTemp(); j++) {
 			if (compareAddresses(sensors[j].DevAddress, knownDevs[i])) {
 				sensors[j].DevAvailable = true;
 				knownDevAvail[i] = true;
+				sensors[i].Driver = this;
 			}
 		}
 	}
 
 	dt->setResolution(DT_DEFAULT_RESOLUTION);
-	dt->requestTemperatures();
+	RequestTemperature();
+	return ret;
 }
 
+void TemperatureBus::loop() {
+	RequestTemperature();
+}
 
 bool TemperatureBus::compareAddresses(DeviceAddress addr1, DeviceAddress addr2) {
 	bool ret = true;

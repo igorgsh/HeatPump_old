@@ -12,6 +12,8 @@
 #include "DallasTemperature.h"
 #include "TemperatureBus.h"
 #include "TemperatureDriver.h"
+#include "TempSensor.h"
+
 
 #define DT_DEFAULT_RESOLUTION 10
 
@@ -22,9 +24,10 @@ class TemperatureBus : public TemperatureDriver
 	 bool begin();
 	 TemperatureBus(int pin);
 	 ~TemperatureBus();
-	 void RequestTemperature() { dt->requestTemperatures(); }
 	 float GetTemperature(DeviceAddress addr) { return dt->getTempC(addr); }
+	 void loop();
   private:
+	void RequestTemperature() { dt->requestTemperatures(); };
 	OneWire* bus;
 	DallasTemperature* dt;
 	TempSensor* sensors;

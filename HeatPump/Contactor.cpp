@@ -33,13 +33,7 @@ void Contactor::begin() {
 }
 
 bool Contactor::loop() {
-	bool res;
 
-	res = GetData();
-	return res;
-}
-
-bool Contactor::checkDataReady() {
 	float oldValue = currentValue;
 
 	if (Config.IsSimulator()) {

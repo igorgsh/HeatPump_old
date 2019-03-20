@@ -5,6 +5,7 @@
 #include "Compressor.h"
 #include "Contactor.h"
 #include "TempSensor.h"
+#include "TemperatureDriver.h"
 #include "TemperatureBus.h"
 
 #define NUMBER_OF_TEMP	7
@@ -20,15 +21,15 @@ public:
 	~DeviceManager();
 
 	void begin();
-	TemperatureBus TempBus(PIN_TEMPERATURE_BUS);
+	TemperatureBus* TempDrv;
 	TempSensor tempSensors[NUMBER_OF_TEMP] = {
-		/* 0*/	TempSensor("GeoI",&TempBus,-20.0, 50.0),	//T1
-		/* 1*/	TempSensor("GeoO",&TempBus,-20.0, 50.0),	//T2
-		/* 2*/	TempSensor("CondI",&TempBus,-30.0,50.0),	//T3
-		/* 3*/	TempSensor("CondO",&TempBus,-30.0,50.0),	//T4
-		/* 4*/	TempSensor("Compr",&TempBus, -30.0, 120.0),	//T5
-		/* 5*/	TempSensor("HpI",&TempBus,-30.0,110.0),	//T6
-		/* 6*/	TempSensor("HpO",&TempBus,-30.0, 110.0)	//T7
+		/* 0*/	TempSensor("GeoI",-20.0, 50.0),	//T1
+		/* 1*/	TempSensor("GeoO",-20.0, 50.0),	//T2
+		/* 2*/	TempSensor("CondI",-30.0,50.0),	//T3
+		/* 3*/	TempSensor("CondO",-30.0,50.0),	//T4
+		/* 4*/	TempSensor("Compr", -30.0, 120.0),	//T5
+		/* 5*/	TempSensor("HpI",-30.0,110.0),	//T6
+		/* 6*/	TempSensor("HpO",-30.0, 110.0)	//T7
 	};
 
 	//TempSensorSingle tempSensors[NUMBER_OF_TEMP] = {
@@ -64,6 +65,7 @@ public:
 	TempSensor* tHpI = &tempSensors[5];
 	TempSensor* tHpO = &tempSensors[6];
 
+	TempSensor* currentTemp = &tempSensors[3];
 
 	/*
 	TempSensor* tGeoI = &tempSensors[0];

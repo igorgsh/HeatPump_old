@@ -31,18 +31,14 @@ public:
 	// Request values from sensor
 	virtual bool loop() = 0;
 
-	bool GetData();
+	//bool GetData();
 
-	ActionStatus GetActionStatus() { 
-		if (actionStatus == ActionStatus::ACTION_NODATA) {
-			GetData();
-		}
-		return actionStatus; };
+	ActionStatus GetActionStatus() {return actionStatus; };
 	float GetLowerRange() { return lowerRange; }
 	float GetUpperRange() { return upperRange; }
 
 protected:
-	virtual bool checkDataReady() = 0;
+//	virtual bool checkDataReady() = 0;
 	int pin;
 
 	ActionStatus actionStatus = ActionStatus::ACTION_NODATA;

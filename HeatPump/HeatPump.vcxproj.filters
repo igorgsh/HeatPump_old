@@ -31,9 +31,6 @@
     <ClInclude Include="Sensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ArduinoServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
     <ClInclude Include="Unit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TempSensorSingle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TempSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -107,9 +101,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sensor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArduinoServer.cpp">
@@ -161,9 +152,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TempSensorSingle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TempSensor.cpp">

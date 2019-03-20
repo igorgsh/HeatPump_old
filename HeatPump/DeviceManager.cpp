@@ -4,16 +4,18 @@
 
 DeviceManager::DeviceManager()
 {
+	TempDrv = new TemperatureBus(PIN_TEMPERATURE_BUS);
 }
 
 
 DeviceManager::~DeviceManager()
 {
+	delete TempDrv;
 }
 
 void DeviceManager::begin() {
 
-	TempBus.begin();
+	TempDrv->begin();
 
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].begin();
@@ -34,7 +36,8 @@ void DeviceManager::loop() {
 	for (int i = 0; i < getNumberTemp(); i++) {
 		tempSensors[i].loop();
 	}
-	TempBus.RequestTemperature();
+	TempDrv->loop();
+	
 	//check all contactors
 	for (int i = 0; i < getNumberCont(); i++) {
 		contacts[i].loop();

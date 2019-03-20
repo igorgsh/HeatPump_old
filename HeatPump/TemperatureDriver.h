@@ -5,8 +5,9 @@ class TemperatureDriver
 {
 public:
 	TemperatureDriver();
-	~TemperatureDriver();
+	virtual ~TemperatureDriver();
 	virtual void RequestTemperature() =0;
 	virtual float GetTemperature(DeviceAddress addr) = 0;
+	virtual void loop() = 0;
 };
 
