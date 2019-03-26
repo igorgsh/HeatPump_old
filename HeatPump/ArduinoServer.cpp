@@ -4,6 +4,7 @@
 #include "SD.h"
 #include "SPI.h"
 #include "Loger.h"
+#include "TempSensor.h"
 
 extern Configuration Config;
 
@@ -204,7 +205,7 @@ void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 }
 
 
-String GetSensorParams(Sensor* sensor, String tpl) {
+String GetSensorParams(TempSensor* sensor, String tpl) {
 	String res = "";
 	if (tpl.equals("%SensorsLabel%")) {
 		res = sensor->GetLabel();
@@ -226,7 +227,13 @@ String GetSensorParams(Sensor* sensor, String tpl) {
 	else if (tpl.equals("%SensorsUpperRange%")) {
 		res = String(sensor->GetUpperRange());
 	}
-	
+	else if (tpl.equals("%SensorsMAC%")) {
+		//Loger::Debug("Sensor:" + sensor->GetLabel());
+		//Loger::Debug("DEvAddr: " + String(sensor->GetMac()[0],HEX) + String(sensor->GetMac()[1], HEX));
+		res = Config.PrintMac(sensor->GetMac());
+		//res = Config.PrintMac(NULL);
+	}
+
 	return res;
 }
 
@@ -244,20 +251,22 @@ String GetPumpParams(Pump* pump, String tpl) {
 
 String GetTemplate(String tpl) {
 	String res = "";
+	//Loger::Debug("TPL:" + tpl);
 	if (tpl.startsWith("%Sensors")) {
 		res = "[";
 		for (int i = 0; i < Config.DevMgr.getNumberTemp(); i++) {
+			TempSensor* ts = &(Config.DevMgr.tempSensors[i]);
 			res += "'";
-			res += GetSensorParams(&(Config.DevMgr.tempSensors[i]), tpl);
+			res += GetSensorParams(ts, tpl);
 			res += "',";
 		}
-		
+		/*
 		for (int i = 0; i < Config.DevMgr.getNumberCont(); i++) {
 			res += "'";
 			res += GetSensorParams(&(Config.DevMgr.contacts[i]), tpl);
 			res += "',";
 		}
-		
+		*/
 		res[res.length() - 1] = ']';
 	}
 	else if (tpl.startsWith("%Pumps")) {
@@ -317,23 +326,6 @@ void setArrayVar(String varName, int ind, String val) {
 		s->SetLabel(decodeHex(val));
 		//s->setLabel(val);
 	}
-/*
-	else if (varName.equals("arrayCritCnt")) {
-		s->setCriticalThreshold(val.toInt());
-	}
-	else if (varName.equals("arrayAlarmLow")) {
-		s->setActionPoint(ACTIONPOINT_ALARM_LOW, val.toFloat());
-	}
-	else if (varName.equals("arrayAlarmHigh")) {
-		s->setActionPoint(ACTIONPOINT_ALARM_HIGH, val.toFloat());
-	}
-	else if (varName.equals("arrayStartLow")) {
-		s->setActionPoint(ACTIONPOINT_START_LOW, val.toFloat());
-	}
-	else if (varName.equals("arrayStartHigh")) {
-		s->setActionPoint(ACTIONPOINT_START_HIGH, val.toFloat());
-	}
-*/
 }
 
 void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
@@ -373,7 +365,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 		while (pageTpl.available()) {
 			if (isStart) {
 				String s = pageTpl.readStringUntil(0x0A);
-
+				//Loger::Debug(s);
 				if (s.startsWith("%TEMPLATE_START%")) {
 					isTpl = true;
 				}
@@ -381,8 +373,8 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					isTpl = false;
 					isStart = false;
 				}
-				else if (isTpl) {
-					String tpl = "";
+				else if (isTpl && isStart) {
+					//String tpl = "";
 					s.replace("%SensorsLabel%", GetTemplate("%SensorsLabel%"));
 					s.replace("%SensorsType%", GetTemplate("%SensorsType%"));
 					s.replace("%SensorsCode%", GetTemplate("%SensorsCode%"));
@@ -390,6 +382,7 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%SensorsError%", GetTemplate("%SensorsError%"));
 					s.replace("%SensorsLowerRange%", GetTemplate("%SensorsLowerRange%"));
 					s.replace("%SensorsUpperRange%", GetTemplate("%SensorsUpperRange%"));
+					s.replace("%SensorsMAC%", GetTemplate("%SensorsMAC%"));
 
 					s.replace("%DesiredTemperature%", String(Config.GetDesiredTemp()));
 					s.replace("%CurrentTemperature%", String(Config.GetCurrentTemp()));
@@ -402,11 +395,10 @@ void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
 					s.replace("%PumpsStatus%",GetTemplate("%PumpsStatus%"));
 
 					client.println(s);
-					//Debug(s);
+					//Loger::Debug(s);
 				}
 				else { // ordinary line - nothing special
 					client.println(s);
-					//Debug(s);
 				}
 			}
 			else {

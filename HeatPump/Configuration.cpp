@@ -127,7 +127,9 @@ void Configuration::readEepromInfo() {
 	for (int i = 0; i < DevMgr.getNumberTemp(); i++) {
 		for (int j = 0; j < 8; j++) {
 			DevMgr.tempSensors[i].DevAddress[j] = eepromRead(EEPROM_T_ADDRESS + i * 8 + j);
+
 		}
+		PrintMac(DevMgr.tempSensors[i].DevAddress);
 	}
 
 	//Read MQTT Credentials
@@ -265,4 +267,26 @@ void Configuration::ethernetSetup() {
 	}
 	//Debug("Point2");
 	Loger::Debug("Server is at: " +PrintIP(Ethernet.localIP()));
+}
+
+String Configuration::PrintMac(byte* devAddr, int format) {
+	String res = "";
+	
+	if (devAddr != NULL) {
+		for (int i = 0; i < 8; i++) {
+			if (devAddr[i] < 16) {
+				res += '0';
+			}
+			res += String(devAddr[i], HEX);
+			if (format == 1) {
+				if (i != 7) {
+					res += ' ';
+				}
+			}
+		}
+	}
+	Loger::Debug("MAC:" + res);
+	
+	//res = "QWERT";
+	return res;
 }

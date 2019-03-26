@@ -21,15 +21,17 @@ public:
 	~DeviceManager();
 
 	void begin();
-	TemperatureBus* TempDrv;
+	//TemperatureBus* TempDrv;
+	TemperatureBus TempDrv = TemperatureBus(PIN_TEMPERATURE_BUS);
+
 	TempSensor tempSensors[NUMBER_OF_TEMP] = {
-		/* 0*/	TempSensor("GeoI",-20.0, 50.0),	//T1
-		/* 1*/	TempSensor("GeoO",-20.0, 50.0),	//T2
-		/* 2*/	TempSensor("CondI",-30.0,50.0),	//T3
-		/* 3*/	TempSensor("CondO",-30.0,50.0),	//T4
-		/* 4*/	TempSensor("Compr", -30.0, 120.0),	//T5
-		/* 5*/	TempSensor("HpI",-30.0,110.0),	//T6
-		/* 6*/	TempSensor("HpO",-30.0, 110.0)	//T7
+		/* 0*/	TempSensor("Geo In",1 ,-20.0, 50.0),	//T1
+		/* 1*/	TempSensor("Geo Out",2 ,-20.0, 50.0),	//T2
+		/* 2*/	TempSensor("Cond In",3,-30.0,50.0),	//T3
+		/* 3*/	TempSensor("Cond Out",4,-30.0,50.0),	//T4
+		/* 4*/	TempSensor("Compressor",5, -30.0, 120.0),	//T5
+		/* 5*/	TempSensor("HP In",6,-30.0,110.0),	//T6
+		/* 6*/	TempSensor("HP Out",7,-30.0, 110.0)	//T7
 	};
 
 	//TempSensorSingle tempSensors[NUMBER_OF_TEMP] = {

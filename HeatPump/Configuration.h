@@ -74,7 +74,7 @@ public:
 	bool IsSimulator() { return availSimulator; }
 	bool IsWeb() { return isWebReady; /* availEthernet & availWebServer;*/ }
 	bool IsMqtt() { return isMqttReady;/*availEthernet & availMqttClient;*/ }
-
+	String /*static*/ PrintMac(byte* devAddr, int format=1);
 
 private:
 	// Flag variables

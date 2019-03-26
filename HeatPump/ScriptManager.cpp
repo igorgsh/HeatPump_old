@@ -54,17 +54,17 @@ void ScriptManager::loop() {
 	if (scriptHeatPump->IsAlarm()) {
 		//Debug("ScriptManager#Alarm");
 		if (scriptHeatPump->GetAlarm() == 0) { //It is a new Alarm
-			Loger::Debug("ScriptManager#Alarm:Force Stop");
+			Loger::Debug("ScriptManager#Heat Pump#Alarm:Force Stop");
 			scriptHeatPump->ForceStop();
 		}
 		scriptHeatPump->SetAlarm(Config.Counter1s); //set the timestamp with new counter
 	}
 	else { //alarm is disappeared or not exists
 		if (scriptHeatPump->GetAlarm()!= 0) { // alarm is disappeared. Delay is needed
-			Loger::Debug("ScriptManager#No Alarm");
+			Loger::Debug("ScriptManager#Heat Pump#No Alarm");
 
 			if (Config.Counter1s >= scriptHeatPump->GetAlarm() + scriptHeatPump->GetAlarmDelay()) { // ready to go!
-				Loger::Debug("ScriptManager#Alarm finished");
+				Loger::Debug("ScriptManager#Heat Pump#Alarm finished");
 
 				scriptHeatPump->SetAlarm(0);
 				scriptHeatPump->SetStep(0);

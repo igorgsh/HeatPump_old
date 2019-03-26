@@ -24,9 +24,9 @@ bool ScriptHeatPump::IsAlarm() {
 
 bool ScriptHeatPump::checkTempConditions() {
 	bool ret = true;
-	//Debug("Point 0");
+	//Loger::Debug("Point 0");
 	ret &= (Config.DevMgr.tGeoI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
-	//if (!ret) Debug("Point 1#"+String(Config.DevMgr.tGeoI->getActionStatus()));
+	//if (!ret) Loger::Debug("Point 1#"+String(Config.DevMgr.tGeoI->GetActionStatus()));
 	ret &= (Config.DevMgr.tGeoO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
 	//ret &= (Config.DevMgr.tEvoI->GetActionStatus() == ActionStatus::ACTION_NORMAL);
 	//ret &= (Config.DevMgr.tEvoO->GetActionStatus() == ActionStatus::ACTION_NORMAL);
@@ -65,9 +65,9 @@ bool ScriptHeatPump::IsStartNeeded(bool isSync) {
 bool ScriptHeatPump::checkAllConditions() {
 	bool res = true;
 	res &= checkTempConditions();
-	//if (!res) Debug("ScriptHeatPump:Temp Condition Failed");
+	if (!res) Loger::Debug("ScriptHeatPump:Temp Condition Failed");
 	res &= checkContactors();
-	//if (!res) Debug("ScriptHeatPump:Contactor Condition Failed");
+	if (!res) Loger::Debug("ScriptHeatPump:Contactor Condition Failed");
 	return res;
 }
 

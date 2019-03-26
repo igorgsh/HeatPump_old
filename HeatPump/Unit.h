@@ -22,6 +22,7 @@ public:
 	String GetLabel() { return label; };
 	void SetLabel(String lbl) { label = lbl; };
 	UnitType GetType() { return type; };
+	byte* GetMac() { return NULL; };
 
 private:
 	UnitType type = UnitType::UT_NoUnit;

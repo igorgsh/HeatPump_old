@@ -17,6 +17,9 @@
   <ItemGroup>
     <None Include="monitor.htm" />
     <None Include="main.htm" />
+    <None Include="tsetup.htm">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.HeatPump.vsarduino.h">

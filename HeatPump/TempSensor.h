@@ -9,7 +9,7 @@ class TempSensor :
 	public Sensor
 {
 public:
-	TempSensor(String label, float lowerRange, float upperRange);
+	TempSensor(String label, int pin, float lowerRange, float upperRange);
 	
 	~TempSensor();
 	bool loop();
@@ -18,7 +18,7 @@ public:
 	bool DevAvailable = false;
 	TemperatureDriver* Driver;
 	void begin();
-
+	byte* GetMac() { return DevAddress; };
 private:
 
 };

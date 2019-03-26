@@ -6,7 +6,7 @@ extern Simulator* sim;
 
 
 
-TempSensor::TempSensor(String label, float lowerRange, float upperRange) : Sensor(label, -1, UnitType::UT_Thermometer, lowerRange, upperRange)
+TempSensor::TempSensor(String label, int pin, float lowerRange, float upperRange) : Sensor(label, pin, UnitType::UT_Thermometer, lowerRange, upperRange)
 {
 	
 	for (int i = 0; i < 8; i++) {
@@ -24,7 +24,8 @@ bool TempSensor::loop() {
 	float oldValue = currentValue;
 
 	if (Config.IsSimulator()) {
-		currentValue = sim->GetRealResult(this->pin);
+		currentValue = sim->GetRealResult(60+this->pin);
+		//Loger::Debug("TempSimulator:("+String(this->pin) + ")#" + String(currentValue));
 		ret = true;
 		//Debug("Value for (" + String(this->getLabel()) + ") = " + String(currentValue));
 	}
@@ -42,6 +43,7 @@ bool TempSensor::loop() {
 	if (ret) {
 		if (currentValue <= lowerRange
 			|| currentValue >= upperRange) {
+			Loger::Debug("TempAlarm:current=" + String(currentValue) + "#Low=" + String(lowerRange) + "#Up=" + String(upperRange));
 			actionStatus = ACTION_ALARM;
 		}
 		else {

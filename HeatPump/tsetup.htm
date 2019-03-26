@@ -4,7 +4,7 @@
 <!--
 <meta http-equiv="refresh" content="5" />
 -->
-	<title>Мониторинг температуры</title>
+	<title>Установка термометров</title>
 	<script type=text/javascript>
 	var statusString = ['???','Включен','Выключен'];
 %TEMPLATE_START%
@@ -44,37 +44,15 @@ function createTempRows() {
 		for (i=0; i< labels.length; i++) {
 			var row = tbl.insertRow(ind+i);
 			row.insertCell(0).innerHTML=decodeURI(labels[i]);
-			row.insertCell(1).innerHTML=(types[i] == 1? 'Термо' : 'Контакт') ;
-			row.insertCell(2).innerHTML=codes[i];
-			row.insertCell(3).innerHTML=value[i];
-			row.insertCell(4).innerHTML=(errors[i]==1? '*' : '&nbsp');
-            row.insertCell(5).innerHTML = lowerRange[i];
-			row.insertCell(6).innerHTML= upperRange[i];
-            row.insertCell(7).innerHTML = mac[i];
+			row.insertCell(1).innerHTML=codes[i];
+			row.insertCell(2).innerHTML=value[i];
+            row.insertCell(3).innerHTML = mac[i];
 		}
 	}	
 };
-
-function createPumpRows() {
-	var tbl = document.getElementById('pumpTable');
-	if (tbl) {
-		var ind = tbl.rows.length;
-		for (i=0; i< pLabels.length; i++) {
-			var row = tbl.insertRow(ind+i);
-			row.insertCell(0).innerHTML=pLabels[i];
-			row.insertCell(1).innerHTML=statusString[pStatus[i]];
-		}
-	}	
-};
-
 	
 document.addEventListener( "DOMContentLoaded", function() {
-	document.getElementById('desiredTemp').innerHTML=desTemp;
-	document.getElementById('currTemp').innerHTML=currTemp;
-	document.getElementById('currTime').innerHTML=dt;
-	document.getElementById('compressor').innerHTML=compressor;
 	createTempRows();
-	createPumpRows();
 }, false );
 
 function noRefresh() {
@@ -96,38 +74,18 @@ function noRefresh() {
 </head>
 <body>
 <form method="post">
-	<div class="text1">Текущая температура:</div><div id="currTemp" class="currentTemp"></div><div class="currentTemp">ºС</div>
-	<div class="text1">Установлена:</div><div id="desiredTemp" class="desiredTemp"></div><div class="desiredTemp">ºС</div>
-	<div class="text1">Текущее Время:</div><div id="currTime" class="currentTime"></div>
-	
-<h3>Датчики</h3>
+<h3>Температурные Датчики</h3>
 <table id="tempTable" name="tempTable">
 	<tr>
-		<th rowspan=2>Название</th>
-		<th rowspan=2>Тип</th>
-		<th rowspan=2>Код</th>
-		<th rowspan=2>Текущее<br/>значение</th>
-		<th rowspan=2>Ошибка</th>
-		<th colspan=2>Рабочий диапазон</th>
-        <th rowspan="2">Адрес</th>
-	</tr>
-	<tr>	
-		<th>От</th> 
-		<th>До</th> 
+		<th>Название</th>
+		<th>Код</th>
+		<th>Текущее<br/>значение</th>
+        <th>Адрес</th>
 	</tr>
 </table>
 	<input type="button" id="editButton" value="Редактировать" onclick="noRefresh()">
 	<input type="submit" class="editable" value="Сохранить">
 
-<h3>Насосы</h3>
-<table id="pumpTable" name="pumpTable">
-	<tr>
-		<th>Название</th>
-		<th>Состояние</th>
-	</tr>
-</table>
-<h3>Компрессор</h3>
-<div id="compressor"></div>
 </form>
 </body>	
 </html>
