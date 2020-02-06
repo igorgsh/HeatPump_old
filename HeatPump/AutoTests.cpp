@@ -69,8 +69,8 @@ bool AutoTests::RunTest() {
 	switch (currentTestNumber) {
 	case 0: {
 		currentName = "Normal Start";
-		res = TestDummySuccess();
-//		res = TestStart();
+//		res = TestDummySuccess();
+		res = TestStart();
 		break;
 	}
 	case 1: {
@@ -88,8 +88,8 @@ bool AutoTests::RunTest() {
 	}
 	case 3: {
 		currentName = "Start and stop on the last step";
-//		res = TestDummySuccess();
-		res = TestStartBrokenLastStep();
+		res = TestDummySuccess();
+//		res = TestStartBrokenLastStep();
 		break;
 	}
 	default: {
@@ -129,13 +129,14 @@ bool AutoTests::TestStart() {
 		testStartTS = Config.Counter1s;
 		ts = Config.Counter1s;
 		res = true;
-
+		TestMessage("Step1.0");
 	}
 	if (step == 1) { //Wait 3 sec to avoid counter unsync
 		if (ts + 3 <= Config.Counter1s) {
 			res = true;
 			TestMessage("Step 1 is over");
 			step++;
+			TestMessage("Step2.0");
 		}
 	}
 	if (step == 2) {
@@ -148,6 +149,7 @@ bool AutoTests::TestStart() {
 			else {
 				TestMessage("Pump Contour1 is started");
 				step++;
+				TestMessage("Step3.0");
 			}
 		}
 
@@ -162,6 +164,7 @@ bool AutoTests::TestStart() {
 			else {
 				TestMessage("Pump Contour2 is started");
 				step++;
+				TestMessage("Step4.0");
 			}
 		}
 	}
@@ -176,6 +179,7 @@ bool AutoTests::TestStart() {
 			else {
 				TestMessage("Pump Geo is started");
 				step++;
+				TestMessage("Step5.0");
 			}
 		}
 	}
@@ -190,6 +194,7 @@ bool AutoTests::TestStart() {
 			else {
 				TestMessage("Compressor is started");
 				step++;
+				TestMessage("Step6.0");
 			}
 		}
 

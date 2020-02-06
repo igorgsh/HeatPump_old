@@ -9,13 +9,15 @@
 //#include <Keyboard.h>
 //#include <DallasTemperature.h>
 //#include "TemperatureBus.h"
+#include <FlexiTimer2.h>
 #include <Ethernet.h>
 //#include <Keypad.h>
 //#include <Key.h>
 
 #include <SD.h>
 #include "Configuration.h"
-#include <MsTimer2.h>
+//#include <MsTimer2.h>
+
 #include "Configuration.h"
 #include "Simulator.h"
 #include "AutoTests.h"
@@ -35,6 +37,7 @@ Configuration Config;
 
 
 void Timer2() { //it is started every 100ms
+	//Loger::Debug("Timer!!!");
 	if (Config.IsReady()) {
 		Config.Counter100++;
 		if (Config.Counter100 % 5 == 0) {
@@ -42,6 +45,7 @@ void Timer2() { //it is started every 100ms
 		}
 		if (Config.Counter100 % 10 == 0) {
 			Config.Counter1s++;
+			//Loger::Debug("Counter1s tick");
 		}
 	}
 }
@@ -58,8 +62,10 @@ void setup() {
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
 	//Set a timer 
-	MsTimer2::set(100, Timer2);
-	MsTimer2::start();
+//	MsTimer2::set(100, Timer2);
+//	MsTimer2::start();
+	FlexiTimer2::set(100, Timer2);
+	FlexiTimer2::start();
 
 	if (Config.IsSimulator()) {
 		initSim();
@@ -80,6 +86,7 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	//Loger::Debug("Config100=" + String(Config.Counter100));
 	if (Config.IsSimulator()) {
 		sim->loop();
 	}

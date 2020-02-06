@@ -207,6 +207,9 @@ void ReadTAddresses() {
 	for (int i = 0; i < 7; i++) {
 		for (int j = 0; j < 8; j++) {
 			Serial.print(String(EepromRead(EEPROM_T_ADDRESS + i * 8 + j), HEX));
+			if (i != 7) {
+				Serial.print(":");
+			}
 		}
 		Serial.println();
 	}

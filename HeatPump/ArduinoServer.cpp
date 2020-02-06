@@ -50,7 +50,7 @@ int ArduinoServer::ProcessRequest(Client& client) {
 
 	// Read type of request
 	line = client.readStringUntil('/');
-	//Debug2("TYPE=",line);
+	//Loger::Debug("TYPE=" + line);
 	HttpRequest request;
 
 	if (line.startsWith("GET")) {
@@ -64,31 +64,38 @@ int ArduinoServer::ProcessRequest(Client& client) {
 	}
 	// Read URL
 	line = client.readStringUntil(' ');
-	//Debug2("URL=",line);
+	Loger::Debug("URL=" + line);
 	request.URL = line;
 
 	// skip HTTP/1.1
 	line = client.readStringUntil(0x0a);
-	//Debug2("Line=", line);
+	Loger::Debug("Line=" + line);
 
 	//Read parameters of header
 	while (client.available()) {
 		line = client.readStringUntil(0x0a);
-		//Debug2("Line=", line);
+		Loger::Debug("Line1(" + String(line.length()) + ")=" + line +"###");
+		Loger::Debug("Line0=" + String(line[0], HEX));
 
 		if (line.length() == 1 && line[0] == 0x0D) {// Empty line. The body will be next
-			request.body = client.readString();
+			Loger::Debug("Point2");
+			//request.body = client.readString();
+			request.body = client.readStringUntil(0x0A);
+
+			Loger::Debug("Body length=" + request.body.length());
+			Loger::Debug("Body1=" + request.body);
 		}
 		else if (line.startsWith("Host: ")) {
 			request.host = line.substring(6);
+			Loger::Debug("Host1:" + request.host);
 		}
 	}
 	request.ParseParameters();
-	//Debug2("Result:", (request.type == GET ? "Type: GET" : "Type: POST"));
-	//Debug2("URL:",request.URL);
-	//Debug2("Host:",request.host);
-	//Debug2("Body:",request.body);
-	//Debug2("NumberOfParm:", request.NumberParms);
+	Loger::Debug("Result:" + String((request.type == GET ? "GET" : "POST")));
+	Loger::Debug("URL:" + request.URL);
+	Loger::Debug("Host:" + request.host);
+	Loger::Debug("Body:"+ request.body);
+	Loger::Debug("NumberOfParm:" + request.NumberParms);
 
 	ParseCommand(client, request);
 
@@ -130,55 +137,8 @@ void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 	else {
 		PrintAnyFile(client, request);
 	}
-	/*
-	if (request.URL.startsWith("main.htm")) {
-		PrintMainPage(client, request);
-	}
-	else if (request.URL.startsWith("monitor.htm")) {
-		PrintMonitorPage(client, request);
-	}
-	else if (request.URL.startsWith("schedule.htm")) {
-		PrintSchedulePage(client, request);
-	}
-	else {
-		PrintErrorPage(client, "404 Page not found", "This page is unavailable");
-	}
-	*/
 	//Debug("End ParseCommand");
 }
-/*
-void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
-
-	Debug("Start PrintMainPage");
-	if (request.NumberParms != 0) {
-		int ind = request.getIndexOfParmKey("desTemp");
-		if (ind!=-1) {
-			Config.cThermo.setDesiredTemp(request.getParmValue(ind).toFloat());
-		}
-	}
-	Debug2("Desired Temp=", Config.cThermo.getDesiredTemp());
-
-	File pageTpl = SD.open("main.htm", FILE_READ);
-	if (pageTpl) {
-		HttpHeader(client, "200 Ok");
-		while (pageTpl.available()) {
-			String s = pageTpl.readStringUntil(0x0A);
-			s.replace("%DesiredTemperature%", String(Config.cThermo.getDesiredTemp()));
-			s.replace("%CurrentTemperature%", String(Config.cThermo.getTemp()));
-			s.replace("%CurrentTime%", "тут будет дата-время");
-			client.println(s);
-		}
-		pageTpl.close();
-	}
-	else
-	{
-		Debug("File not found");
-		PrintErrorPage(client, "404 Not Found", "Проблема с чтением темплейта");
-	}
-	Debug("End PrintMainPage");
-
-}
-*/
 
 void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
 

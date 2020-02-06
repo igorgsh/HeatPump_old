@@ -170,4 +170,9 @@
   <ItemGroup>
     <Text Include="configuration.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="favicon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

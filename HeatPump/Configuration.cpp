@@ -36,11 +36,15 @@ void Configuration::setup() {
 	if (IsEthernet() && availMqttClient) {
 		mqttClient = new Mqtt();
 		isMqttReady = mqttClient->setup();
+		Loger::Debug("Point10");
+		Loger::Debug("Point10.1");
+		Loger::Debug("Is MQTT ready?" + String(isMqttReady));
 		mqttClient->InitialActions();
 	}
-
+	Loger::Debug("Starting script Manager");
 	isReady = ScriptMgr.setup();
-
+	Loger::Debug("Is Config Ready?" + String(isReady));
+	
 	if (IsEthernet() && availWebServer) {
 		Loger::Debug("Web Server Is Starting...");
 		web = new ArduinoServer();
@@ -129,7 +133,7 @@ void Configuration::readEepromInfo() {
 			DevMgr.tempSensors[i].DevAddress[j] = eepromRead(EEPROM_T_ADDRESS + i * 8 + j);
 
 		}
-		PrintMac(DevMgr.tempSensors[i].DevAddress);
+		//PrintMac(DevMgr.tempSensors[i].DevAddress);
 	}
 
 	//Read MQTT Credentials
@@ -142,7 +146,7 @@ void Configuration::readMqttCredentials() {
 	byte len;
 	unsigned addr = EEPROM_MQTT;
 	char* buf;
-
+	
 	for (int i = 0; i < 4; i++) {
 		mqttCreds.ServerIP[i] = eepromRead(addr);
 		addr++;
@@ -199,12 +203,12 @@ void Configuration::readMqttCredentials() {
 		mqttCreds.Password = "";
 	}
 	
-	//Loger::Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
-	//Loger::Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
-	//Loger::Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
-	//Loger::Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
-	//Loger::Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
-		
+	Loger::Debug("EEPROM:MQTT:URL:" +  PrintIP(mqttCreds.ServerIP));
+	Loger::Debug("EEPROM:MQTT:Port:" + String(mqttCreds.Port));
+	Loger::Debug("EEPROM:MQTT:Root:" + String(mqttCreds.Root));
+	Loger::Debug("EEPROM:MQTT:Login:" + String(mqttCreds.Login));
+	Loger::Debug("EEPROM:MQTT:Password:" + String(mqttCreds.Password));
+	
 }
 
 

@@ -14,6 +14,7 @@ HttpRequest::~HttpRequest()
 void HttpRequest::ParseParameters() {
 	
 	String line = "";
+	Loger::Debug("Point1:" + String(type));
 
 	if (type == GET) {
 		int ind = URL.indexOf("?");
@@ -23,6 +24,7 @@ void HttpRequest::ParseParameters() {
 	}
 	else if (type == POST) {
 		line = body;
+		Loger::Debug("Post Body:" + line);
 	}
 	if (line.length() != 0) {
 		//count number of parameters

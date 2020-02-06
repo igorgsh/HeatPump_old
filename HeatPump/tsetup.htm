@@ -1,9 +1,6 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<!--
-<meta http-equiv="refresh" content="5" />
--->
 	<title>Установка термометров</title>
 	<script type=text/javascript>
 	var statusString = ['???','Включен','Выключен'];
@@ -23,30 +20,33 @@
 	var compressor=statusString[%CompressorStatus%];
 	var pLabels = %PumpsLabel%;
     var pStatus = %PumpsStatus%;
-    var mac = %SensorsMAC%;
+    var devAddr = %SensorsMAC%;
 %TEMPLATE_END%
 
-var submitCounter =0;
-var isEdit = 0;
 
-/*	
-setInterval(function(){
-	if (isEdit==1) {submitCounter++;}
-	if (isEdit==0 || submitCounter>=10) {window.location.reload(1);}
-}, 5000);
-*/	
-	
+function insertLabelsDropDown(ndx) {
+
+    var str = "<select size=1 name=tempName_"+ndx+">";
+    for (j = 0; j < labels.length; j++) {
+        str += "<option value=" + j;
+        if (j == ndx) {
+            str += " selected";
+        }
+        str += ">" + labels[j] + "</option>";
+    }
+    str += "</select>";
+    return str;
+}
+
 function createTempRows() {
-	//var errorString = ['ND','НИЗКАЯ','СТАРТ Н', '','ВЫСОКАЯ', 'СТАРТ В'];
 	var tbl = document.getElementById('tempTable');
 	if (tbl) {
 		var ind = tbl.rows.length;
 		for (i=0; i< labels.length; i++) {
 			var row = tbl.insertRow(ind+i);
-			row.insertCell(0).innerHTML=decodeURI(labels[i]);
-			row.insertCell(1).innerHTML=codes[i];
-			row.insertCell(2).innerHTML=value[i];
-            row.insertCell(3).innerHTML = mac[i];
+            row.insertCell(0).innerHTML = insertLabelsDropDown(i);
+			row.insertCell(1).innerHTML=value[i];
+            row.insertCell(2).innerHTML = devAddr[i];
 		}
 	}	
 };
@@ -55,10 +55,6 @@ document.addEventListener( "DOMContentLoaded", function() {
 	createTempRows();
 }, false );
 
-function noRefresh() {
-	isEdit = 1;
-	submitCounter =0;
-}
 
 	</script>
 	<style type="text/css">
@@ -78,14 +74,11 @@ function noRefresh() {
 <table id="tempTable" name="tempTable">
 	<tr>
 		<th>Название</th>
-		<th>Код</th>
 		<th>Текущее<br/>значение</th>
         <th>Адрес</th>
 	</tr>
 </table>
-	<input type="button" id="editButton" value="Редактировать" onclick="noRefresh()">
 	<input type="submit" class="editable" value="Сохранить">
-
 </form>
 </body>	
 </html>

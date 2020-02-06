@@ -106,7 +106,7 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 			}
 		}
 		else {
-			//Debug("ScriptHeatPump: Waiting for start allowance!");
+			Loger::Debug("ScriptHeatPump: Waiting for start allowance!");
 		}
 		break;
 	}
@@ -126,7 +126,11 @@ bool ScriptHeatPump::MainLoop(bool isSync) {
 	case COMPRESSOR_WAITING_PUMP_GEO_START: {//delay before start compressor
 		if (Config.Counter1s - counterScript >= COMPRESSOR_ON_TIMEOUT) {
 			step = COMPRESSOR_START;
-			Loger::Debug("ScriptHeatPump:Compressor starting...");
+			Loger::Debug("ScriptHeatPump:Geo Pump Started. Compressor starting...");
+		}
+		else {
+			//Loger::Debug("ScriptHeatPump:Waiting Pump Geo#" + String(Config.Counter1s) + "#" + String(counterScript) );
+
 		}
 		break;
 	}

@@ -41,8 +41,8 @@ bool TempSensor::loop() {
 		}
 	}
 	if (ret) {
-		if (currentValue <= lowerRange
-			|| currentValue >= upperRange) {
+		if (currentValue < lowerRange
+			|| currentValue > upperRange) {
 			Loger::Debug("TempAlarm:current=" + String(currentValue) + "#Low=" + String(lowerRange) + "#Up=" + String(upperRange));
 			actionStatus = ACTION_ALARM;
 		}

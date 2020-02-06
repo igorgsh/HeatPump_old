@@ -108,7 +108,7 @@ private:
 	const bool availAutoTesting = true;
 	const bool availEthernet = true;
 	const bool availSimulator = true;
-	const bool availWebServer = true;
+	const bool availWebServer = false;
 
 };
 
