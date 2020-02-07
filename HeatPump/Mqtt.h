@@ -50,9 +50,9 @@ class Mqtt : public PubSubClient
 		unsigned long mqttWaiting;
 		bool setup();
 		void MqttLoop();
-		void PublishLog(DebugLevel level, String message);
-		void Subscribe(String topic);
-		bool Publish(String topic, String payload);
+		void PublishLog(DebugLevel level, const String &message);
+		void Subscribe(const String &topic);
+		bool Publish(const String &topic, const String &payload);
 		bool Publish(Sensor* dev);
 		bool PublishDesiredTemp(float temp);
 		bool PublishRelay(Relay* dev);
@@ -66,9 +66,10 @@ class Mqtt : public PubSubClient
 private:
 		//char *boardId = (char*)BOARD_ID;
 		String LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
-		
+		String LogTopic[7];
+		String rootPath;
+
 		bool mqttReconnect();
 		void subscribeTopics();
-		String rootPath();
 };
 

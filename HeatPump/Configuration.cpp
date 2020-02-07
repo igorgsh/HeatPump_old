@@ -36,8 +36,7 @@ void Configuration::setup() {
 	if (IsEthernet() && availMqttClient) {
 		mqttClient = new Mqtt();
 		isMqttReady = mqttClient->setup();
-		Loger::Debug("Point10");
-		Loger::Debug("Point10.1");
+		//Loger::Debug("Point10");
 		Loger::Debug("Is MQTT ready?" + String(isMqttReady));
 		mqttClient->InitialActions();
 	}

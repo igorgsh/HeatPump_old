@@ -106,7 +106,7 @@ bool AutoTests::RunTest() {
 }
 
 void AutoTests::TestMessage(String message) {
-	Loger::Debug("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.Counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
+	Loger::SimpleLog("AUTOTESTS#" + currentName + "#case:" + String(sim->GetCaseNumber()) + "#run_time:" + String(Config.Counter1s - testStartTS) +"#step:" + step + "#status:" + status + "#" + message);
 }
 
 bool AutoTests::TestStart() {
@@ -201,8 +201,8 @@ bool AutoTests::TestStart() {
 	}
 
 	if (step == 6) { //Final!
-		TestMessage("Finish Successfully!");
 		status = TestStatus::SUCCESS;
+		TestMessage("Finish Successfully!");
 		step++;
 	}
 	

@@ -9,45 +9,36 @@ Author:	Igor Shevchenko
 #include "Configuration.h"
 #include "Sensor.h"
 
-//extern Mqtt MqttClient;
 extern Configuration Config;
 EthernetClient EthClient;
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
-	Loger::SimpleLog("callbackFunc[" + String(topic) + "](" + String(length) +")"  );
 	Config.GetMqttClient()->Callback(topic, payload, length);
 }
 
 Mqtt::Mqtt() : PubSubClient(Config.GetMqttCreds().ServerIP, Config.GetMqttCreds().Port, callbackFunc, EthClient) {
 	mqttWaiting = MQTT_INITIAL_RETRY_DELAY;
-	
+	rootPath = Config.GetMqttCreds().Root + MQTT_SEPARATOR + Config.BoardName() + MQTT_SEPARATOR;
 }
 
 
 bool Mqtt::mqttReconnect() {
 
-	//	char topic[TOPIC_LENGTH];
-	bool res = false;
+	bool res = connected();
 	unsigned connectTry = 0;
-
-	if (!connected()) {
+		
+	if (!res) {
 		while (!res && connectTry <= MQTT_TRY_COUNT) {
-			Loger::Debug("Mqtt connect attempt=" + String(connectTry));
-
 			if (Config.GetMqttCreds().Login.length() == 0) {
 				res = connect(Config.BoardName().c_str());
-				Loger::Info("Mqtt connect (guest): " + String(res));
 			}
 			else {
 				res = connect(Config.BoardName().c_str(), Config.GetMqttCreds().Login.c_str(), Config.GetMqttCreds().Password.c_str());
-				Loger::Info("Mqtt connect (" + Config.GetMqttCreds().Login + "): " + String(res));
 			}
-
-			delay(MQTT_INITIAL_RETRY_DELAY);
-			connectTry++;
-		}
-		if (!res) {
-			Loger::Debug("MQTT: Too many reconnect errors");
+			if (!res) {
+				delay(MQTT_INITIAL_RETRY_DELAY);
+				connectTry++;
+			}
 		}
 	}
 
@@ -59,7 +50,6 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 	if (length > 0) {
 		String strTopic = String(topic);
 		String strPayload = String((char*)payLoad).substring(0, length);
-		//		char subscription[TOPIC_LENGTH];
 		String str0;
 
 		Loger::Debug("CallBack:[" + strTopic + "]:" + strPayload + "#");
@@ -79,10 +69,13 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 
 bool Mqtt::setup(void) {
 	Loger::Debug("Init MQTT");
-//	long connectTry = 0;
 	bool res = false;
 
 	res = mqttReconnect();
+	String topic0 = rootPath + MQTT_LOG_PREFIX + MQTT_SEPARATOR;
+	for (unsigned i = 0; i < 7; i++) {
+		LogTopic[i] = topic0 + LOG_END[i];
+	}
 	return res;
 }
 
@@ -107,22 +100,23 @@ void Mqtt::MqttLoop() {
 	}
 }
 
-void Mqtt::PublishLog(DebugLevel level, String message) {
-	String topic = rootPath() + MQTT_LOG_PREFIX + MQTT_SEPARATOR + LOG_END[level];
-	Publish(topic, message);
+void Mqtt::PublishLog(DebugLevel level, const String &message) {
+	if (Config.IsMqtt()) {
+		publish(LogTopic[level].c_str(), message.c_str());
+	}
 }
 
 bool Mqtt::PublishDesiredTemp(float temp) {
 
 	String topic;
-	topic = rootPath() + MQTT_DESIRED_TEMP;
+	topic = rootPath + MQTT_DESIRED_TEMP;
 	String payLoad = String(temp);
 
 	return Publish(topic, payLoad);
 }
 
 bool Mqtt::PublishRelay(Relay* dev) {
-	String topic = rootPath();
+	String topic = rootPath;
 	
 
 	switch (dev->GetType()) {
@@ -147,29 +141,20 @@ bool Mqtt::PublishRelay(Relay* dev) {
 }
 
 
-/*
-void Mqtt::WatchDog() {
-
-	//uint8_t rnd = random(0, 1000);
-	char topic[TOPIC_LENGTH];
-	sprintf(topic, MQTT_WATCH_DOG, Config.BoardId);
-	Publish(topic, String(Config.counter60).c_str());
-}
-*/
-
-bool Mqtt::Publish(String topic, String payload) {
+bool Mqtt::Publish(const String &topic, const String &payload) {
 	bool res = false;
+	
 	if (Config.IsMqtt()) {
-		if (mqttReconnect()) {
-			Loger::Debug("Publish:[" + topic + "]" + payload);
-			res =publish(topic.c_str(), payload.c_str());
+		if (topic.length() != 0 && payload.length() != 0) {
+			res = publish(topic.c_str(), payload.c_str());
+			Loger::SimpleLog("Publish:[" + topic + "]" + payload);
 		}
 	}
 	return res;
 }
 
 bool Mqtt::Publish(Sensor* dev) {
-	String topic = rootPath();
+	String topic = rootPath;
 
 	switch (dev->GetType()) {
 	case UnitType::UT_Thermometer: {
@@ -185,7 +170,6 @@ bool Mqtt::Publish(Sensor* dev) {
 	}
 	topic += dev->GetLabel();
 	String payLoad = String(dev->GetValue());
-
 	return Publish(topic, payLoad);
 }
 
@@ -194,10 +178,10 @@ void Mqtt::InitialActions() {
 	PublishDesiredTemp(Config.GetDesiredTemp());
 }
 
-void Mqtt::Subscribe(String topic) {
+void Mqtt::Subscribe(const String &topic) {
 	if (Config.IsMqtt()) {
 		Loger::Debug("Subscribe [" + topic + "]");
-		if (mqttReconnect()) {
+		if (Config.IsMqtt()) {
 			subscribe(topic.c_str());
 		}
 	}
@@ -205,14 +189,8 @@ void Mqtt::Subscribe(String topic) {
 
 void Mqtt::subscribeTopics() {
 	String topic0;
-
-
 	// Subscribe for Special Temperatures
-	topic0 = rootPath() + MQTT_DESIRED_TEMP;
+	topic0 = rootPath + MQTT_DESIRED_TEMP;
 	Subscribe(topic0);
-
 }
 
-String Mqtt::rootPath() { 
-	return Config.GetMqttCreds().Root + MQTT_SEPARATOR + Config.BoardName() + MQTT_SEPARATOR; 
-}

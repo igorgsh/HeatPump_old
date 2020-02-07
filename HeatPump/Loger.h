@@ -17,21 +17,21 @@ extern DebugLevel dLevel;
 class Loger
 {
 public:
-	static void SimpleLog(String message);
-	static void Log(DebugLevel level, String message);
-	static void Error(String message) {
+	static void SimpleLog(const String &message);
+	static void Log(DebugLevel level, const String &message);
+	static void Error(const String &message) {
 		Log(D_ERROR, message);
 	}
-	static void Fatal(String message) {
+	static void Fatal(const String &message) {
 		Log(D_FATAL, message);
 	}
-	static void Info(String message) {
+	static void Info(const String &message) {
 		Log(D_INFO, message);
 	}
-	static void Warn(String message) {
+	static void Warn(const String &message) {
 		Log(D_WARN, message);
 	}
-	static void Debug(String message) {
+	static void Debug(const String &message) {
 		Log(D_DEBUG, message);
 	}
 };

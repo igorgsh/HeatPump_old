@@ -4,7 +4,7 @@
 
 extern Configuration Config;
 
-void Loger::Log(DebugLevel level, String message) {
+void Loger::Log(DebugLevel level, const String &message) {
 	if (level <= dLevel) {
 		Serial.println(message);
 		if (Config.IsMqtt()) {
@@ -13,6 +13,6 @@ void Loger::Log(DebugLevel level, String message) {
 	}
 }
 
-void Loger::SimpleLog(String message) {
+void Loger::SimpleLog(const String &message) {
 	Serial.println(message);
 }

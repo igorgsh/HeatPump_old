@@ -242,7 +242,7 @@ void setup() {
 
 	//Mqtt Creds
 	IPAddress ip(192, 168, 0, 99);
-	WriteMqttCredentials(1883, ip, "HeatPump", "", "");
+	WriteMqttCredentials(1883, ip, "Equipment/HeatPump", "", "");
 
 	byte b;
 
